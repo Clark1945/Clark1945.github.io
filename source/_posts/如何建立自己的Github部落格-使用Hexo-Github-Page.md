@@ -78,8 +78,12 @@ $ hexo new "你的文章標題"
 3. 使用Markdown語法輸入你想寫的內容
 4. 重複上一篇步驟18的動作，你就成功部署新的文章了
 
+
 #### 以上，感謝觀看。
 
 ### 參考資料
 1. https://hexo.io/zh-tw/docs/writing
 2. https://hackmd.io/@Heidi-Liu/note-hexo-github
+3. https://hackmd.io/@Heidi-Liu/hexo-theme
+4. https://ithelp.ithome.com.tw/articles/10242172
+5. https://hexo.io/zh-tw/docs/github-pages
