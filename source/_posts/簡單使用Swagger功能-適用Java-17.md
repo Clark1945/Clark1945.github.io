@@ -81,6 +81,8 @@ public String deleteEmployee(@PathVariable int employeeId) {
 ```
 @ApiResponse是一個回傳格式，可以撰寫不同HTTP狀態碼的回傳內容，以及更多描述。
 
+有了以上功能，你應該就可以為你的API寫出足夠描述的文件了。
+
 ### 參考資料
 1. https://medium.com/@berktorun.dev/swagger-like-a-pro-with-spring-boot-3-and-java-17-49eed0ce1d2f
 2. https://bell-sw.com/blog/documenting-rest-api-with-swagger-in-spring-boot-3/E
