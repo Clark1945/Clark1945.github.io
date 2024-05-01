@@ -1,7 +1,7 @@
 ---
 title: Spring JPA(JDK 17)的一些疑難雜症
 date: 2024-04-20 12:53:47
-tags: Java
+tags: Spring
 ---
 ### 問題一
 
