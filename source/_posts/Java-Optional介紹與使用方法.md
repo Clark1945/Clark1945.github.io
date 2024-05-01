@@ -185,5 +185,24 @@ private Optional<String> getEmpty() {
     }
 
 ```
+7. map與flatmap
+```
+public static String testOptionalFlatMap(Student student) {
+			
+// 這段是使用Optional 檢測 Null
+        var score = student.getScore();
+        if(score.isPresent()) {
+            var word = score.get().getWord();
+            if(word .isPresent()) {
+                return word.get();
+            }
+        }
+        return "NA";
 
+// 這段是使用Optional Flatmap 檢測 Null
+        return student.getScore()
+                .flatMap(Score::getWord)
+                .orElse("n.a.");
+}
+```
 以上，就是常見的基本Optional用法，也許不需要全部都會，只需要基本了解就很夠用了也說不定，謝謝各位。
