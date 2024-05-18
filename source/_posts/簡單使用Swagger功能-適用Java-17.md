@@ -1,14 +1,16 @@
 ---
-title: 簡單使用Swagger功能(適用Java 17)
+title: 使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)
 date: 2024-04-22 11:20:19
+categories: Coding
 tags: Spring
 ---
 
-作為一個工程師，如何撰寫出讓人好理解的API至關重要，當今天的需求，需要給同事以外的人去理解時，文件的重要度就大幅提高了，因此Swagger就此誕生。Swagger的特色是利用Annonation的方式去撰寫文件，另外透過OpenAPI，將撰寫的內容轉成靜態網頁，文件只需要提供靜態網頁就可以讓前端人員、PM去參考API的格式與規範，相當方便。
+作為一個後端工程師，除了基本的API開發，如何撰寫出讓人好理解的文件至關重要。一份好的文件不僅可以幫助RD了解API，也能提供給PM等部門去了解自己的產品。
+Swagger就是因此而生，Swagger的特色是利用Annonation撰寫文件，另外透過OpenAPI，將撰寫的內容轉成靜態網頁，文件只需要提供靜態網頁就可以讓前端人員、PM去參考API的格式與規範，相當方便。
 本文以Java 17舉例。
 
 ### 安裝
-在Maven檔案中添加以下依賴，並運行pom.xml：
+在Maven的pom.xml檔案中添加以下依賴，並reload：
 ```
 <dependency>
     <groupId>org.springdoc</groupId>
@@ -17,7 +19,26 @@ tags: Spring
 </dependency>
 
 ```
-接著訪問以下路徑"http://localhost:8080/swagger-ui/index.html"，就應該可以看到一個靜態網頁了，裡面應該有所有Project的API，簡單的建立就完成了。
+接著補上API(已經有API的這部分可以不看)
+```
+@RestController
+@RequestMapping("/api")
+public class MemberController {
+    @PutMapping("/member")
+    public String login(@RequestBody HashMap reqMap) {
+        System.out.println("Start login~");
+        String response = memberService.login(reqMap);
+        System.out.println("Response = " + response);
+        return response;
+    }
+    
+}
+```
+
+接著訪問以下路徑
+http://localhost:8080/swagger-ui/index.html
+就可以看到一個靜態網頁，裡面應該有所有Project的API，簡單的建立就完成了。
+OpenAPI的特色是可以建立一個網頁，讓你瀏覽專案中所有在偵測範圍內的API。
 
 你可以試著為API添加一些資訊，像是針對系統的名稱、描述或是開發者的資料等等。像這樣
 ```
@@ -80,9 +101,12 @@ public String deleteEmployee(@PathVariable int employeeId) {
 }
 ```
 @ApiResponse是一個回傳格式，可以撰寫不同HTTP狀態碼的回傳內容，以及更多描述。
-
 有了以上功能，你應該就可以為你的API寫出足夠描述的文件了。
+
+![这是图片](/images/swagger-demo.png)
 
 ### 參考資料
 1. https://medium.com/@berktorun.dev/swagger-like-a-pro-with-spring-boot-3-and-java-17-49eed0ce1d2f
 2. https://bell-sw.com/blog/documenting-rest-api-with-swagger-in-spring-boot-3/E
+
+以上

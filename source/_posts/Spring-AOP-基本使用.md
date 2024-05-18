@@ -1,7 +1,10 @@
 ---
-title: Spring AOP 基本使用
+title: Spring AOP 基本概念與使用
 date: 2024-05-01 12:26:20
-tags: Spring
+catergories: Coding
+tags: 
+ - Spring
+ - AOP
 ---
 
 到目前為止，在程式開發的發展上已經誕生了許多風格，如物件導向程式設計(Object-Oriented-Programming)、Functional-Programming FP，這些方法都有好有壞，但都有共同的目的，就是簡化重複的程式碼，物件導向程式語言使用物件的封裝、繼承特性去約束程式碼，而FP則是專注在整個流程上，透過將功能建立為一個個微小的Function，進行開發。FP的好處是，通常可讀性可以提升不少。此外因為Function小，各功能也很好共用。
@@ -9,7 +12,7 @@ tags: Spring
 AOP的主要訴求是，將整個程式流程視為一個Flow，假設我有兩隻API，分別提供了付款、退貨兩功能。
 付款的流程如下：驗證 > 交易 > 回傳結果
 退貨的流程如下：驗證 > 退貨 > 回傳結果
-而AOP就是將兩者相同的「驗證」部分提取出來作為一個切面(Aspect)，讓付款與退貨的API可以集中在真正重要的商業邏輯。也就是所謂的「關注點分離」的概念。
+而AOP核心精神就是將兩者相同的「驗證」部分提取出來作為一個切面(Aspect)，讓付款與退貨的API可以集中在真正重要的商業邏輯。也就是所謂的「關注點分離」的概念。
 常見的Annotation如下：
 * @Aspect - 將類別宣告為一個切面，切面方法放在裡面。
 * @Pointcut - 切入點。定義切入位置，通常使用execution切點表達式表達。
@@ -91,6 +94,21 @@ public class StrangeAOP {
         System.out.println("返回通知:"+result);
     }
 }
+
+@RestController
+public class TestController{
+
+    @GettingMapping("/)
+    public String getIndex(){
+        System.out.print("Index");
+        return "This is Index";
+    }
+}
 ```
+
+印出訊息的順序應該是 
+
+前置通知 > This is index > 后置通知 > 返回通知+result
+
 
 以上

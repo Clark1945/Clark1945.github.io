@@ -1,15 +1,18 @@
 ---
 title: 在SpringBoot 寫測試 @Mock,@MockBean,MvcResult
 date: 2024-05-01 11:06:01
+catergories: Coding
 tags: SpringBoot
 ---
 
 在Spring開發完後，我們需要測試自己撰寫的API有沒有問題。除了在SpringBoot專案預設的SpringBootTest中針對單個方法進行單位測試外，有時也會有需要去Mock，就是假造一個物件的需求。
-假設今天程式比較複雜，需根據DB回傳的資料做判斷，而DB剛好沒有這樣的資料時，就會需要假造一個符合需求的物件。換句話說，因為成本太高，所以利用假造的方式來撰寫符合需要規模的程式碼。
+假設今天程式比較複雜，需根據DB回傳的資料做判斷，而DB剛好沒有這樣的資料時，與其更動DB以符合測試，不如假造DB的內容，單測試API。換句話說，因為成本太高，所以利用假造的方式來撰寫符合需要規模的程式碼。
 
 ### Mockito框架
 Mockito是一個Mock框架，同時適用單元測試與整合測試。以下介紹常見的用法：
+
 1. @MockBean 可以用來假造Repository，也就是假造資料庫回傳的資料，因為是假造一整個物件，所以比較適合在整合測試中使用。舉例來說，像是以下用法：
+
 ```
     @MockBean
     private StudentRepository stuRepo;
@@ -28,6 +31,7 @@ Mockito是一個Mock框架，同時適用單元測試與整合測試。以下介
 ```
 
 2. 想要假造方法或是變數，假設我有一個物件MainService。
+
 ```
     @Test
 	public MainService MockConfig() throws Exception {
@@ -50,8 +54,9 @@ Mockito是一個Mock框架，同時適用單元測試與整合測試。以下介
 	}
 
 ```
+
 ### SpringMvc 單元測試
-想要做部分的整合測試，可以使用MvcResult去測試Rest API
+如果想要做部分整合測試，可以使用MvcResult去測試一個Rest API
 ```
 HttpHeaders httpHeaders = new HttpHeaders();
 httpHeaders.add("Content-Type", "application/json");

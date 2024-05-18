@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Clark's Page
+title: Clark的 王 道 征 途
 subtitle: ''
-description: '一個軟體工程師兼阿宅，同等地愛著Java與Guava'
+description: '一個軟體工程師兼阿宅，熱愛ACG、旅遊與學習新知'
 keywords:
 author: 劉智旻 Clark Liu
 language: en
@@ -13,7 +13,7 @@ timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: https://clark1945.github.io/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -40,7 +40,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 syntax_highlighter: highlight.js

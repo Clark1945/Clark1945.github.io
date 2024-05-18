@@ -1,6 +1,7 @@
 ---
 title: 如何建立自己的Github部落格 使用Hexo+Github Page
 date: 2024-04-19 11:31:16
+categories: 其他
 tags: 工具
 ---
 
@@ -12,17 +13,17 @@ Hexo是基於Node.js開發的網誌框架，特色主要如下：
 * 一鍵部署
 * 簡單操作
 * 支援MarkDown語法
-* 多種模板可參考，詳情請見https://hexo.io/themes/
+* 多種模板可參考，更多模板可以參考https://hexo.io/themes/
 
 ### 前置作業
-1. 電腦需先安裝Node.js，Hexo需要透過npm安裝。(https://nodejs.org/en/)
-2. Git 用來將檔案發佈到Github Page。(https://git-scm.com/)
-3. 開啟cmd，先輸入**npm version**確保node.js可以成功顯示內容，若Node.js安裝成功，這部分應該會顯示一堆套件的訊息。
+1. 安裝Node.js，Hexo需要透過npm安裝。(https://nodejs.org/en/)
+2. 安裝Git，用來將檔案發佈到Github Page。(https://git-scm.com/)
+3. 安裝Node.js完成後開啟cmd，輸入**npm version**確保node.js可以成功顯示內容，若Node.js安裝成功，這部分應該會顯示一堆套件的訊息。
 4. 安裝Hexo，在cmd輸入以下指令：
 ```
 $ npm install hexo-cli -g
 ```
-5. 安裝好後輸入 hexo version 確保安裝成功。
+5. 安裝好後輸入 hexo version，查看hexo版本，如果有顯示版本名稱就代表安裝成功了。
 6. 初始化Hexo，在你想要的路徑下輸入以下指令來建立
 ```
 $ hexo init <資料夾名稱>
@@ -79,7 +80,7 @@ $ hexo new "你的文章標題"
 4. 重複上一篇步驟18的動作，你就成功部署新的文章了
 
 
-#### 以上，感謝觀看。
+#### 以上。
 
 ### 參考資料
 1. https://hexo.io/zh-tw/docs/writing
