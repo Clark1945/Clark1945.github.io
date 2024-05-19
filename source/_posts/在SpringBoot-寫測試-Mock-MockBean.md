@@ -1,7 +1,7 @@
 ---
 title: 在SpringBoot 寫測試 @Mock,@MockBean,MvcResult
 date: 2024-05-01 11:06:01
-catergories: Coding
+categories: Coding
 tags: SpringBoot
 ---
 

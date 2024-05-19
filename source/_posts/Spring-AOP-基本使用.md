@@ -1,7 +1,7 @@
 ---
 title: Spring AOP 基本概念與使用
 date: 2024-05-01 12:26:20
-catergories: Coding
+categories: Coding
 tags: 
  - Spring
  - AOP
