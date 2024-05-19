@@ -1,7 +1,7 @@
 ---
 title: 解說SQL的Transaction與隔離層級
 date: 2024-05-19 20:08:54
-catergories: Software Knowledge
+categories: Software Knowledge
 tags:
  - SQL
 ---
