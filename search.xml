@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Java Stream用法、MapStruct、Lombok語法</title>
+    <url>/2024/05/01/Java-Stream%E7%94%A8%E6%B3%95%E3%80%81MapStruct%E3%80%81Lombok%E8%AA%9E%E6%B3%95/</url>
+    <content><![CDATA[<p>Java 8 加入Stream語法，提供了很多針對陣列物件的便利功能，以下介紹一些常見的用法。</p>
+<span id="more"></span>
+<h3 id="Java-Stream-常見用法"><a href="#Java-Stream-常見用法" class="headerlink" title="Java Stream 常見用法"></a>Java Stream 常見用法</h3><p>Java Stream 主要功能如下</p>
+<ol>
+<li>Filter 透過設定的條件過濾元素</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 找出非Empty數量</span><br><span class="line">long memberCount = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.count();</span><br><span class="line"></span><br><span class="line">// 找出非重複的第一位成員</span><br><span class="line">String firstMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.findFirst()</span><br><span class="line">.get();</span><br><span class="line"></span><br><span class="line">// 找出 陣列中以AL1S開頭的任何一個，若沒有符合的回傳&quot;IS NOT EXIST&quot;</span><br><span class="line">String findQueen = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; string.startsWith(&quot;AL1S&quot;))</span><br><span class="line">.distinct()</span><br><span class="line">.findAny()</span><br><span class="line">.orElse(&quot;IS NOT EXIST&quot;);</span><br><span class="line"></span><br><span class="line">// 找出前三位成員</span><br><span class="line">String findThreeMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.limit(3)</span><br><span class="line">.collect(Collectors.joining());</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Map 映射每个元素到對應的結果</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;),</span><br><span class="line">    new Food(&quot;餛飩湯&quot;),</span><br><span class="line">    new Food(&quot;肉羹湯&quot;),</span><br><span class="line">    new Food(&quot;牛肉湯&quot;),</span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">// 取得物件的字串</span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream().map( food -&gt; food.getFoodName()).toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>forEach 迭代Stream中的每個元素 ( 同樣可以修改 但是不會回傳)</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;), </span><br><span class="line">    new Food(&quot;餛飩湯&quot;), </span><br><span class="line">    new Food(&quot;肉羹湯&quot;), </span><br><span class="line">    new Food(&quot;牛肉湯&quot;), </span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream()</span><br><span class="line">.map( food -&gt; food.getFoodName())</span><br><span class="line">.toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br><span class="line"></span><br><span class="line">// 將所有FoodName 加上 NT$</span><br><span class="line">foodObj</span><br><span class="line">.stream()</span><br><span class="line">.forEach(food -&gt; &#123;</span><br><span class="line">			food.foodName = &quot;NT$&quot;+food.getFoodName();</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>reduce (元素匯總成單一結果。)</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; integers = Arrays.asList(1, 2, 3, 4, 5);</span><br><span class="line">//將列表元素加總</span><br><span class="line">Integer sum = integers.stream().reduce(0, (a, b) -&gt; a + b);</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="MapStruct-用法，MapStruct可以將兩個類別互相轉換"><a href="#MapStruct-用法，MapStruct可以將兩個類別互相轉換" class="headerlink" title="MapStruct 用法，MapStruct可以將兩個類別互相轉換"></a>MapStruct 用法，MapStruct可以將兩個類別互相轉換</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@Builder</span><br><span class="line">@AllArgsConstructor</span><br><span class="line">@NoArgsConstructor</span><br><span class="line">public class UserPo &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@Data</span><br><span class="line">public class UserEntity &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick1;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 轉換器</span><br><span class="line">@Mapper</span><br><span class="line">public interface IPersonMapper &#123;</span><br><span class="line">    IPersonMapper INSTANCT = Mappers.getMapper(IPersonMapper.class);</span><br><span class="line">    @Mapping(target = &quot;userNick1&quot;, source = &quot;userNick&quot;) // 如果名稱不同無法對應 就使用 這個做Mapping</span><br><span class="line">    @Mapping(target = &quot;age&quot;, source = &quot;age&quot;, numberFormat = &quot;#0.00&quot;)</span><br><span class="line"></span><br><span class="line">    UserEntity poToentity(UserPo userPo);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 測試PO 與 Entity 轉換</span><br><span class="line">public static void testNormal() &#123;</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----start------&quot;);</span><br><span class="line">    UserPo userPo = UserPo.builder()</span><br><span class="line">            .id(1L)</span><br><span class="line">            .gmtCreate(new Date())</span><br><span class="line">           .buyerId(666L)</span><br><span class="line">           .userNick(&quot;測試mapstruct&quot;)</span><br><span class="line">           .userVerified(&quot;ok&quot;)</span><br><span class="line">           .age(18L)</span><br><span class="line">           .build();</span><br><span class="line"></span><br><span class="line">    System.out.println(&quot;USERPO = &quot; + userPo);</span><br><span class="line">    UserEntity userEntity = IPersonMapper.INSTANCT.poToentity(userPo);</span><br><span class="line">    System.out.println(&quot;ENTITY = &quot; + userEntity);</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----ent------&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Lombok-的Annonation"><a href="#Lombok-的Annonation" class="headerlink" title="@Lombok 的Annonation"></a>@Lombok 的Annonation</h3><ul>
+<li>@Data 注解：<br>@Data 是 Lombok 提供的最常用的注解之一，它结合了 @ToString、@EqualsAndHashCode、@Getter、@Setter 以及 @RequiredArgsConstructor 的功能。它会自动生成这些方法，并为类的每个非静态字段创建 Getter 和 Setter 方法，还会生成 toString 方法和 equals、hashCode 方法。</li>
+<li>@Builder 注解：<br>@Builder 是 Lombok 提供的注解，用于实现建造者模式。它生成一个嵌套的静态内部类 Builder，使得创建对象时可以链式调用，更加清晰和易读。使用 @Builder 注解时，您可以通过生成器模式设置实例的字段。</li>
+<li>@AllArgsConstructor 注解：<br>@AllArgsConstructor 是 Lombok 提供的注解，用于生成一个包含所有参数的构造函数。它会为类的每个字段生成构造函数参数，方便创建对象时传入所有字段的值。</li>
+<li>@NoArgsConstructor 注解：<br>@NoArgsConstructor 是 Lombok 提供的注解，用于生成一个无参数的默认构造函数。它可以在创建对象时使用，特别是当您在使用 @Builder 注解时，因为默认情况下，@Builder 注解需要一个无参构造函数。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java Optional介紹與使用方法</title>
     <url>/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>Optional是Java 8推出時加入的新功能，Optional被發明出來的初衷是為了解決Java常見的NullPointException。</p>
@@ -96,79 +139,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java Stream用法、MapStruct、Lombok語法</title>
-    <url>/2024/05/01/Java-Stream%E7%94%A8%E6%B3%95%E3%80%81MapStruct%E3%80%81Lombok%E8%AA%9E%E6%B3%95/</url>
-    <content><![CDATA[<p>Java 8 加入Stream語法，提供了很多針對陣列物件的便利功能，以下介紹一些常見的用法。</p>
-<span id="more"></span>
-<h3 id="Java-Stream-常見用法"><a href="#Java-Stream-常見用法" class="headerlink" title="Java Stream 常見用法"></a>Java Stream 常見用法</h3><p>Java Stream 主要功能如下</p>
-<ol>
-<li>Filter 透過設定的條件過濾元素</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 找出非Empty數量</span><br><span class="line">long memberCount = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.count();</span><br><span class="line"></span><br><span class="line">// 找出非重複的第一位成員</span><br><span class="line">String firstMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.findFirst()</span><br><span class="line">.get();</span><br><span class="line"></span><br><span class="line">// 找出 陣列中以AL1S開頭的任何一個，若沒有符合的回傳&quot;IS NOT EXIST&quot;</span><br><span class="line">String findQueen = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; string.startsWith(&quot;AL1S&quot;))</span><br><span class="line">.distinct()</span><br><span class="line">.findAny()</span><br><span class="line">.orElse(&quot;IS NOT EXIST&quot;);</span><br><span class="line"></span><br><span class="line">// 找出前三位成員</span><br><span class="line">String findThreeMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.limit(3)</span><br><span class="line">.collect(Collectors.joining());</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>Map 映射每个元素到對應的結果</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;),</span><br><span class="line">    new Food(&quot;餛飩湯&quot;),</span><br><span class="line">    new Food(&quot;肉羹湯&quot;),</span><br><span class="line">    new Food(&quot;牛肉湯&quot;),</span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">// 取得物件的字串</span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream().map( food -&gt; food.getFoodName()).toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>forEach 迭代Stream中的每個元素 ( 同樣可以修改 但是不會回傳)</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;), </span><br><span class="line">    new Food(&quot;餛飩湯&quot;), </span><br><span class="line">    new Food(&quot;肉羹湯&quot;), </span><br><span class="line">    new Food(&quot;牛肉湯&quot;), </span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream()</span><br><span class="line">.map( food -&gt; food.getFoodName())</span><br><span class="line">.toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br><span class="line"></span><br><span class="line">// 將所有FoodName 加上 NT$</span><br><span class="line">foodObj</span><br><span class="line">.stream()</span><br><span class="line">.forEach(food -&gt; &#123;</span><br><span class="line">			food.foodName = &quot;NT$&quot;+food.getFoodName();</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>reduce (元素匯總成單一結果。)</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; integers = Arrays.asList(1, 2, 3, 4, 5);</span><br><span class="line">//將列表元素加總</span><br><span class="line">Integer sum = integers.stream().reduce(0, (a, b) -&gt; a + b);</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="MapStruct-用法，MapStruct可以將兩個類別互相轉換"><a href="#MapStruct-用法，MapStruct可以將兩個類別互相轉換" class="headerlink" title="MapStruct 用法，MapStruct可以將兩個類別互相轉換"></a>MapStruct 用法，MapStruct可以將兩個類別互相轉換</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@Builder</span><br><span class="line">@AllArgsConstructor</span><br><span class="line">@NoArgsConstructor</span><br><span class="line">public class UserPo &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@Data</span><br><span class="line">public class UserEntity &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick1;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 轉換器</span><br><span class="line">@Mapper</span><br><span class="line">public interface IPersonMapper &#123;</span><br><span class="line">    IPersonMapper INSTANCT = Mappers.getMapper(IPersonMapper.class);</span><br><span class="line">    @Mapping(target = &quot;userNick1&quot;, source = &quot;userNick&quot;) // 如果名稱不同無法對應 就使用 這個做Mapping</span><br><span class="line">    @Mapping(target = &quot;age&quot;, source = &quot;age&quot;, numberFormat = &quot;#0.00&quot;)</span><br><span class="line"></span><br><span class="line">    UserEntity poToentity(UserPo userPo);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 測試PO 與 Entity 轉換</span><br><span class="line">public static void testNormal() &#123;</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----start------&quot;);</span><br><span class="line">    UserPo userPo = UserPo.builder()</span><br><span class="line">            .id(1L)</span><br><span class="line">            .gmtCreate(new Date())</span><br><span class="line">           .buyerId(666L)</span><br><span class="line">           .userNick(&quot;測試mapstruct&quot;)</span><br><span class="line">           .userVerified(&quot;ok&quot;)</span><br><span class="line">           .age(18L)</span><br><span class="line">           .build();</span><br><span class="line"></span><br><span class="line">    System.out.println(&quot;USERPO = &quot; + userPo);</span><br><span class="line">    UserEntity userEntity = IPersonMapper.INSTANCT.poToentity(userPo);</span><br><span class="line">    System.out.println(&quot;ENTITY = &quot; + userEntity);</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----ent------&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="Lombok-的Annonation"><a href="#Lombok-的Annonation" class="headerlink" title="@Lombok 的Annonation"></a>@Lombok 的Annonation</h3><ul>
-<li>@Data 注解：<br>@Data 是 Lombok 提供的最常用的注解之一，它结合了 @ToString、@EqualsAndHashCode、@Getter、@Setter 以及 @RequiredArgsConstructor 的功能。它会自动生成这些方法，并为类的每个非静态字段创建 Getter 和 Setter 方法，还会生成 toString 方法和 equals、hashCode 方法。</li>
-<li>@Builder 注解：<br>@Builder 是 Lombok 提供的注解，用于实现建造者模式。它生成一个嵌套的静态内部类 Builder，使得创建对象时可以链式调用，更加清晰和易读。使用 @Builder 注解时，您可以通过生成器模式设置实例的字段。</li>
-<li>@AllArgsConstructor 注解：<br>@AllArgsConstructor 是 Lombok 提供的注解，用于生成一个包含所有参数的构造函数。它会为类的每个字段生成构造函数参数，方便创建对象时传入所有字段的值。</li>
-<li>@NoArgsConstructor 注解：<br>@NoArgsConstructor 是 Lombok 提供的注解，用于生成一个无参数的默认构造函数。它可以在创建对象时使用，特别是当您在使用 @Builder 注解时，因为默认情况下，@Builder 注解需要一个无参构造函数。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spring JPA(JDK 17)的一些疑難雜症</title>
-    <url>/2024/04/20/Spring-JPA-JDK-17-%E7%9A%84%E4%B8%80%E4%BA%9B%E7%96%91%E9%9B%A3%E9%9B%9C%E7%97%87/</url>
-    <content><![CDATA[<h3 id="問題一"><a href="#問題一" class="headerlink" title="問題一"></a>問題一</h3><p>今天在自己做Project時，啟動Project時老是出現Spring JPA 冒出的錯誤訊息:not a managed type class…</p>
-<span id="more"></span>
-<p>遇到時當下我有點困惑，因為之前做時從來沒看過，所以在這邊做個紀錄：<br>錯誤的地方如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">package com.example.payment_system.orm;</span><br><span class="line"></span><br><span class="line">import javax.persistence.Column;</span><br><span class="line">import javax.persistence.Entity;</span><br><span class="line">import javax.persistence.Id;</span><br><span class="line">import javax.persistence.Table;</span><br><span class="line">import java.time.LocalDateTime;</span><br><span class="line"></span><br><span class="line">@Entity</span><br><span class="line">@Table(name = &quot;payment_member_info&quot;)</span><br><span class="line">public class PaymentMemberInfo &#123;</span><br><span class="line"></span><br><span class="line">    @Id</span><br><span class="line">    @Column(name = &quot;pmi_member_id&quot;)</span><br><span class="line">    private Long pmiMeberId;</span><br><span class="line">    @Column(name = &quot;pmi_member_name&quot;,nullable = false,length = 255)</span><br><span class="line">    private String pmsMemberName;</span><br><span class="line">    @Column(name = &quot;pmi_member_phone&quot;,nullable = false,length = 30)</span><br><span class="line">    private String pmiMemberPhone;</span><br><span class="line">    @Column(name = &quot;pmi_member_email&quot;,nullable = false,length = 255)</span><br><span class="line">    private String pmiMemberEmail;</span><br><span class="line">    @Column(name = &quot;pmi_member_pwd&quot;,nullable = false,length = 255)</span><br><span class="line">    private String pmiMemberpwd;</span><br><span class="line">    @Column(name = &quot;pmi_lastlogin_time&quot;,nullable = false)</span><br><span class="line">    private LocalDateTime pmiLastloginTime;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>這個錯誤發生的原因來自Spring的JDK版本問題，在新版的SpringBoot與JDK中，把JavaX給替換成了Jakarta，所以只要是SpringBoot 6+ 與 JDK 17+，都是使用jakarta persist api，只要換成jakarta就解決這個問題了。</p>
-<h3 id="問題二"><a href="#問題二" class="headerlink" title="問題二"></a>問題二</h3><p>在新建立專案時遇到錯誤</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Failed to configure a DataSource: &#x27;url&#x27; attribute is not specified and no embedded datasource could be configured.</span><br><span class="line"></span><br><span class="line">Reason: Failed to determine a suitable driver class</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Action:</span><br><span class="line"></span><br><span class="line">Consider the following:</span><br><span class="line">	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.</span><br><span class="line">	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>這很明顯的就是少了設定資料庫的poperties，所以如果遇到的話要檢查application.poperties是否存在以下config：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=payment;encrypt=false;</span><br><span class="line">spring.datasource.username=sa</span><br><span class="line">spring.datasource.password=17E513579</span><br><span class="line">spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>從上至下分別是：連線資料庫的url、連線資料庫的帳號、密碼、以及資料庫驅動程式，根據你使用不同的資料庫要添加的稍有不同，以下以SQL Server作為舉例。</p>
-<h3 id="問題三"><a href="#問題三" class="headerlink" title="問題三"></a>問題三</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;encrypt&quot; 屬性設定為 &quot;true&quot; 且 &quot;trustServerCertificate&quot; 屬性設為 &quot;false&quot;，但驅動程式無法使用安全通訊端層 (SSL) 加密建立 SQL Server 的安全連線: 錯誤: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target。 ClientConnectionId:7633a811-f5ed-4644-b413-770e31275a44</span><br></pre></td></tr></table></figure>
-
-<p>如果在連線時出現以下問題，代表資料庫沒有設定SSL加密的，方法有兩種，解法有調整資料庫SSL加密，以及在application.poperties設定取消加密兩種方法。如果後者可以參考以下程式。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=payment;encrypt=false;</span><br></pre></td></tr></table></figure>
-
-<p>以上</p>
-<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
-<li><a href="https://stackoverflow.com/questions/28664064/spring-boot-not-a-managed-type">https://stackoverflow.com/questions/28664064/spring-boot-not-a-managed-type</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Spring</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【熊本弁】學習 Girl Band Cry 1 話出現的方言</title>
     <url>/2024/05/19/%E3%80%90%E7%86%8A%E6%9C%AC%E5%BC%81%E3%80%91%E5%AD%B8%E7%BF%92-Girl-Band-Cry-1-%E8%A9%B1%E5%87%BA%E7%8F%BE%E7%9A%84%E6%96%B9%E8%A8%80/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>周末就是補番時刻，這一季動畫真是琳瑯滿目，做為一名老宅宅，近年來越來越多深入人心的樂團番誕生，從孤獨搖滾到MyGO，這季還有Girl Band Cry這部，第一話做得很好，有興趣請大家一定要看看。這次要討論的是動畫第一話中出現的熊本弁，讓各位可以簡單上手熊本弁。</p>
@@ -207,6 +177,36 @@
       <tags>
         <tag>熊本弁</tag>
         <tag>ガールズバンドクライ</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring JPA(JDK 17)的一些疑難雜症</title>
+    <url>/2024/04/20/Spring-JPA-JDK-17-%E7%9A%84%E4%B8%80%E4%BA%9B%E7%96%91%E9%9B%A3%E9%9B%9C%E7%97%87/</url>
+    <content><![CDATA[<h3 id="問題一"><a href="#問題一" class="headerlink" title="問題一"></a>問題一</h3><p>今天在自己做Project時，啟動Project時老是出現Spring JPA 冒出的錯誤訊息:not a managed type class…</p>
+<span id="more"></span>
+<p>遇到時當下我有點困惑，因為之前做時從來沒看過，所以在這邊做個紀錄：<br>錯誤的地方如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">package com.example.payment_system.orm;</span><br><span class="line"></span><br><span class="line">import javax.persistence.Column;</span><br><span class="line">import javax.persistence.Entity;</span><br><span class="line">import javax.persistence.Id;</span><br><span class="line">import javax.persistence.Table;</span><br><span class="line">import java.time.LocalDateTime;</span><br><span class="line"></span><br><span class="line">@Entity</span><br><span class="line">@Table(name = &quot;payment_member_info&quot;)</span><br><span class="line">public class PaymentMemberInfo &#123;</span><br><span class="line"></span><br><span class="line">    @Id</span><br><span class="line">    @Column(name = &quot;pmi_member_id&quot;)</span><br><span class="line">    private Long pmiMeberId;</span><br><span class="line">    @Column(name = &quot;pmi_member_name&quot;,nullable = false,length = 255)</span><br><span class="line">    private String pmsMemberName;</span><br><span class="line">    @Column(name = &quot;pmi_member_phone&quot;,nullable = false,length = 30)</span><br><span class="line">    private String pmiMemberPhone;</span><br><span class="line">    @Column(name = &quot;pmi_member_email&quot;,nullable = false,length = 255)</span><br><span class="line">    private String pmiMemberEmail;</span><br><span class="line">    @Column(name = &quot;pmi_member_pwd&quot;,nullable = false,length = 255)</span><br><span class="line">    private String pmiMemberpwd;</span><br><span class="line">    @Column(name = &quot;pmi_lastlogin_time&quot;,nullable = false)</span><br><span class="line">    private LocalDateTime pmiLastloginTime;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>這個錯誤發生的原因來自Spring的JDK版本問題，在新版的SpringBoot與JDK中，把JavaX給替換成了Jakarta，所以只要是SpringBoot 6+ 與 JDK 17+，都是使用jakarta persist api，只要換成jakarta就解決這個問題了。</p>
+<h3 id="問題二"><a href="#問題二" class="headerlink" title="問題二"></a>問題二</h3><p>在新建立專案時遇到錯誤</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Failed to configure a DataSource: &#x27;url&#x27; attribute is not specified and no embedded datasource could be configured.</span><br><span class="line"></span><br><span class="line">Reason: Failed to determine a suitable driver class</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Action:</span><br><span class="line"></span><br><span class="line">Consider the following:</span><br><span class="line">	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.</span><br><span class="line">	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>這很明顯的就是少了設定資料庫的poperties，所以如果遇到的話要檢查application.poperties是否存在以下config：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=payment;encrypt=false;</span><br><span class="line">spring.datasource.username=sa</span><br><span class="line">spring.datasource.password=17E513579</span><br><span class="line">spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>從上至下分別是：連線資料庫的url、連線資料庫的帳號、密碼、以及資料庫驅動程式，根據你使用不同的資料庫要添加的稍有不同，以下以SQL Server作為舉例。</p>
+<h3 id="問題三"><a href="#問題三" class="headerlink" title="問題三"></a>問題三</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;encrypt&quot; 屬性設定為 &quot;true&quot; 且 &quot;trustServerCertificate&quot; 屬性設為 &quot;false&quot;，但驅動程式無法使用安全通訊端層 (SSL) 加密建立 SQL Server 的安全連線: 錯誤: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target。 ClientConnectionId:7633a811-f5ed-4644-b413-770e31275a44</span><br></pre></td></tr></table></figure>
+
+<p>如果在連線時出現以下問題，代表資料庫沒有設定SSL加密的，方法有兩種，解法有調整資料庫SSL加密，以及在application.poperties設定取消加密兩種方法。如果後者可以參考以下程式。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=payment;encrypt=false;</span><br></pre></td></tr></table></figure>
+
+<p>以上</p>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
+<li><a href="https://stackoverflow.com/questions/28664064/spring-boot-not-a-managed-type">https://stackoverflow.com/questions/28664064/spring-boot-not-a-managed-type</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
@@ -256,41 +256,6 @@
       </categories>
       <tags>
         <tag>SpringBoot</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)</title>
-    <url>/2024/04/22/%E7%B0%A1%E5%96%AE%E4%BD%BF%E7%94%A8Swagger%E5%8A%9F%E8%83%BD-%E9%81%A9%E7%94%A8Java-17/</url>
-    <content><![CDATA[<p>作為一個後端工程師，除了基本的API開發，如何撰寫出讓人好理解的文件至關重要。一份好的文件不僅可以幫助RD了解API，也能提供給PM等部門去了解自己的產品。</p>
-<span id="more"></span>Swagger就是因此而生，Swagger的特色是利用Annonation撰寫文件，另外透過OpenAPI，將撰寫的內容轉成靜態網頁，文件只需要提供靜態網頁就可以讓前端人員、PM去參考API的格式與規範，相當方便。
-<p>本文以Java 17舉例。</p>
-<h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><p>在Maven的pom.xml檔案中添加以下依賴，並reload：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springdoc&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;springdoc-openapi-starter-webmvc-ui&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.2.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>接著補上API(已經有API的這部分可以不看)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;/api&quot;)</span><br><span class="line">public class MemberController &#123;</span><br><span class="line">    @PutMapping(&quot;/member&quot;)</span><br><span class="line">    public String login(@RequestBody HashMap reqMap) &#123;</span><br><span class="line">        System.out.println(&quot;Start login~&quot;);</span><br><span class="line">        String response = memberService.login(reqMap);</span><br><span class="line">        System.out.println(&quot;Response = &quot; + response);</span><br><span class="line">        return response;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接著訪問以下路徑<br><a href="http://localhost:8080/swagger-ui/index.html">http://localhost:8080/swagger-ui/index.html</a><br>就可以看到一個靜態網頁，裡面應該有所有Project的API，簡單的建立就完成了。<br>OpenAPI的特色是可以建立一個網頁，讓你瀏覽專案中所有在偵測範圍內的API。</p>
-<p>你可以試著為API添加一些資訊，像是針對系統的名稱、描述或是開發者的資料等等。像這樣</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">@Configuration</span><br><span class="line">public class OpenAPIConfiguration &#123;</span><br><span class="line"></span><br><span class="line">   @Bean</span><br><span class="line">   public OpenAPI defineOpenApi() &#123;</span><br><span class="line">       Server server = new Server();</span><br><span class="line">       server.setUrl(&quot;http://localhost:8080&quot;);</span><br><span class="line">       server.setDescription(&quot;Development&quot;);</span><br><span class="line"></span><br><span class="line">       Contact myContact = new Contact();</span><br><span class="line">       myContact.setName(&quot;Jane Doe&quot;);</span><br><span class="line">       myContact.setEmail(&quot;your.email@gmail.com&quot;);</span><br><span class="line"></span><br><span class="line">       Info information = new Info()</span><br><span class="line">               .title(&quot;Employee Management System API&quot;)</span><br><span class="line">               .version(&quot;1.0&quot;)</span><br><span class="line">               .description(&quot;This API exposes endpoints to manage employees.&quot;)</span><br><span class="line">               .contact(myContact);</span><br><span class="line">       return new OpenAPI().info(information).servers(List.of(server));</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>如果想要為個別的API添加描述，可以參考以下程式。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Tag(name = &quot;get&quot;, description = &quot;GET methods of Employee APIs&quot;)</span><br><span class="line">@GetMapping(&quot;/employees&quot;)</span><br><span class="line">public List&lt;Employee&gt; findAllEmployees() &#123;</span><br><span class="line">   return repository.findAll();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Tag(name = &quot;get&quot;, description = &quot;GET methods of Employee APIs&quot;)</span><br><span class="line">@GetMapping(&quot;/employees/&#123;employeeId&#125;&quot;)</span><br><span class="line">public Employee getEmployee(@PathVariable int employeeId) &#123;</span><br><span class="line">   Employee employee = repository.findById(employeeId)</span><br><span class="line">           .orElseThrow(() -&gt; new RuntimeException(&quot;Employee id not found - &quot; + employeeId));</span><br><span class="line">   return employee;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>@Tag中的name代表了分類，description代表針對這個分類的描述。</p>
-<p>如果要建立Response的文件規範的話，可以參考以下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@ApiResponses(&#123;</span><br><span class="line">       @ApiResponse(responseCode = &quot;200&quot;, content = &#123; @Content(mediaType = &quot;application/json&quot;,</span><br><span class="line">               schema = @Schema(implementation = Employee.class)) &#125;),</span><br><span class="line">       @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Employee not found&quot;,</span><br><span class="line">               content = @Content) &#125;)</span><br><span class="line">@DeleteMapping(&quot;/employees/&#123;employeeId&#125;&quot;)</span><br><span class="line">public String deleteEmployee(@PathVariable int employeeId) &#123;</span><br><span class="line">   Employee employee = repository.findById(employeeId)</span><br><span class="line">           .orElseThrow(() -&gt; new RuntimeException(&quot;Employee id not found - &quot; + employeeId));</span><br><span class="line">   repository.delete(employee);</span><br><span class="line">   return &quot;Deleted employee with id: &quot; + employeeId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>@ApiResponse是一個回傳格式，可以撰寫不同HTTP狀態碼的回傳內容，以及更多描述。<br>有了以上功能，你應該就可以為你的API寫出足夠描述的文件了。</p>
-<p><img src="/images/swagger-demo.png" alt="这是图片"></p>
-<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
-<li><a href="https://medium.com/@berktorun.dev/swagger-like-a-pro-with-spring-boot-3-and-java-17-49eed0ce1d2f">https://medium.com/@berktorun.dev/swagger-like-a-pro-with-spring-boot-3-and-java-17-49eed0ce1d2f</a></li>
-<li><a href="https://bell-sw.com/blog/documenting-rest-api-with-swagger-in-spring-boot-3/E">https://bell-sw.com/blog/documenting-rest-api-with-swagger-in-spring-boot-3/E</a></li>
-</ol>
-<p>以上</p>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
@@ -366,34 +331,38 @@
       </tags>
   </entry>
   <entry>
-    <title>關於我拿到日本公司的內定卻決定拒絕的那件事</title>
-    <url>/2024/04/19/%E9%97%9C%E6%96%BC%E6%88%91%E6%8B%BF%E5%88%B0%E6%97%A5%E6%9C%AC%E5%85%AC%E5%8F%B8%E7%9A%84%E5%85%A7%E5%AE%9A%E5%8D%BB%E6%B1%BA%E5%AE%9A%E6%8B%92%E7%B5%95%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B/</url>
-    <content><![CDATA[<h4 id="你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？-你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？"><a href="#你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？-你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？" class="headerlink" title="你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？ 你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？"></a>你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？ 你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？</h4><p><strong>我有</strong></p>
-<p>這邊算是一篇生活的筆記紀錄，主要是最近發生了太多事情，一時之間不曉得怎麼讓自己去習慣這樣的變化，所以我決定訴諸文字，透過過去陪伴了我數年的文字來表達出我內心一隅的期盼、忍讓與惋惜。</p>
-<p>我從小就很喜歡日本文化，名字中也包含了日文(旻)，這讓我自小就覺得自己是個適合日本的人，我小時候看的動畫從航海王，線上愛奇藝的死神，到我正式入宅看的Fate&#x2F;Zero、當紅戀愛喜劇我的妹妹哪有那麼可愛、不朽經典的幸運星等等，代表性的動畫不計其數。不同於許多同學，喜歡動畫都在國中、高中階段，我的熱情從未退卻。<br>高中開始聽Galgame OP，開始使用Twitter追蹤喜歡的畫師，接觸可能連日本人都不熟悉的同人誌與同人音樂，還有偷偷瞞著家裡買Galgame豪華特典版，更別說家裡的牆壁早就被我掛滿海報、掛軸、還有畫師親簽的複製原畫。這些年來我從來沒有後悔入宅過，一次都沒有。</p>
-<p>除此之外，我也不是白宅的，我在高中，連一句日文都不會說時，就開始利用Youtube去翻譯動畫、遊戲的預告，因為我希望有著跟我同樣對動畫充滿熱情的人，不會因為語言而停止追逐。<br>在大學時，我正式開始學習日文、或許是宅得無可救藥的緣故，我只考了兩次日文檢定，就拿到了日文檢定最高的JLPT N1。當下拿到時我真的很開心。<br>回顧我學生時期的軌跡，我以自己的熱情為傲，並堅信自己的熱情終有一天會引導我前往更好的生活，也就是住在日本。</p>
-<h4 id="那時我還不知道自己有多天真"><a href="#那時我還不知道自己有多天真" class="headerlink" title="那時我還不知道自己有多天真**"></a>那時我還不知道自己有多天真**</h4><p>大學畢業後的我，成為一名軟體工程師，每天上班Coding，下班後過著快樂宅的生活，然而一枚Gmail吸引了我的目光。</p>
-<p><strong>「日本 樂天 招募台灣工程師」</strong></p>
-<p>這封信就好像一滴墨漬在白紙上暈開般，我忽然間想起自己應該要開始嘗試自己一直以來都想要嘗試的事了。我試著投遞了職缺，但最終因為能力不足而被刷掉。<br>但我沒有氣餒。「不就是能力嗎？我去培養不就好了。」<br>於是我開始對軟體知識認真向學，從只會Coding到可以設計出一個還可以的系統。可以說是<br>日本是我一直以來前進的契機，因為想要，所以必須得努力不可。</p>
-<p>今年，過了一年的我，帶著一年軟體開發的經驗去投遞日本職缺，我使用Linkedin上找尋海外赴日的顧問，請他幫我找適合我的職缺。<br>接著就是一連串的忙碌日子，從第一次跟日本人說話，到面試練習、職務經歷、志望動機、自我PR與自我介紹，我把我所有能做的事情都做了。</p>
-<p>而最後我拿到的職缺是「派遣IT 軟體工程師」</p>
-<p>很滑稽吧，努力到盡頭我得到的居然是派遣IT的工作，在國內的我雖然也只是在名不經傳的小新創企業，但好歹也是一份正職工作，但我要去日本的話，居然只能透過派遣IT的形式過去嗎？</p>
-<p>我琢磨一直以來帶領自己成長與前進的力量，忍不住產生了懷疑。「このまま、本当にいいのか？(這樣下去真的好嗎)」我期望著日本的生活，但卻要因此犧牲目前在台灣的生活、失去穩定的工作，以及成長性。就只是為了前往日本，這樣真的是最佳解嗎？</p>
-<p>我帶著這份困惑，向工作的老闆提出了我想要離開這份工作前往日本的事，老闆表示同意也鼓勵我去趁著自己年輕時追逐自己的夢想。</p>
-<p>然而，心中的那份疑惑終於已某種形式爆發出來了，心中理性的自己告訴自己住手，為了日本拋棄一切根本是愚蠢至極，若是失敗了自己將毫無退路，而另外一道聲音則告訴自己，這是自己的志願，為了日本追逐至今的自己，如今卻要讓機會從手中滑落嗎？</p>
-<p><strong>「祝福，在我始料未及的情況下，逆轉成了詛咒。」</strong></p>
-<p>這份掙扎與痛苦讓我苦苦思慮了相當久的一段時間，有好幾天我早上五點半起床，在家中陽台呆愣著看著窗外，浮現一抹魚肚白的天際。期望著有誰能給我解答，但回應我的只有戶外野狗的吠叫。</p>
-<p>最後，我咬著牙，拋棄了一直以來支持我的理想，也就是日本的生活。我是理想的叛徒，像是小丑一般在Offer面談的前一天拒絕了入職邀約，儘管合理卻對我來說不合理，我看見顧問發來無數詢問的訊息，把手機丟向一旁，身體深深埋入了被窩之中。</p>
-<p>又是一天的五點鐘起床，我望著窗外的天際，心裡也慢慢浮現了一線曙光，為我長久以來的掙扎與苦痛畫下了休止符。</p>
-<p>失去了日本、失去了工作，如今的我還剩下什麼？我沒有答案。</p>
-<p><strong>這是不是正確的？</strong> 這個問題我連想都不敢想，我的意志不夠堅定，所以不能再讓它傷害更多的人了，我咬著指甲，將這份苦澀的情緒，伴隨早餐的咖啡一嚥而下。</p>
+    <title>使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)</title>
+    <url>/2024/04/22/%E7%B0%A1%E5%96%AE%E4%BD%BF%E7%94%A8Swagger%E5%8A%9F%E8%83%BD-%E9%81%A9%E7%94%A8Java-17/</url>
+    <content><![CDATA[<p>作為一個後端工程師，除了基本的API開發，如何撰寫出讓人好理解的文件至關重要。一份好的文件不僅可以幫助RD了解API，也能提供給PM等部門去了解自己的產品。</p>
+<span id="more"></span>Swagger就是因此而生，Swagger的特色是利用Annonation撰寫文件，另外透過OpenAPI，將撰寫的內容轉成靜態網頁，文件只需要提供靜態網頁就可以讓前端人員、PM去參考API的格式與規範，相當方便。
+<p>本文以Java 17舉例。</p>
+<h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><p>在Maven的pom.xml檔案中添加以下依賴，並reload：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springdoc&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;springdoc-openapi-starter-webmvc-ui&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.2.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>接著補上API(已經有API的這部分可以不看)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;/api&quot;)</span><br><span class="line">public class MemberController &#123;</span><br><span class="line">    @PutMapping(&quot;/member&quot;)</span><br><span class="line">    public String login(@RequestBody HashMap reqMap) &#123;</span><br><span class="line">        System.out.println(&quot;Start login~&quot;);</span><br><span class="line">        String response = memberService.login(reqMap);</span><br><span class="line">        System.out.println(&quot;Response = &quot; + response);</span><br><span class="line">        return response;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接著訪問以下路徑<br><a href="http://localhost:8080/swagger-ui/index.html">http://localhost:8080/swagger-ui/index.html</a><br>就可以看到一個靜態網頁，裡面應該有所有Project的API，簡單的建立就完成了。<br>OpenAPI的特色是可以建立一個網頁，讓你瀏覽專案中所有在偵測範圍內的API。</p>
+<p>你可以試著為API添加一些資訊，像是針對系統的名稱、描述或是開發者的資料等等。像這樣</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">@Configuration</span><br><span class="line">public class OpenAPIConfiguration &#123;</span><br><span class="line"></span><br><span class="line">   @Bean</span><br><span class="line">   public OpenAPI defineOpenApi() &#123;</span><br><span class="line">       Server server = new Server();</span><br><span class="line">       server.setUrl(&quot;http://localhost:8080&quot;);</span><br><span class="line">       server.setDescription(&quot;Development&quot;);</span><br><span class="line"></span><br><span class="line">       Contact myContact = new Contact();</span><br><span class="line">       myContact.setName(&quot;Jane Doe&quot;);</span><br><span class="line">       myContact.setEmail(&quot;your.email@gmail.com&quot;);</span><br><span class="line"></span><br><span class="line">       Info information = new Info()</span><br><span class="line">               .title(&quot;Employee Management System API&quot;)</span><br><span class="line">               .version(&quot;1.0&quot;)</span><br><span class="line">               .description(&quot;This API exposes endpoints to manage employees.&quot;)</span><br><span class="line">               .contact(myContact);</span><br><span class="line">       return new OpenAPI().info(information).servers(List.of(server));</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果想要為個別的API添加描述，可以參考以下程式。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Tag(name = &quot;get&quot;, description = &quot;GET methods of Employee APIs&quot;)</span><br><span class="line">@GetMapping(&quot;/employees&quot;)</span><br><span class="line">public List&lt;Employee&gt; findAllEmployees() &#123;</span><br><span class="line">   return repository.findAll();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Tag(name = &quot;get&quot;, description = &quot;GET methods of Employee APIs&quot;)</span><br><span class="line">@GetMapping(&quot;/employees/&#123;employeeId&#125;&quot;)</span><br><span class="line">public Employee getEmployee(@PathVariable int employeeId) &#123;</span><br><span class="line">   Employee employee = repository.findById(employeeId)</span><br><span class="line">           .orElseThrow(() -&gt; new RuntimeException(&quot;Employee id not found - &quot; + employeeId));</span><br><span class="line">   return employee;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@Tag中的name代表了分類，description代表針對這個分類的描述。</p>
+<p>如果要建立Response的文件規範的話，可以參考以下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@ApiResponses(&#123;</span><br><span class="line">       @ApiResponse(responseCode = &quot;200&quot;, content = &#123; @Content(mediaType = &quot;application/json&quot;,</span><br><span class="line">               schema = @Schema(implementation = Employee.class)) &#125;),</span><br><span class="line">       @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Employee not found&quot;,</span><br><span class="line">               content = @Content) &#125;)</span><br><span class="line">@DeleteMapping(&quot;/employees/&#123;employeeId&#125;&quot;)</span><br><span class="line">public String deleteEmployee(@PathVariable int employeeId) &#123;</span><br><span class="line">   Employee employee = repository.findById(employeeId)</span><br><span class="line">           .orElseThrow(() -&gt; new RuntimeException(&quot;Employee id not found - &quot; + employeeId));</span><br><span class="line">   repository.delete(employee);</span><br><span class="line">   return &quot;Deleted employee with id: &quot; + employeeId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@ApiResponse是一個回傳格式，可以撰寫不同HTTP狀態碼的回傳內容，以及更多描述。<br>有了以上功能，你應該就可以為你的API寫出足夠描述的文件了。</p>
+<p><img src="/images/swagger-demo.png" alt="这是图片"></p>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
+<li><a href="https://medium.com/@berktorun.dev/swagger-like-a-pro-with-spring-boot-3-and-java-17-49eed0ce1d2f">https://medium.com/@berktorun.dev/swagger-like-a-pro-with-spring-boot-3-and-java-17-49eed0ce1d2f</a></li>
+<li><a href="https://bell-sw.com/blog/documenting-rest-api-with-swagger-in-spring-boot-3/E">https://bell-sw.com/blog/documenting-rest-api-with-swagger-in-spring-boot-3/E</a></li>
+</ol>
+<p>以上</p>
 ]]></content>
       <categories>
-        <category>生活紀錄</category>
+        <category>Coding</category>
       </categories>
       <tags>
-        <tag>日本求職</tag>
-        <tag>面試</tag>
+        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
@@ -439,6 +408,37 @@
       </categories>
       <tags>
         <tag>SQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>關於我拿到日本公司的內定卻決定拒絕的那件事</title>
+    <url>/2024/04/19/%E9%97%9C%E6%96%BC%E6%88%91%E6%8B%BF%E5%88%B0%E6%97%A5%E6%9C%AC%E5%85%AC%E5%8F%B8%E7%9A%84%E5%85%A7%E5%AE%9A%E5%8D%BB%E6%B1%BA%E5%AE%9A%E6%8B%92%E7%B5%95%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B/</url>
+    <content><![CDATA[<h4 id="你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？-你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？"><a href="#你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？-你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？" class="headerlink" title="你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？ 你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？"></a>你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？ 你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？</h4><p><strong>我有</strong></p>
+<p>這邊算是一篇生活的筆記紀錄，主要是最近發生了太多事情，一時之間不曉得怎麼讓自己去習慣這樣的變化，所以我決定訴諸文字，透過過去陪伴了我數年的文字來表達出我內心一隅的期盼、忍讓與惋惜。</p>
+<p>我從小就很喜歡日本文化，名字中也包含了日文(旻)，這讓我自小就覺得自己是個適合日本的人，我小時候看的動畫從航海王，線上愛奇藝的死神，到我正式入宅看的Fate&#x2F;Zero、當紅戀愛喜劇我的妹妹哪有那麼可愛、不朽經典的幸運星等等，代表性的動畫不計其數。不同於許多同學，喜歡動畫都在國中、高中階段，我的熱情從未退卻。<br>高中開始聽Galgame OP，開始使用Twitter追蹤喜歡的畫師，接觸可能連日本人都不熟悉的同人誌與同人音樂，還有偷偷瞞著家裡買Galgame豪華特典版，更別說家裡的牆壁早就被我掛滿海報、掛軸、還有畫師親簽的複製原畫。這些年來我從來沒有後悔入宅過，一次都沒有。</p>
+<p>除此之外，我也不是白宅的，我在高中，連一句日文都不會說時，就開始利用Youtube去翻譯動畫、遊戲的預告，因為我希望有著跟我同樣對動畫充滿熱情的人，不會因為語言而停止追逐。<br>在大學時，我正式開始學習日文、或許是宅得無可救藥的緣故，我只考了兩次日文檢定，就拿到了日文檢定最高的JLPT N1。當下拿到時我真的很開心。<br>回顧我學生時期的軌跡，我以自己的熱情為傲，並堅信自己的熱情終有一天會引導我前往更好的生活，也就是住在日本。</p>
+<h4 id="那時我還不知道自己有多天真"><a href="#那時我還不知道自己有多天真" class="headerlink" title="那時我還不知道自己有多天真**"></a>那時我還不知道自己有多天真**</h4><p>大學畢業後的我，成為一名軟體工程師，每天上班Coding，下班後過著快樂宅的生活，然而一枚Gmail吸引了我的目光。</p>
+<p><strong>「日本 樂天 招募台灣工程師」</strong></p>
+<p>這封信就好像一滴墨漬在白紙上暈開般，我忽然間想起自己應該要開始嘗試自己一直以來都想要嘗試的事了。我試著投遞了職缺，但最終因為能力不足而被刷掉。<br>但我沒有氣餒。「不就是能力嗎？我去培養不就好了。」<br>於是我開始對軟體知識認真向學，從只會Coding到可以設計出一個還可以的系統。可以說是<br>日本是我一直以來前進的契機，因為想要，所以必須得努力不可。</p>
+<p>今年，過了一年的我，帶著一年軟體開發的經驗去投遞日本職缺，我使用Linkedin上找尋海外赴日的顧問，請他幫我找適合我的職缺。<br>接著就是一連串的忙碌日子，從第一次跟日本人說話，到面試練習、職務經歷、志望動機、自我PR與自我介紹，我把我所有能做的事情都做了。</p>
+<p>而最後我拿到的職缺是「派遣IT 軟體工程師」</p>
+<p>很滑稽吧，努力到盡頭我得到的居然是派遣IT的工作，在國內的我雖然也只是在名不經傳的小新創企業，但好歹也是一份正職工作，但我要去日本的話，居然只能透過派遣IT的形式過去嗎？</p>
+<p>我琢磨一直以來帶領自己成長與前進的力量，忍不住產生了懷疑。「このまま、本当にいいのか？(這樣下去真的好嗎)」我期望著日本的生活，但卻要因此犧牲目前在台灣的生活、失去穩定的工作，以及成長性。就只是為了前往日本，這樣真的是最佳解嗎？</p>
+<p>我帶著這份困惑，向工作的老闆提出了我想要離開這份工作前往日本的事，老闆表示同意也鼓勵我去趁著自己年輕時追逐自己的夢想。</p>
+<p>然而，心中的那份疑惑終於已某種形式爆發出來了，心中理性的自己告訴自己住手，為了日本拋棄一切根本是愚蠢至極，若是失敗了自己將毫無退路，而另外一道聲音則告訴自己，這是自己的志願，為了日本追逐至今的自己，如今卻要讓機會從手中滑落嗎？</p>
+<p><strong>「祝福，在我始料未及的情況下，逆轉成了詛咒。」</strong></p>
+<p>這份掙扎與痛苦讓我苦苦思慮了相當久的一段時間，有好幾天我早上五點半起床，在家中陽台呆愣著看著窗外，浮現一抹魚肚白的天際。期望著有誰能給我解答，但回應我的只有戶外野狗的吠叫。</p>
+<p>最後，我咬著牙，拋棄了一直以來支持我的理想，也就是日本的生活。我是理想的叛徒，像是小丑一般在Offer面談的前一天拒絕了入職邀約，儘管合理卻對我來說不合理，我看見顧問發來無數詢問的訊息，把手機丟向一旁，身體深深埋入了被窩之中。</p>
+<p>又是一天的五點鐘起床，我望著窗外的天際，心裡也慢慢浮現了一線曙光，為我長久以來的掙扎與苦痛畫下了休止符。</p>
+<p>失去了日本、失去了工作，如今的我還剩下什麼？我沒有答案。</p>
+<p><strong>這是不是正確的？</strong> 這個問題我連想都不敢想，我的意志不夠堅定，所以不能再讓它傷害更多的人了，我咬著指甲，將這份苦澀的情緒，伴隨早餐的咖啡一嚥而下。</p>
+]]></content>
+      <categories>
+        <category>生活紀錄</category>
+      </categories>
+      <tags>
+        <tag>日本求職</tag>
+        <tag>面試</tag>
       </tags>
   </entry>
 </search>
