@@ -20,15 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Clark&#39;s Page">
-<meta property="og:url" content="http://example.com/archives/index.html">
+  <meta name="description" content="什麼是TDD？TDD，全名測試驅動開發(Test Driven Development)是一種軟體開發的方法論，顧名思義這種開發方式以測試驅動。使用TDD進行開發的流程如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什麼是TDD？如何實作？">
+<meta property="og:url" content="http://example.com/2024/05/18/%E4%BB%80%E9%BA%BC%E6%98%AFTDD%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%EF%BC%9F/index.html">
 <meta property="og:site_name" content="Clark&#39;s Page">
+<meta property="og:description" content="什麼是TDD？TDD，全名測試驅動開發(Test Driven Development)是一種軟體開發的方法論，顧名思義這種開發方式以測試驅動。使用TDD進行開發的流程如下：">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-05-18T14:41:03.000Z">
+<meta property="article:modified_time" content="2024-10-03T09:58:48.677Z">
 <meta property="article:author" content="Clark">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="TDD">
+<meta property="article:tag" content="Methology">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/archives/">
+<link rel="canonical" href="http://example.com/2024/05/18/%E4%BB%80%E9%BA%BC%E6%98%AFTDD%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%EF%BC%9F/">
 
 
 <script id="page-configurations">
@@ -36,12 +43,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Archive | Clark's Page</title>
+  <title>什麼是TDD？如何實作？ | Clark's Page</title>
   
 
 
@@ -198,234 +205,129 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">Um..! 11 posts in total. Keep on posting.</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/18/%E4%BB%80%E9%BA%BC%E6%98%AFTDD%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Clark">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Clark's Page">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          什麼是TDD？如何實作？
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-05-18 22:41:03" itemprop="dateCreated datePublished" datetime="2024-05-18T22:41:03+08:00">2024-05-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-03 17:58:48" itemprop="dateModified" datetime="2024-10-03T17:58:48+08:00">2024-10-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>116</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2024</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-05-19T20:08:54+08:00"
-              content="2024-05-19">
-          05-19
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/05/19/%E8%A7%A3%E8%AA%AASQL%E7%9A%84Transaction%E8%88%87%E9%9A%94%E9%9B%A2%E5%B1%A4%E7%B4%9A/" itemprop="url">
-            <span itemprop="name">解說SQL的Transaction與隔離層級</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-05-19T14:18:26+08:00"
-              content="2024-05-19">
-          05-19
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/05/19/%E3%80%90%E7%86%8A%E6%9C%AC%E5%BC%81%E3%80%91%E5%AD%B8%E7%BF%92-Girl-Band-Cry-1-%E8%A9%B1%E5%87%BA%E7%8F%BE%E7%9A%84%E6%96%B9%E8%A8%80/" itemprop="url">
-            <span itemprop="name">【熊本弁】學習 Girl Band Cry 1 話出現的方言</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-05-18T22:41:03+08:00"
-              content="2024-05-18">
-          05-18
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/05/18/%E4%BB%80%E9%BA%BC%E6%98%AFTDD%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%EF%BC%9F/" itemprop="url">
-            <span itemprop="name">什麼是TDD？如何實作？</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-05-01T14:16:37+08:00"
-              content="2024-05-01">
-          05-01
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/05/01/Java-Stream%E7%94%A8%E6%B3%95%E3%80%81MapStruct%E3%80%81Lombok%E8%AA%9E%E6%B3%95/" itemprop="url">
-            <span itemprop="name">Java Stream用法、MapStruct、Lombok語法</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-05-01T12:26:20+08:00"
-              content="2024-05-01">
-          05-01
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/05/01/Spring-AOP-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" itemprop="url">
-            <span itemprop="name">Spring AOP 基本概念與使用</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-05-01T11:06:01+08:00"
-              content="2024-05-01">
-          05-01
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/05/01/%E5%9C%A8SpringBoot-%E5%AF%AB%E6%B8%AC%E8%A9%A6-Mock-MockBean/" itemprop="url">
-            <span itemprop="name">在SpringBoot 寫測試 @Mock,@MockBean,MvcResult</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-04-24T13:08:13+08:00"
-              content="2024-04-24">
-          04-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" itemprop="url">
-            <span itemprop="name">Java Optional介紹與使用方法</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-04-22T11:20:19+08:00"
-              content="2024-04-22">
-          04-22
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/04/22/%E7%B0%A1%E5%96%AE%E4%BD%BF%E7%94%A8Swagger%E5%8A%9F%E8%83%BD-%E9%81%A9%E7%94%A8Java-17/" itemprop="url">
-            <span itemprop="name">使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-04-20T12:53:47+08:00"
-              content="2024-04-20">
-          04-20
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/04/20/Spring-JPA-JDK-17-%E7%9A%84%E4%B8%80%E4%BA%9B%E7%96%91%E9%9B%A3%E9%9B%9C%E7%97%87/" itemprop="url">
-            <span itemprop="name">Spring JPA(JDK 17)的一些疑難雜症</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-04-19T15:07:07+08:00"
-              content="2024-04-19">
-          04-19
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/04/19/%E9%97%9C%E6%96%BC%E6%88%91%E6%8B%BF%E5%88%B0%E6%97%A5%E6%9C%AC%E5%85%AC%E5%8F%B8%E7%9A%84%E5%85%A7%E5%AE%9A%E5%8D%BB%E6%B1%BA%E5%AE%9A%E6%8B%92%E7%B5%95%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B/" itemprop="url">
-            <span itemprop="name">關於我拿到日本公司的內定卻決定拒絕的那件事</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        <h3 id="什麼是TDD？"><a href="#什麼是TDD？" class="headerlink" title="什麼是TDD？"></a>什麼是TDD？</h3><p>TDD，全名測試驅動開發(Test Driven Development)是一種軟體開發的方法論，顧名思義這種開發方式以測試驅動。使用TDD進行開發的流程如下：</p>
+<span id="more"></span>
+<ol>
+<li>紅燈</li>
+<li>綠燈</li>
+<li>重構</li>
+</ol>
+<h4 id="紅燈階段"><a href="#紅燈階段" class="headerlink" title="紅燈階段"></a>紅燈階段</h4><p>這個階段必須要撰寫出一個必定會失敗的程式碼</p>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/TDD/" rel="tag"># TDD</a>
+              <a href="/tags/Methology/" rel="tag"># Methology</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/05/01/Java-Stream%E7%94%A8%E6%B3%95%E3%80%81MapStruct%E3%80%81Lombok%E8%AA%9E%E6%B3%95/" rel="prev" title="Java Stream用法、MapStruct、Lombok語法">
+      <i class="fa fa-chevron-left"></i> Java Stream用法、MapStruct、Lombok語法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/05/19/%E3%80%90%E7%86%8A%E6%9C%AC%E5%BC%81%E3%80%91%E5%AD%B8%E7%BF%92-Girl-Band-Cry-1-%E8%A9%B1%E5%87%BA%E7%8F%BE%E7%9A%84%E6%96%B9%E8%A8%80/" rel="next" title="【熊本弁】學習 Girl Band Cry 1 話出現的方言">
+      【熊本弁】學習 Girl Band Cry 1 話出現的方言 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
   
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
-  </nav>
+  
+  
 
 
 
@@ -477,6 +379,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AFTDD%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什麼是TDD？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%85%E7%87%88%E9%9A%8E%E6%AE%B5"><span class="nav-number">1.1.</span> <span class="nav-text">紅燈階段</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

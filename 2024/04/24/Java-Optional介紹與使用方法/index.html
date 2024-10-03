@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/hanako_icon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/hanako_icon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Optional是Java 8推出時加入的新功能，Optional被發明出來的初衷是為了解決Java常見的NullPointException。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Optional介紹與使用方法">
+<meta property="og:url" content="http://example.com/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Clark&#39;s Page">
+<meta property="og:description" content="Optional是Java 8推出時加入的新功能，Optional被發明出來的初衷是為了解決Java常見的NullPointException。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-04-24T05:08:13.000Z">
+<meta property="article:modified_time" content="2024-10-03T09:58:54.423Z">
+<meta property="article:author" content="Clark">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Java Optional介紹與使用方法 | Clark's Page</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Clark's Page</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">請勿拍打，歡迎餵食</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Clark">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Clark's Page">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java Optional介紹與使用方法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-04-24 13:08:13" itemprop="dateCreated datePublished" datetime="2024-04-24T13:08:13+08:00">2024-04-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-03 17:58:54" itemprop="dateModified" datetime="2024-10-03T17:58:54+08:00">2024-10-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>5.3k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>5 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Optional是Java 8推出時加入的新功能，Optional被發明出來的初衷是為了解決Java常見的NullPointException。</p>
+<span id="more"></span>
+<p>為沒寫過Java的人科普一下，NullPointException大多數的發生原因都是針對value為Null進行操作而導致的例外狀況，Optional為此出現。</p>
+<h4 id="Java-8-Optional-使用方式"><a href="#Java-8-Optional-使用方式" class="headerlink" title="Java 8 Optional 使用方式"></a>Java 8 Optional 使用方式</h4><p>使用方式很簡單，可以理解為將值外部再包了一層類別，比方說以下程式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;Student&gt; student = Optional.ofNullable(studentRepo.getAllStudent())</span><br></pre></td></tr></table></figure>
+<p>Student類別的外部包了一個Optional類別，可以想像為程式外部又包了一個try catch的處理。</p>
+<h4 id="Optioal常用的方法如下："><a href="#Optioal常用的方法如下：" class="headerlink" title="Optioal常用的方法如下："></a>Optioal常用的方法如下：</h4><ul>
+<li>isPresent() <strong>判斷是否為Null，是則回傳True，否則回傳False</strong></li>
+<li>get() <strong>取得Optional內的值，需要先使用isPresent()確認是否為Null</strong></li>
+<li>Optional.of() <strong>建立Optional的方法，若為Null會直接報錯</strong></li>
+<li>Optional.ofNullable() <strong>建立Optional的方法，可以放入Null與非Null物件</strong></li>
+<li>ifPresent() <strong>如果值為非Null就執行某方法，沒有回傳值</strong></li>
+<li>orElse() <strong>如果值為Null就用參數代替</strong></li>
+<li>orElseGet() <strong>如果值為Null就執行該方法，與orElse()相差在可接受傳入參數不同</strong></li>
+<li>orElseThrow() <strong>如果值為Null就拋出某些Exception</strong></li>
+</ul>
+<h4 id="以下介紹一些常用的方法"><a href="#以下介紹一些常用的方法" class="headerlink" title="以下介紹一些常用的方法"></a>以下介紹一些常用的方法</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;String&gt; opt = Optional.ofNullable(InputName);</span><br><span class="line">if(opt.isPresent())&#123; // 判斷 是否為Null</span><br><span class="line">    System.out.println(&quot;String = &quot; + opt.get()); // 非Null才取值</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">opt.ifPresent(name -&gt; System.out.println(name)); // 同一個意思，只是寫得比較簡潔</span><br><span class="line"></span><br><span class="line">String name = Optional.ofNullable(InputName).orElse(&quot;John&quot;); //若inputName 是 null 回傳&quot;John&quot;</span><br><span class="line"></span><br><span class="line">opNull.orElseGet(() -&gt; &quot;John&quot;); // 同個意思 只是orElseGet() 接受的是方法</span><br><span class="line"></span><br><span class="line">name = Optional.ofNullable(insertName).orElseThrow(IllegalArgumentException::new); // null　就拋出IllegalArgumentException</span><br></pre></td></tr></table></figure>
+
+<h4 id="更多實際應用"><a href="#更多實際應用" class="headerlink" title="更多實際應用"></a>更多實際應用</h4><p>使用Optional還有一個好處，就是可以套用Java 8 的API</p>
+<ol>
+<li>判斷是否為2016年</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;Integer&gt; yearOptional = Optional.of(year);</span><br><span class="line">boolean is2016 = yearOptional</span><br><span class="line">                    .filter(y -&gt; y == 2016)</span><br><span class="line">                    .isPresent(); // 判斷值是否為2016年</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>判斷物件價格範圍是否介於15~20之間</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// 可以使用 function進行值的檢測判斷</span><br><span class="line">Modem modem2 = new Modem(13.10d);</span><br><span class="line">System.out.println(&quot;Result = &quot; + priceIsInRange2(modem2));</span><br><span class="line"></span><br><span class="line">public class Modem &#123;</span><br><span class="line">      private Double price;</span><br><span class="line"></span><br><span class="line">      public Modem(Double price) &#123;</span><br><span class="line">          this.price = price;</span><br><span class="line">      &#125;</span><br><span class="line">      // standard getters and setters</span><br><span class="line"></span><br><span class="line">      public void setPrice(Double price) &#123;</span><br><span class="line">          this.price = price;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public Double getPrice() &#123;</span><br><span class="line">          return price;</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean priceIsInRange2(Modem modem2) &#123;</span><br><span class="line">    return Optional.ofNullable(modem2)</span><br><span class="line">            .map(Modem::getPrice).</span><br><span class="line">            filter(p -&gt; p &gt;= 10).</span><br><span class="line">            filter(p -&gt; p &lt;= 15).</span><br><span class="line">            isPresent();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>先處理過再判斷。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String password = &quot; password &quot;;</span><br><span class="line">Optional&lt;String&gt; passOpt = Optional.of(password);</span><br><span class="line">boolean correctPassword = passOpt</span><br><span class="line">	.filter(pass -&gt; pass.equals(&quot;password&quot;))</span><br><span class="line">	.isPresent();</span><br><span class="line">assertFalse(correctPassword);</span><br><span class="line"></span><br><span class="line">correctPassword = passOpt</span><br><span class="line">	.map(String::trim)</span><br><span class="line">	.filter(pass -&gt; pass.equals(&quot;password&quot;))</span><br><span class="line">	.isPresent();</span><br><span class="line">assertTrue(correctPassword);</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>取得陣列長度，null為0</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; companyNames = Arrays.asList(&quot;paypal&quot;, &quot;oracle&quot;, &quot;&quot;, &quot;microsoft&quot;, &quot;&quot;, &quot;apple&quot;);</span><br><span class="line">Optional&lt;List&lt;String&gt;&gt; listOptional = Optional.ofNullable(companyNames);</span><br><span class="line">int size = listOptional.map(List::size).orElse(0);</span><br><span class="line">System.out.println(&quot;SIZE = &quot; + size);</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>map 與 flatmap 的差異 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 假設我們有一個包含字串的列表</span><br><span class="line">List&lt;String&gt; words = Arrays.asList(&quot;Java&quot;, &quot;Stream&quot;, &quot;API&quot;);</span><br><span class="line"></span><br><span class="line">// 使用map操作，將每個字串轉換為它的長度</span><br><span class="line">List&lt;Integer&gt; wordLengths = words.stream()</span><br><span class="line">        .map(String::length)</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">System.out.println(&quot;使用 map 操作得到的長度列表: &quot; + wordLengths);</span><br><span class="line"></span><br><span class="line">// 使用flatMap操作，將每個字串拆分為單個字符並平坦化為單獨的流</span><br><span class="line">List&lt;Character&gt; characters = words.stream()</span><br><span class="line">        .flatMap(word -&gt; word.chars().mapToObj(c -&gt; (char) c))</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">System.out.println(&quot;使用 flatMap 操作得到的字符列表: &quot; + characters);</span><br><span class="line"></span><br><span class="line">/ /使用 map 操作得到的長度列表: [4, 6, 3]</span><br><span class="line">// 使用 flatMap 操作得到的字符列表: [J, a, v, a, S, t, r, e, a, m, A, P, I]</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li>
+<li>參考用法<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">//  取得第一個非null的值，Optional::get 是為了取得&lt;Stream&lt;String&gt;&gt;</span><br><span class="line">//  方法會全數執行</span><br><span class="line">String found = Stream.of(getEmpty(), getHello(), getBye())</span><br><span class="line">        .filter(Optional::isPresent)</span><br><span class="line">        .map(Optional::get)</span><br><span class="line">        .findFirst()</span><br><span class="line">        .get();</span><br><span class="line"></span><br><span class="line">//  同樣意思，但方法不會全數執行</span><br><span class="line">Optional&lt;String&gt; found2 =</span><br><span class="line">      Stream.&lt;Supplier&lt;Optional&lt;String&gt;&gt;&gt;of(this::getEmpty, this::getHello, this::getBye)</span><br><span class="line">              .map(Supplier::get)</span><br><span class="line">              .filter(Optional::isPresent)</span><br><span class="line">              .map(Optional::get)</span><br><span class="line">              .findFirst();</span><br><span class="line"></span><br><span class="line">// 若function想要帶上參數 需使用lambda</span><br><span class="line">Optional&lt;String&gt; found3 = Stream.&lt;Supplier&lt;Optional&lt;String&gt;&gt;&gt;of(</span><br><span class="line">              () -&gt; createOptional(&quot;empty&quot;),</span><br><span class="line">              () -&gt; createOptional(&quot;hello&quot;)</span><br><span class="line">      )</span><br><span class="line">      .map(Supplier::get)</span><br><span class="line">      .filter(Optional::isPresent)</span><br><span class="line">      .map(Optional::get)</span><br><span class="line">      .findFirst();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//        判斷是否全數為null</span><br><span class="line">String found4 = Stream.&lt;Supplier&lt;Optional&lt;String&gt;&gt;&gt;of(</span><br><span class="line">                () -&gt; createOptional(&quot;empty&quot;),</span><br><span class="line">                () -&gt; createOptional(&quot;E&quot;)</span><br><span class="line">        )</span><br><span class="line">        .map(Supplier::get)</span><br><span class="line">        .filter(Optional::isPresent)</span><br><span class="line">        .map(Optional::get)</span><br><span class="line">        .findFirst()</span><br><span class="line">        .orElseGet(() -&gt; &quot;default&quot;);</span><br><span class="line"></span><br><span class="line">assertEquals(&quot;E&quot;,found4);</span><br><span class="line"></span><br><span class="line">private Optional&lt;String&gt; getEmpty() &#123;</span><br><span class="line">        return Optional.empty();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Optional&lt;String&gt; getHello() &#123;</span><br><span class="line">        return Optional.of(&quot;hello&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Optional&lt;String&gt; getBye() &#123;</span><br><span class="line">        return Optional.of(&quot;bye&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Optional&lt;String&gt; createOptional(String input) &#123;</span><br><span class="line">        if (input == null || &quot;&quot;.equals(input) || &quot;empty&quot;.equals(input)) &#123;</span><br><span class="line">            return Optional.empty();</span><br><span class="line">        &#125;</span><br><span class="line">        return Optional.of(input);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>map與flatmap<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public static String testOptionalFlatMap(Student student) &#123;</span><br><span class="line">			</span><br><span class="line">// 這段是使用Optional 檢測 Null</span><br><span class="line">        var score = student.getScore();</span><br><span class="line">        if(score.isPresent()) &#123;</span><br><span class="line">            var word = score.get().getWord();</span><br><span class="line">            if(word .isPresent()) &#123;</span><br><span class="line">                return word.get();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return &quot;NA&quot;;</span><br><span class="line"></span><br><span class="line">// 這段是使用Optional Flatmap 檢測 Null</span><br><span class="line">        return student.getScore()</span><br><span class="line">                .flatMap(Score::getWord)</span><br><span class="line">                .orElse(&quot;n.a.&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+以上就是常見的基本Optional用法，也許不需要全部都會，只需要基本了解就很夠用了也說不定。</li>
+</ol>
+<p>以上</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/04/22/%E7%B0%A1%E5%96%AE%E4%BD%BF%E7%94%A8Swagger%E5%8A%9F%E8%83%BD-%E9%81%A9%E7%94%A8Java-17/" rel="prev" title="使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)">
+      <i class="fa fa-chevron-left"></i> 使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/05/01/%E5%9C%A8SpringBoot-%E5%AF%AB%E6%B8%AC%E8%A9%A6-Mock-MockBean/" rel="next" title="在SpringBoot 寫測試 @Mock,@MockBean,MvcResult">
+      在SpringBoot 寫測試 @Mock,@MockBean,MvcResult <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-8-Optional-%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">Java 8 Optional 使用方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Optioal%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">Optioal常用的方法如下：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A5%E4%B8%8B%E4%BB%8B%E7%B4%B9%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">以下介紹一些常用的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E5%AF%A6%E9%9A%9B%E6%87%89%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">更多實際應用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Clark</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Clark</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">25k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">23 mins.</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>

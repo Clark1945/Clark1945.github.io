@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Java Optional介紹與使用方法</title>
+    <url>/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>Optional是Java 8推出時加入的新功能，Optional被發明出來的初衷是為了解決Java常見的NullPointException。</p>
+<span id="more"></span>
+<p>為沒寫過Java的人科普一下，NullPointException大多數的發生原因都是針對value為Null進行操作而導致的例外狀況，Optional為此出現。</p>
+<h4 id="Java-8-Optional-使用方式"><a href="#Java-8-Optional-使用方式" class="headerlink" title="Java 8 Optional 使用方式"></a>Java 8 Optional 使用方式</h4><p>使用方式很簡單，可以理解為將值外部再包了一層類別，比方說以下程式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Optional&lt;Student&gt; student = Optional.ofNullable(studentRepo.getAllStudent())</span><br></pre></td></tr></table></figure>
+<p>Student類別的外部包了一個Optional類別，可以想像為程式外部又包了一個try catch的處理。</p>
+<h4 id="Optioal常用的方法如下："><a href="#Optioal常用的方法如下：" class="headerlink" title="Optioal常用的方法如下："></a>Optioal常用的方法如下：</h4><ul>
+<li>isPresent() <strong>判斷是否為Null，是則回傳True，否則回傳False</strong></li>
+<li>get() <strong>取得Optional內的值，需要先使用isPresent()確認是否為Null</strong></li>
+<li>Optional.of() <strong>建立Optional的方法，若為Null會直接報錯</strong></li>
+<li>Optional.ofNullable() <strong>建立Optional的方法，可以放入Null與非Null物件</strong></li>
+<li>ifPresent() <strong>如果值為非Null就執行某方法，沒有回傳值</strong></li>
+<li>orElse() <strong>如果值為Null就用參數代替</strong></li>
+<li>orElseGet() <strong>如果值為Null就執行該方法，與orElse()相差在可接受傳入參數不同</strong></li>
+<li>orElseThrow() <strong>如果值為Null就拋出某些Exception</strong></li>
+</ul>
+<h4 id="以下介紹一些常用的方法"><a href="#以下介紹一些常用的方法" class="headerlink" title="以下介紹一些常用的方法"></a>以下介紹一些常用的方法</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Optional&lt;String&gt; opt = Optional.ofNullable(InputName);</span><br><span class="line">if(opt.isPresent())&#123; // 判斷 是否為Null</span><br><span class="line">    System.out.println(&quot;String = &quot; + opt.get()); // 非Null才取值</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">opt.ifPresent(name -&gt; System.out.println(name)); // 同一個意思，只是寫得比較簡潔</span><br><span class="line"></span><br><span class="line">String name = Optional.ofNullable(InputName).orElse(&quot;John&quot;); //若inputName 是 null 回傳&quot;John&quot;</span><br><span class="line"></span><br><span class="line">opNull.orElseGet(() -&gt; &quot;John&quot;); // 同個意思 只是orElseGet() 接受的是方法</span><br><span class="line"></span><br><span class="line">name = Optional.ofNullable(insertName).orElseThrow(IllegalArgumentException::new); // null　就拋出IllegalArgumentException</span><br></pre></td></tr></table></figure>
+
+<h4 id="更多實際應用"><a href="#更多實際應用" class="headerlink" title="更多實際應用"></a>更多實際應用</h4><p>使用Optional還有一個好處，就是可以套用Java 8 的API</p>
+<ol>
+<li>判斷是否為2016年</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Optional&lt;Integer&gt; yearOptional = Optional.of(year);</span><br><span class="line">boolean is2016 = yearOptional</span><br><span class="line">                    .filter(y -&gt; y == 2016)</span><br><span class="line">                    .isPresent(); // 判斷值是否為2016年</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>判斷物件價格範圍是否介於15~20之間</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 可以使用 function進行值的檢測判斷</span><br><span class="line">Modem modem2 = new Modem(13.10d);</span><br><span class="line">System.out.println(&quot;Result = &quot; + priceIsInRange2(modem2));</span><br><span class="line"></span><br><span class="line">public class Modem &#123;</span><br><span class="line">      private Double price;</span><br><span class="line"></span><br><span class="line">      public Modem(Double price) &#123;</span><br><span class="line">          this.price = price;</span><br><span class="line">      &#125;</span><br><span class="line">      // standard getters and setters</span><br><span class="line"></span><br><span class="line">      public void setPrice(Double price) &#123;</span><br><span class="line">          this.price = price;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      public Double getPrice() &#123;</span><br><span class="line">          return price;</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean priceIsInRange2(Modem modem2) &#123;</span><br><span class="line">    return Optional.ofNullable(modem2)</span><br><span class="line">            .map(Modem::getPrice).</span><br><span class="line">            filter(p -&gt; p &gt;= 10).</span><br><span class="line">            filter(p -&gt; p &lt;= 15).</span><br><span class="line">            isPresent();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>先處理過再判斷。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">String password = &quot; password &quot;;</span><br><span class="line">Optional&lt;String&gt; passOpt = Optional.of(password);</span><br><span class="line">boolean correctPassword = passOpt</span><br><span class="line">	.filter(pass -&gt; pass.equals(&quot;password&quot;))</span><br><span class="line">	.isPresent();</span><br><span class="line">assertFalse(correctPassword);</span><br><span class="line"></span><br><span class="line">correctPassword = passOpt</span><br><span class="line">	.map(String::trim)</span><br><span class="line">	.filter(pass -&gt; pass.equals(&quot;password&quot;))</span><br><span class="line">	.isPresent();</span><br><span class="line">assertTrue(correctPassword);</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>取得陣列長度，null為0</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; companyNames = Arrays.asList(&quot;paypal&quot;, &quot;oracle&quot;, &quot;&quot;, &quot;microsoft&quot;, &quot;&quot;, &quot;apple&quot;);</span><br><span class="line">Optional&lt;List&lt;String&gt;&gt; listOptional = Optional.ofNullable(companyNames);</span><br><span class="line">int size = listOptional.map(List::size).orElse(0);</span><br><span class="line">System.out.println(&quot;SIZE = &quot; + size);</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>map 與 flatmap 的差異 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 假設我們有一個包含字串的列表</span><br><span class="line">List&lt;String&gt; words = Arrays.asList(&quot;Java&quot;, &quot;Stream&quot;, &quot;API&quot;);</span><br><span class="line"></span><br><span class="line">// 使用map操作，將每個字串轉換為它的長度</span><br><span class="line">List&lt;Integer&gt; wordLengths = words.stream()</span><br><span class="line">        .map(String::length)</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">System.out.println(&quot;使用 map 操作得到的長度列表: &quot; + wordLengths);</span><br><span class="line"></span><br><span class="line">// 使用flatMap操作，將每個字串拆分為單個字符並平坦化為單獨的流</span><br><span class="line">List&lt;Character&gt; characters = words.stream()</span><br><span class="line">        .flatMap(word -&gt; word.chars().mapToObj(c -&gt; (char) c))</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">System.out.println(&quot;使用 flatMap 操作得到的字符列表: &quot; + characters);</span><br><span class="line"></span><br><span class="line">/ /使用 map 操作得到的長度列表: [4, 6, 3]</span><br><span class="line">// 使用 flatMap 操作得到的字符列表: [J, a, v, a, S, t, r, e, a, m, A, P, I]</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li>
+<li>參考用法<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//  取得第一個非null的值，Optional::get 是為了取得&lt;Stream&lt;String&gt;&gt;</span><br><span class="line">//  方法會全數執行</span><br><span class="line">String found = Stream.of(getEmpty(), getHello(), getBye())</span><br><span class="line">        .filter(Optional::isPresent)</span><br><span class="line">        .map(Optional::get)</span><br><span class="line">        .findFirst()</span><br><span class="line">        .get();</span><br><span class="line"></span><br><span class="line">//  同樣意思，但方法不會全數執行</span><br><span class="line">Optional&lt;String&gt; found2 =</span><br><span class="line">      Stream.&lt;Supplier&lt;Optional&lt;String&gt;&gt;&gt;of(this::getEmpty, this::getHello, this::getBye)</span><br><span class="line">              .map(Supplier::get)</span><br><span class="line">              .filter(Optional::isPresent)</span><br><span class="line">              .map(Optional::get)</span><br><span class="line">              .findFirst();</span><br><span class="line"></span><br><span class="line">// 若function想要帶上參數 需使用lambda</span><br><span class="line">Optional&lt;String&gt; found3 = Stream.&lt;Supplier&lt;Optional&lt;String&gt;&gt;&gt;of(</span><br><span class="line">              () -&gt; createOptional(&quot;empty&quot;),</span><br><span class="line">              () -&gt; createOptional(&quot;hello&quot;)</span><br><span class="line">      )</span><br><span class="line">      .map(Supplier::get)</span><br><span class="line">      .filter(Optional::isPresent)</span><br><span class="line">      .map(Optional::get)</span><br><span class="line">      .findFirst();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//        判斷是否全數為null</span><br><span class="line">String found4 = Stream.&lt;Supplier&lt;Optional&lt;String&gt;&gt;&gt;of(</span><br><span class="line">                () -&gt; createOptional(&quot;empty&quot;),</span><br><span class="line">                () -&gt; createOptional(&quot;E&quot;)</span><br><span class="line">        )</span><br><span class="line">        .map(Supplier::get)</span><br><span class="line">        .filter(Optional::isPresent)</span><br><span class="line">        .map(Optional::get)</span><br><span class="line">        .findFirst()</span><br><span class="line">        .orElseGet(() -&gt; &quot;default&quot;);</span><br><span class="line"></span><br><span class="line">assertEquals(&quot;E&quot;,found4);</span><br><span class="line"></span><br><span class="line">private Optional&lt;String&gt; getEmpty() &#123;</span><br><span class="line">        return Optional.empty();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Optional&lt;String&gt; getHello() &#123;</span><br><span class="line">        return Optional.of(&quot;hello&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Optional&lt;String&gt; getBye() &#123;</span><br><span class="line">        return Optional.of(&quot;bye&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Optional&lt;String&gt; createOptional(String input) &#123;</span><br><span class="line">        if (input == null || &quot;&quot;.equals(input) || &quot;empty&quot;.equals(input)) &#123;</span><br><span class="line">            return Optional.empty();</span><br><span class="line">        &#125;</span><br><span class="line">        return Optional.of(input);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>map與flatmap<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static String testOptionalFlatMap(Student student) &#123;</span><br><span class="line">			</span><br><span class="line">// 這段是使用Optional 檢測 Null</span><br><span class="line">        var score = student.getScore();</span><br><span class="line">        if(score.isPresent()) &#123;</span><br><span class="line">            var word = score.get().getWord();</span><br><span class="line">            if(word .isPresent()) &#123;</span><br><span class="line">                return word.get();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return &quot;NA&quot;;</span><br><span class="line"></span><br><span class="line">// 這段是使用Optional Flatmap 檢測 Null</span><br><span class="line">        return student.getScore()</span><br><span class="line">                .flatMap(Score::getWord)</span><br><span class="line">                .orElse(&quot;n.a.&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+以上就是常見的基本Optional用法，也許不需要全部都會，只需要基本了解就很夠用了也說不定。</li>
+</ol>
+<p>以上</p>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring AOP 基本概念與使用</title>
+    <url>/2024/05/01/Spring-AOP-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>到目前為止，在程式開發的發展上已經誕生了許多風格，如物件導向程式設計(Object-Oriented-Programming)、</p>
+<span id="more"></span>
+<p>Functional-Programming FP，這些方法都有好有壞，但都有共同的目的，就是簡化重複的程式碼，物件導向程式語言使用物件的封裝、繼承特性去約束程式碼，而FP則是專注在整個流程上，透過將功能建立為一個個微小的Function，進行開發。FP的好處是，通常可讀性可以提升不少。此外因為Function小，各功能也很好共用。<br>但今天要介紹的並不是這兩者，而是另外一種風格，被稱為切面導向程式設計(Aspect-Oriented-Programming)。<br>AOP的主要訴求是，將整個程式流程視為一個Flow，假設我有兩隻API，分別提供了付款、退貨兩功能。<br>付款的流程如下：驗證 &gt; 交易 &gt; 回傳結果<br>退貨的流程如下：驗證 &gt; 退貨 &gt; 回傳結果<br>而AOP核心精神就是將兩者相同的「驗證」部分提取出來作為一個切面(Aspect)，讓付款與退貨的API可以集中在真正重要的商業邏輯。也就是所謂的「關注點分離」的概念。<br>常見的Annotation如下：</p>
+<ul>
+<li>@Aspect - 將類別宣告為一個切面，切面方法放在裡面。</li>
+<li>@Pointcut - 切入點。定義切入位置，通常使用execution切點表達式表達。</li>
+<li>@Before 前置通知，常在切入方法執行前執行。若此方法回報異常，則不會執行方法。而是執行@After與@AfterThrowing</li>
+<li>@After 後置方法 - 再切入方法執行後執行</li>
+<li>@AfterReturn - 在方法正常結束return後執行</li>
+<li>@AfterThrowing - 拋出異常後執行，若無異常則不會執行</li>
+<li>@Around - 環繞通知，可以視為@Before+@After+@AfterThrowing+@AfterReturn</li>
+<li>@Order - 指定切入執行順序</li>
+</ul>
+<h3 id="Spring-AOP-為何不生效？原因？"><a href="#Spring-AOP-為何不生效？原因？" class="headerlink" title="Spring AOP 為何不生效？原因？"></a>Spring AOP 為何不生效？原因？</h3><p><strong>A:</strong> 當切面在類別上運作時，我們使用的類別實際上是由Spring替我們生成了一個代理對象，故切面必須依賴於類別的呼叫。簡單來說 a.getMessage() 可以套用 AOP 但 getMessage() 是不行的！<br>解決方法：</p>
+<ol>
+<li><p>注入類別，使用self</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class TestBean &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private TestBean self;  // 这个装配的对象是代理对象</span><br><span class="line"></span><br><span class="line">    public void hello() &#123;</span><br><span class="line">        System.out.println(&quot;hello&quot;);</span><br><span class="line">        self.hi(); // 這樣就會成功</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hi() &#123;</span><br><span class="line">        System.out.println(&quot;hi&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>啟用exposeProxy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@EnableAspectJAutoProxy(exposeProxy=true)</span><br><span class="line">@Component</span><br><span class="line">public class TestBean &#123;</span><br><span class="line"></span><br><span class="line">    public void hello() &#123;</span><br><span class="line">        System.out.println(&quot;hello&quot;);</span><br><span class="line">        TestBean self = (TestBean) AopContext.currentProxy();  // 获取当前代理</span><br><span class="line">        self.hi();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hi() &#123;</span><br><span class="line">        System.out.println(&quot;hi&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h3><p>以下是一個範例的切面</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">package com.example.demo;</span><br><span class="line"></span><br><span class="line">import org.aspectj.lang.JoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.*;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line">@Component</span><br><span class="line">@Aspect</span><br><span class="line">public class StrangeAOP &#123;</span><br><span class="line"></span><br><span class="line">    @Pointcut(value = &quot;execution(* com.example.demo.controller..*.*(..))&quot;)</span><br><span class="line">    public void pointcut()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Before(&quot;pointcut()&quot;)</span><br><span class="line">    public void before(JoinPoint joinPoint)&#123;</span><br><span class="line">        System.out.println(&quot;前置通知&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    @After(&quot;pointcut()&quot;)</span><br><span class="line">    public void after(JoinPoint joinPoint)&#123;</span><br><span class="line">        System.out.println(&quot;后置通知&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    @AfterReturning(pointcut=&quot;pointcut()&quot;,returning = &quot;result&quot;)</span><br><span class="line">    public void result(JoinPoint joinPoint,Object result)&#123;</span><br><span class="line">        System.out.println(&quot;返回通知:&quot;+result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class TestController&#123;</span><br><span class="line"></span><br><span class="line">    @GettingMapping(&quot;/)</span><br><span class="line">    public String getIndex()&#123;</span><br><span class="line">        System.out.print(&quot;Index&quot;);</span><br><span class="line">        return &quot;This is Index&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>印出訊息的順序應該是 </p>
+<p>前置通知 &gt; This is index &gt; 后置通知 &gt; 返回通知+result</p>
+<p>以上</p>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>AOP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java Stream用法、MapStruct、Lombok語法</title>
+    <url>/2024/05/01/Java-Stream%E7%94%A8%E6%B3%95%E3%80%81MapStruct%E3%80%81Lombok%E8%AA%9E%E6%B3%95/</url>
+    <content><![CDATA[<p>Java 8 加入Stream語法，提供了很多針對陣列物件的便利功能，以下介紹一些常見的用法。</p>
+<span id="more"></span>
+<h3 id="Java-Stream-常見用法"><a href="#Java-Stream-常見用法" class="headerlink" title="Java Stream 常見用法"></a>Java Stream 常見用法</h3><p>Java Stream 主要功能如下</p>
+<ol>
+<li>Filter 透過設定的條件過濾元素</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 找出非Empty數量</span><br><span class="line">long memberCount = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.count();</span><br><span class="line"></span><br><span class="line">// 找出非重複的第一位成員</span><br><span class="line">String firstMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.findFirst()</span><br><span class="line">.get();</span><br><span class="line"></span><br><span class="line">// 找出 陣列中以AL1S開頭的任何一個，若沒有符合的回傳&quot;IS NOT EXIST&quot;</span><br><span class="line">String findQueen = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; string.startsWith(&quot;AL1S&quot;))</span><br><span class="line">.distinct()</span><br><span class="line">.findAny()</span><br><span class="line">.orElse(&quot;IS NOT EXIST&quot;);</span><br><span class="line"></span><br><span class="line">// 找出前三位成員</span><br><span class="line">String findThreeMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.limit(3)</span><br><span class="line">.collect(Collectors.joining());</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Map 映射每个元素到對應的結果</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;),</span><br><span class="line">    new Food(&quot;餛飩湯&quot;),</span><br><span class="line">    new Food(&quot;肉羹湯&quot;),</span><br><span class="line">    new Food(&quot;牛肉湯&quot;),</span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">// 取得物件的字串</span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream().map( food -&gt; food.getFoodName()).toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>forEach 迭代Stream中的每個元素 ( 同樣可以修改 但是不會回傳)</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;), </span><br><span class="line">    new Food(&quot;餛飩湯&quot;), </span><br><span class="line">    new Food(&quot;肉羹湯&quot;), </span><br><span class="line">    new Food(&quot;牛肉湯&quot;), </span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream()</span><br><span class="line">.map( food -&gt; food.getFoodName())</span><br><span class="line">.toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br><span class="line"></span><br><span class="line">// 將所有FoodName 加上 NT$</span><br><span class="line">foodObj</span><br><span class="line">.stream()</span><br><span class="line">.forEach(food -&gt; &#123;</span><br><span class="line">			food.foodName = &quot;NT$&quot;+food.getFoodName();</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>reduce (元素匯總成單一結果。)</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; integers = Arrays.asList(1, 2, 3, 4, 5);</span><br><span class="line">//將列表元素加總</span><br><span class="line">Integer sum = integers.stream().reduce(0, (a, b) -&gt; a + b);</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="MapStruct-用法，MapStruct可以將兩個類別互相轉換"><a href="#MapStruct-用法，MapStruct可以將兩個類別互相轉換" class="headerlink" title="MapStruct 用法，MapStruct可以將兩個類別互相轉換"></a>MapStruct 用法，MapStruct可以將兩個類別互相轉換</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@Builder</span><br><span class="line">@AllArgsConstructor</span><br><span class="line">@NoArgsConstructor</span><br><span class="line">public class UserPo &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@Data</span><br><span class="line">public class UserEntity &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick1;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 轉換器</span><br><span class="line">@Mapper</span><br><span class="line">public interface IPersonMapper &#123;</span><br><span class="line">    IPersonMapper INSTANCT = Mappers.getMapper(IPersonMapper.class);</span><br><span class="line">    @Mapping(target = &quot;userNick1&quot;, source = &quot;userNick&quot;) // 如果名稱不同無法對應 就使用 這個做Mapping</span><br><span class="line">    @Mapping(target = &quot;age&quot;, source = &quot;age&quot;, numberFormat = &quot;#0.00&quot;)</span><br><span class="line"></span><br><span class="line">    UserEntity poToentity(UserPo userPo);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 測試PO 與 Entity 轉換</span><br><span class="line">public static void testNormal() &#123;</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----start------&quot;);</span><br><span class="line">    UserPo userPo = UserPo.builder()</span><br><span class="line">            .id(1L)</span><br><span class="line">            .gmtCreate(new Date())</span><br><span class="line">           .buyerId(666L)</span><br><span class="line">           .userNick(&quot;測試mapstruct&quot;)</span><br><span class="line">           .userVerified(&quot;ok&quot;)</span><br><span class="line">           .age(18L)</span><br><span class="line">           .build();</span><br><span class="line"></span><br><span class="line">    System.out.println(&quot;USERPO = &quot; + userPo);</span><br><span class="line">    UserEntity userEntity = IPersonMapper.INSTANCT.poToentity(userPo);</span><br><span class="line">    System.out.println(&quot;ENTITY = &quot; + userEntity);</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----ent------&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Lombok-的Annonation"><a href="#Lombok-的Annonation" class="headerlink" title="@Lombok 的Annonation"></a>@Lombok 的Annonation</h3><ul>
+<li>@Data 注解：<br>@Data 是 Lombok 提供的最常用的注解之一，它结合了 @ToString、@EqualsAndHashCode、@Getter、@Setter 以及 @RequiredArgsConstructor 的功能。它会自动生成这些方法，并为类的每个非静态字段创建 Getter 和 Setter 方法，还会生成 toString 方法和 equals、hashCode 方法。</li>
+<li>@Builder 注解：<br>@Builder 是 Lombok 提供的注解，用于实现建造者模式。它生成一个嵌套的静态内部类 Builder，使得创建对象时可以链式调用，更加清晰和易读。使用 @Builder 注解时，您可以通过生成器模式设置实例的字段。</li>
+<li>@AllArgsConstructor 注解：<br>@AllArgsConstructor 是 Lombok 提供的注解，用于生成一个包含所有参数的构造函数。它会为类的每个字段生成构造函数参数，方便创建对象时传入所有字段的值。</li>
+<li>@NoArgsConstructor 注解：<br>@NoArgsConstructor 是 Lombok 提供的注解，用于生成一个无参数的默认构造函数。它可以在创建对象时使用，特别是当您在使用 @Builder 注解时，因为默认情况下，@Builder 注解需要一个无参构造函数。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring JPA(JDK 17)的一些疑難雜症</title>
+    <url>/2024/04/20/Spring-JPA-JDK-17-%E7%9A%84%E4%B8%80%E4%BA%9B%E7%96%91%E9%9B%A3%E9%9B%9C%E7%97%87/</url>
+    <content><![CDATA[<h3 id="問題一"><a href="#問題一" class="headerlink" title="問題一"></a>問題一</h3><p>今天在自己做Project時，啟動Project時老是出現Spring JPA 冒出的錯誤訊息:not a managed type class…</p>
+<span id="more"></span>
+<p>遇到時當下我有點困惑，因為之前做時從來沒看過，所以在這邊做個紀錄：<br>錯誤的地方如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">package com.example.payment_system.orm;</span><br><span class="line"></span><br><span class="line">import javax.persistence.Column;</span><br><span class="line">import javax.persistence.Entity;</span><br><span class="line">import javax.persistence.Id;</span><br><span class="line">import javax.persistence.Table;</span><br><span class="line">import java.time.LocalDateTime;</span><br><span class="line"></span><br><span class="line">@Entity</span><br><span class="line">@Table(name = &quot;payment_member_info&quot;)</span><br><span class="line">public class PaymentMemberInfo &#123;</span><br><span class="line"></span><br><span class="line">    @Id</span><br><span class="line">    @Column(name = &quot;pmi_member_id&quot;)</span><br><span class="line">    private Long pmiMeberId;</span><br><span class="line">    @Column(name = &quot;pmi_member_name&quot;,nullable = false,length = 255)</span><br><span class="line">    private String pmsMemberName;</span><br><span class="line">    @Column(name = &quot;pmi_member_phone&quot;,nullable = false,length = 30)</span><br><span class="line">    private String pmiMemberPhone;</span><br><span class="line">    @Column(name = &quot;pmi_member_email&quot;,nullable = false,length = 255)</span><br><span class="line">    private String pmiMemberEmail;</span><br><span class="line">    @Column(name = &quot;pmi_member_pwd&quot;,nullable = false,length = 255)</span><br><span class="line">    private String pmiMemberpwd;</span><br><span class="line">    @Column(name = &quot;pmi_lastlogin_time&quot;,nullable = false)</span><br><span class="line">    private LocalDateTime pmiLastloginTime;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>這個錯誤發生的原因來自Spring的JDK版本問題，在新版的SpringBoot與JDK中，把JavaX給替換成了Jakarta，所以只要是SpringBoot 6+ 與 JDK 17+，都是使用jakarta persist api，只要換成jakarta就解決這個問題了。</p>
+<h3 id="問題二"><a href="#問題二" class="headerlink" title="問題二"></a>問題二</h3><p>在新建立專案時遇到錯誤</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Failed to configure a DataSource: &#x27;url&#x27; attribute is not specified and no embedded datasource could be configured.</span><br><span class="line"></span><br><span class="line">Reason: Failed to determine a suitable driver class</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Action:</span><br><span class="line"></span><br><span class="line">Consider the following:</span><br><span class="line">	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.</span><br><span class="line">	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>這很明顯的就是少了設定資料庫的poperties，所以如果遇到的話要檢查application.poperties是否存在以下config：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=payment;encrypt=false;</span><br><span class="line">spring.datasource.username=sa</span><br><span class="line">spring.datasource.password=17E513579</span><br><span class="line">spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>從上至下分別是：連線資料庫的url、連線資料庫的帳號、密碼、以及資料庫驅動程式，根據你使用不同的資料庫要添加的稍有不同，以下以SQL Server作為舉例。</p>
+<h3 id="問題三"><a href="#問題三" class="headerlink" title="問題三"></a>問題三</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;encrypt&quot; 屬性設定為 &quot;true&quot; 且 &quot;trustServerCertificate&quot; 屬性設為 &quot;false&quot;，但驅動程式無法使用安全通訊端層 (SSL) 加密建立 SQL Server 的安全連線: 錯誤: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target。 ClientConnectionId:7633a811-f5ed-4644-b413-770e31275a44</span><br></pre></td></tr></table></figure>
+
+<p>如果在連線時出現以下問題，代表資料庫沒有設定SSL加密的，方法有兩種，解法有調整資料庫SSL加密，以及在application.poperties設定取消加密兩種方法。如果後者可以參考以下程式。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=payment;encrypt=false;</span><br></pre></td></tr></table></figure>
+
+<p>以上</p>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
+<li><a href="https://stackoverflow.com/questions/28664064/spring-boot-not-a-managed-type">https://stackoverflow.com/questions/28664064/spring-boot-not-a-managed-type</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【熊本弁】學習 Girl Band Cry 1 話出現的方言</title>
+    <url>/2024/05/19/%E3%80%90%E7%86%8A%E6%9C%AC%E5%BC%81%E3%80%91%E5%AD%B8%E7%BF%92-Girl-Band-Cry-1-%E8%A9%B1%E5%87%BA%E7%8F%BE%E7%9A%84%E6%96%B9%E8%A8%80/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>周末就是補番時刻，這一季動畫真是琳瑯滿目，做為一名老宅宅，近年來越來越多深入人心的樂團番誕生，從孤獨搖滾到MyGO，這季還有Girl Band Cry這部，第一話做得很好，有興趣請大家一定要看看。這次要討論的是動畫第一話中出現的熊本弁，讓各位可以簡單上手熊本弁。</p>
+<span id="more"></span>
+<h2 id="什麼人適合閱讀這篇文章？"><a href="#什麼人適合閱讀這篇文章？" class="headerlink" title="什麼人適合閱讀這篇文章？"></a>什麼人適合閱讀這篇文章？</h2><ul>
+<li>至少學過五十音，懂一點日文文法的</li>
+<li>對樂團番、或動漫有興趣</li>
+<li>在等明年阿北母雞卡出，想要換個胃口的人</li>
+</ul>
+<h3 id="わいさー"><a href="#わいさー" class="headerlink" title="わいさー"></a>わいさー</h3><p>「わいさー」在熊本弁中是感嘆詞，基本上沒有太多的意義在內，通常在表示驚訝的場合中被使用。相似的用法有</p>
+<ul>
+<li>わいさーし</li>
+<li>わんさーし</li>
+<li>わいさーぎ</li>
+<li>わいさぎー</li>
+</ul>
+<p>用法皆相似，可以參考看看。</p>
+<h3 id="なんしよっと"><a href="#なんしよっと" class="headerlink" title="なんしよっと"></a>なんしよっと</h3><p>「なんしよっと」換常用的語法就是 なにしてるの，也就是 你在做什麼？ 的意思，根據場合可能會產生 你在做什麼啊 的生氣、責備意思，請多留意。另外，似乎在福岡方言中也有一樣的用法在。</p>
+<h3 id="ばい"><a href="#ばい" class="headerlink" title="ばい"></a>ばい</h3><p>「ばい」在全文中是”電話かけてきたばい”，也就是有打電話給你了喔，這樣，沒什麼好說的，可以理解為「よ」的意思。</p>
+<h3 id="来んって"><a href="#来んって" class="headerlink" title="来んって"></a>来んって</h3><p>這個比較不屬於方言，應該說沒有辦法特定為哪個地區的方言，各地的方言都有出現，有興趣的朋友可以告訴我其他地區是否也有同樣的狀況。<br>「来んって」 &#x3D;&#x3D; 来なくて  不來的意思</p>
+<h3 id="わかっとう"><a href="#わかっとう" class="headerlink" title="わかっとう"></a>わかっとう</h3><p>這個也是疑似在多地都出現過的方言，福岡比較常見。<br>「わかっとう」 可以理解為 分かってる　就是我明白的意思。</p>
+<h3 id="けん"><a href="#けん" class="headerlink" title="けん"></a>けん</h3><p>這個也在各地都有出現，可以將けん理解為語助詞，～だから的意思。<br>例句：明日行くけん</p>
+<h3 id="うるさか"><a href="#うるさか" class="headerlink" title="うるさか"></a>うるさか</h3><p>這個應該不用解釋了，就是うるさい的熊本弁。</p>
+<h3 id="～と？"><a href="#～と？" class="headerlink" title="～と？"></a>～と？</h3><p>熊本弁有時會在句尾加入と，就是日文～なの的意思<br>例句：いけると？</p>
+<h3 id="～なかと"><a href="#～なかと" class="headerlink" title="～なかと"></a>～なかと</h3><p>九州地方的方言，なかと 可以理解為 ない，比方說なかとよ　＞　ないんですよ</p>
+<p>以上，提供參考，熊本方言雖然有很多與九州、福岡地區混在一起，但還是很有趣呢。不說了，我要去看第2話了。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ol>
+<li><a href="https://rkk.jp/gamadase/k_detail.php?id=20070126021119">https://rkk.jp/gamadase/k_detail.php?id=20070126021119</a></li>
+<li><a href="https://keepergiken.jp/keepre/4191/">https://keepergiken.jp/keepre/4191/</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/%E7%86%8A%E6%9C%AC%E5%BC%81">https://ja.wikipedia.org/wiki/%E7%86%8A%E6%9C%AC%E5%BC%81</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>日文</category>
+      </categories>
+      <tags>
+        <tag>熊本弁</tag>
+        <tag>ガールズバンドクライ</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什麼是TDD？如何實作？</title>
+    <url>/2024/05/18/%E4%BB%80%E9%BA%BC%E6%98%AFTDD%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%EF%BC%9F/</url>
+    <content><![CDATA[<h3 id="什麼是TDD？"><a href="#什麼是TDD？" class="headerlink" title="什麼是TDD？"></a>什麼是TDD？</h3><p>TDD，全名測試驅動開發(Test Driven Development)是一種軟體開發的方法論，顧名思義這種開發方式以測試驅動。使用TDD進行開發的流程如下：</p>
+<span id="more"></span>
+<ol>
+<li>紅燈</li>
+<li>綠燈</li>
+<li>重構</li>
+</ol>
+<h4 id="紅燈階段"><a href="#紅燈階段" class="headerlink" title="紅燈階段"></a>紅燈階段</h4><p>這個階段必須要撰寫出一個必定會失敗的程式碼</p>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>TDD</tag>
+        <tag>Methology</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在SpringBoot 寫測試 @Mock,@MockBean,MvcResult</title>
+    <url>/2024/05/01/%E5%9C%A8SpringBoot-%E5%AF%AB%E6%B8%AC%E8%A9%A6-Mock-MockBean/</url>
+    <content><![CDATA[<p>在Spring開發完後，我們需要測試自己撰寫的API有沒有問題。除了在SpringBoot專案預設的SpringBootTest中針對單個方法進行單位測試外，有時也會有需要去Mock，就是假造一個物件的需求。<br>假設今天程式比較複雜，需根據DB回傳的資料做判斷，而DB剛好沒有這樣的資料時，與其更動DB以符合測試，不如假造DB的內容，單測試API。換句話說，因為成本太高，所以利用假造的方式來撰寫符合需要規模的程式碼。</p>
+<h3 id="Mockito框架"><a href="#Mockito框架" class="headerlink" title="Mockito框架"></a>Mockito框架</h3><p>Mockito是一個Mock框架，同時適用單元測試與整合測試。以下介紹常見的用法：</p>
+<span id="more"></span>
+<ol>
+<li>@MockBean 可以用來假造Repository，也就是假造資料庫回傳的資料，因為是假造一整個物件，所以比較適合在整合測試中使用。舉例來說，像是以下用法：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@MockBean</span><br><span class="line">private StudentRepository stuRepo;</span><br><span class="line"></span><br><span class="line">@Test</span><br><span class="line">public void studentMock() &#123;</span><br><span class="line">    Student stu = new Student();</span><br><span class="line">    stu.setStudentId(&quot;001&quot;);</span><br><span class="line">    stu.setStudentName(&quot;Joe&quot;); </span><br><span class="line">    stu.setStudentCreateTime(LocalDateTime.now()); </span><br><span class="line">    // 假造一個Student物件</span><br><span class="line"></span><br><span class="line">    Mockito.when(studentRepo.getAbsentStudent(Mockito.anyString())).thenReturn(stu);</span><br><span class="line">    // 當 想要取得請假學生的資料時，就回傳假造的Student物件</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>想要假造方法或是變數，假設我有一個物件MainService。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">   @Test</span><br><span class="line">public MainService MockConfig() throws Exception &#123;</span><br><span class="line">	MainService mainService = new MainService();</span><br><span class="line">	MainService mainService_mock = Mockito.spy(mainService); </span><br><span class="line">       // 假造一個Mock物件</span><br><span class="line">	</span><br><span class="line">       Mockito.doReturn(null).when(mainService_mock).SendRequest(Mockito.anyObject(),Mockito.anyString());</span><br><span class="line">       // 使MainService中的SendRequest()回傳Null</span><br><span class="line">	</span><br><span class="line">       Mockito.doNothing().when(mainService_mock).validate(Mockito.anyObject()); // 先不做欄位檢查</span><br><span class="line">	// 使MainService中的validate()方法跳過不執行(僅限方法沒有回傳值的狀況 void)</span><br><span class="line"></span><br><span class="line">       ReflectionTestUtils.setField(mainService_mock, &quot;domain&quot;, &quot;https://www.google.com.tw/&quot;); </span><br><span class="line">       // 仿造MainService中的@Value</span><br><span class="line">	</span><br><span class="line">       ReflectionTestUtils.setField(mainService_mock, &quot;apiKey&quot;, &quot;a4d1206bf951479fbcbe2e4bb6475d41&quot;); // 仿造 @Value</span><br><span class="line">	// 仿造MainService中的@Value</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="SpringMvc-單元測試"><a href="#SpringMvc-單元測試" class="headerlink" title="SpringMvc 單元測試"></a>SpringMvc 單元測試</h3><p>如果想要做部分整合測試，可以使用MvcResult去測試一個Rest API</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HttpHeaders httpHeaders = new HttpHeaders();</span><br><span class="line">httpHeaders.add(&quot;Content-Type&quot;, &quot;application/json&quot;);</span><br><span class="line">httpHeaders.add(&quot;Version&quot;, &quot;1.0.1&quot;);</span><br><span class="line">httpHeaders.add(&quot;ClientIp&quot;, &quot;1.1.1.1&quot;);</span><br><span class="line"></span><br><span class="line">RequestBuilder requestBuilder =</span><br><span class="line">        MockMvcRequestBuilders</span><br><span class="line">                .get(&quot;/api/transaction&quot;)</span><br><span class="line">                .headers(httpHeaders)</span><br><span class="line">                .param(&quot;type&quot;, &quot;Credit&quot;)</span><br><span class="line">                .param(&quot;sum&quot;, &quot;10000&quot;);</span><br><span class="line">// 要被測試的API需要建立一個ReqeustBuilder</span><br><span class="line"></span><br><span class="line">MvcResult result = mockMvc.perform(requestBuilder)</span><br><span class="line">        .andDo(print())</span><br><span class="line">        .andExpect(jsonPath(&quot;$.code&quot;).value(&quot;0&quot;))</span><br><span class="line">        .andExpect(jsonPath(&quot;$.message&quot;).value(&quot;SUCCESS&quot;))</span><br><span class="line">        .andReturn();</span><br><span class="line">// 測試，回傳會印出一個標準化的規格。若不符合andExpect()的條件就會回報AssertionError</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>以上。</p>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)</title>
+    <url>/2024/04/22/%E7%B0%A1%E5%96%AE%E4%BD%BF%E7%94%A8Swagger%E5%8A%9F%E8%83%BD-%E9%81%A9%E7%94%A8Java-17/</url>
+    <content><![CDATA[<p>作為一個後端工程師，除了基本的API開發，如何撰寫出讓人好理解的文件至關重要。一份好的文件不僅可以幫助RD了解API，也能提供給PM等部門去了解自己的產品。</p>
+<span id="more"></span>Swagger就是因此而生，Swagger的特色是利用Annonation撰寫文件，另外透過OpenAPI，將撰寫的內容轉成靜態網頁，文件只需要提供靜態網頁就可以讓前端人員、PM去參考API的格式與規範，相當方便。
+<p>本文以Java 17舉例。</p>
+<h3 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h3><p>在Maven的pom.xml檔案中添加以下依賴，並reload：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springdoc&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;springdoc-openapi-starter-webmvc-ui&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.2.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>接著補上API(已經有API的這部分可以不看)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;/api&quot;)</span><br><span class="line">public class MemberController &#123;</span><br><span class="line">    @PutMapping(&quot;/member&quot;)</span><br><span class="line">    public String login(@RequestBody HashMap reqMap) &#123;</span><br><span class="line">        System.out.println(&quot;Start login~&quot;);</span><br><span class="line">        String response = memberService.login(reqMap);</span><br><span class="line">        System.out.println(&quot;Response = &quot; + response);</span><br><span class="line">        return response;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接著訪問以下路徑<br><a href="http://localhost:8080/swagger-ui/index.html">http://localhost:8080/swagger-ui/index.html</a><br>就可以看到一個靜態網頁，裡面應該有所有Project的API，簡單的建立就完成了。<br>OpenAPI的特色是可以建立一個網頁，讓你瀏覽專案中所有在偵測範圍內的API。</p>
+<p>你可以試著為API添加一些資訊，像是針對系統的名稱、描述或是開發者的資料等等。像這樣</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">@Configuration</span><br><span class="line">public class OpenAPIConfiguration &#123;</span><br><span class="line"></span><br><span class="line">   @Bean</span><br><span class="line">   public OpenAPI defineOpenApi() &#123;</span><br><span class="line">       Server server = new Server();</span><br><span class="line">       server.setUrl(&quot;http://localhost:8080&quot;);</span><br><span class="line">       server.setDescription(&quot;Development&quot;);</span><br><span class="line"></span><br><span class="line">       Contact myContact = new Contact();</span><br><span class="line">       myContact.setName(&quot;Jane Doe&quot;);</span><br><span class="line">       myContact.setEmail(&quot;your.email@gmail.com&quot;);</span><br><span class="line"></span><br><span class="line">       Info information = new Info()</span><br><span class="line">               .title(&quot;Employee Management System API&quot;)</span><br><span class="line">               .version(&quot;1.0&quot;)</span><br><span class="line">               .description(&quot;This API exposes endpoints to manage employees.&quot;)</span><br><span class="line">               .contact(myContact);</span><br><span class="line">       return new OpenAPI().info(information).servers(List.of(server));</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果想要為個別的API添加描述，可以參考以下程式。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Tag(name = &quot;get&quot;, description = &quot;GET methods of Employee APIs&quot;)</span><br><span class="line">@GetMapping(&quot;/employees&quot;)</span><br><span class="line">public List&lt;Employee&gt; findAllEmployees() &#123;</span><br><span class="line">   return repository.findAll();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Tag(name = &quot;get&quot;, description = &quot;GET methods of Employee APIs&quot;)</span><br><span class="line">@GetMapping(&quot;/employees/&#123;employeeId&#125;&quot;)</span><br><span class="line">public Employee getEmployee(@PathVariable int employeeId) &#123;</span><br><span class="line">   Employee employee = repository.findById(employeeId)</span><br><span class="line">           .orElseThrow(() -&gt; new RuntimeException(&quot;Employee id not found - &quot; + employeeId));</span><br><span class="line">   return employee;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@Tag中的name代表了分類，description代表針對這個分類的描述。</p>
+<p>如果要建立Response的文件規範的話，可以參考以下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@ApiResponses(&#123;</span><br><span class="line">       @ApiResponse(responseCode = &quot;200&quot;, content = &#123; @Content(mediaType = &quot;application/json&quot;,</span><br><span class="line">               schema = @Schema(implementation = Employee.class)) &#125;),</span><br><span class="line">       @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Employee not found&quot;,</span><br><span class="line">               content = @Content) &#125;)</span><br><span class="line">@DeleteMapping(&quot;/employees/&#123;employeeId&#125;&quot;)</span><br><span class="line">public String deleteEmployee(@PathVariable int employeeId) &#123;</span><br><span class="line">   Employee employee = repository.findById(employeeId)</span><br><span class="line">           .orElseThrow(() -&gt; new RuntimeException(&quot;Employee id not found - &quot; + employeeId));</span><br><span class="line">   repository.delete(employee);</span><br><span class="line">   return &quot;Deleted employee with id: &quot; + employeeId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@ApiResponse是一個回傳格式，可以撰寫不同HTTP狀態碼的回傳內容，以及更多描述。<br>有了以上功能，你應該就可以為你的API寫出足夠描述的文件了。</p>
+<p><img src="/images/swagger-demo.png" alt="这是图片"></p>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
+<li><a href="https://medium.com/@berktorun.dev/swagger-like-a-pro-with-spring-boot-3-and-java-17-49eed0ce1d2f">https://medium.com/@berktorun.dev/swagger-like-a-pro-with-spring-boot-3-and-java-17-49eed0ce1d2f</a></li>
+<li><a href="https://bell-sw.com/blog/documenting-rest-api-with-swagger-in-spring-boot-3/E">https://bell-sw.com/blog/documenting-rest-api-with-swagger-in-spring-boot-3/E</a></li>
+</ol>
+<p>以上</p>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何建立自己的Github部落格 使用Hexo+Github Page</title>
+    <url>/2024/04/19/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%B7%B1%E7%9A%84Github%E9%83%A8%E8%90%BD%E6%A0%BC-%E4%BD%BF%E7%94%A8Hexo-Github-Page/</url>
+    <content><![CDATA[<p>網路上目前已經有很多這類的教學了，所以這篇比較像是自己的學習紀錄。</p>
+<span id="more"></span>
+<h3 id="Hexo是什麼？"><a href="#Hexo是什麼？" class="headerlink" title="Hexo是什麼？"></a>Hexo是什麼？</h3><p>Hexo是基於Node.js開發的網誌框架，特色主要如下：</p>
+<ul>
+<li>一鍵部署</li>
+<li>簡單操作</li>
+<li>支援MarkDown語法</li>
+<li>多種模板可參考，更多模板可以參考<a href="https://hexo.io/themes/">https://hexo.io/themes/</a></li>
+</ul>
+<h3 id="前置作業"><a href="#前置作業" class="headerlink" title="前置作業"></a>前置作業</h3><ol>
+<li><p>安裝Node.js，Hexo需要透過npm安裝。(<a href="https://nodejs.org/en/">https://nodejs.org/en/</a>)</p>
+</li>
+<li><p>安裝Git，用來將檔案發佈到Github Page。(<a href="https://git-scm.com/">https://git-scm.com/</a>)</p>
+</li>
+<li><p>安裝Node.js完成後開啟cmd，輸入<strong>npm version</strong>確保node.js可以成功顯示內容，若Node.js安裝成功，這部分應該會顯示一堆套件的訊息。</p>
+</li>
+<li><p>安裝Hexo，在cmd輸入以下指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ npm install hexo-cli -g</span><br></pre></td></tr></table></figure></li>
+<li><p>安裝好後輸入 hexo version，查看hexo版本，如果有顯示版本名稱就代表安裝成功了。</p>
+</li>
+<li><p>初始化Hexo，在你想要的路徑下輸入以下指令來建立</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ hexo init &lt;資料夾名稱&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>建立好後將目錄切進去</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd &lt;資料夾名稱&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>安裝npm套件，<strong>這部分重要，不要忘記</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ npm install</span><br></pre></td></tr></table></figure></li>
+<li><p>產生靜態檔案，本地啟動看看</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br><span class="line">$ hexo server</span><br></pre></td></tr></table></figure></li>
+<li><p>Hexo預設路徑<a href="http://localhost:4000/">http://localhost:4000/</a></p>
+</li>
+<li><p>開啟你的Github帳號，沒有就註冊一個。</p>
+</li>
+<li><p>New一個Repository，並把專案命名為&lt;名字&gt;.github.io，這部分是固定的，不可以自定義。</p>
+</li>
+<li><p>建立好repository後，先把你的專案網址clone起來。</p>
+</li>
+<li><p>在cmd輸入以下指令安裝git相關套件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></li>
+<li><p>調整Deployment。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: &lt;你剛剛clone的路徑&gt;</span><br><span class="line">  branch: &lt;你專案的branch名稱，通常是master&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>部署它</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure></li>
+<li><p>你應該會在Github Action看到 pages build and deployment 的訊息，請耐心等他跑完，應該一分鐘內就會執行完成。你應該可以在https:&#x2F;&#x2F;名稱.github.io的路徑下找到它</p>
+</li>
+<li><p>之後你的每次修改後都應該要</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ hexo clean    // 清除之前建立的靜態檔案</span><br><span class="line">$ hexo generate     // 建立靜態頁面</span><br><span class="line">$ hexo deploy     // 部署至 GitHub</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>以上就是安裝教學。接下來說說要怎麼新增文章。</p>
+<ol>
+<li>在cmd輸入以下指令<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ hexo new &quot;你的文章標題&quot;</span><br></pre></td></tr></table></figure></li>
+<li>新增之後，你應該可以在source路徑下找到你自己剛剛建立的文章</li>
+<li>使用Markdown語法輸入你想寫的內容</li>
+<li>重複上一篇步驟18的動作，你就成功部署新的文章了</li>
+</ol>
+<h4 id="以上。"><a href="#以上。" class="headerlink" title="以上。"></a>以上。</h4><h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
+<li><a href="https://hexo.io/zh-tw/docs/writing">https://hexo.io/zh-tw/docs/writing</a></li>
+<li><a href="https://hackmd.io/@Heidi-Liu/note-hexo-github">https://hackmd.io/@Heidi-Liu/note-hexo-github</a></li>
+<li><a href="https://hackmd.io/@Heidi-Liu/hexo-theme">https://hackmd.io/@Heidi-Liu/hexo-theme</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10242172">https://ithelp.ithome.com.tw/articles/10242172</a></li>
+<li><a href="https://hexo.io/zh-tw/docs/github-pages">https://hexo.io/zh-tw/docs/github-pages</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>關於我拿到日本公司的內定卻決定拒絕的那件事</title>
+    <url>/2024/04/19/%E9%97%9C%E6%96%BC%E6%88%91%E6%8B%BF%E5%88%B0%E6%97%A5%E6%9C%AC%E5%85%AC%E5%8F%B8%E7%9A%84%E5%85%A7%E5%AE%9A%E5%8D%BB%E6%B1%BA%E5%AE%9A%E6%8B%92%E7%B5%95%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B/</url>
+    <content><![CDATA[<h4 id="你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？-你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？"><a href="#你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？-你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？" class="headerlink" title="你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？ 你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？"></a>你有沒有曾經想過，只要搭著電車、就可以在淺草拍照？ 你有沒有想過，只要搭一會兒新幹線，就可以在京都尋訪各地日本美景？</h4><p><strong>我有</strong></p>
+<p>這邊算是一篇生活的筆記紀錄，主要是最近發生了太多事情，一時之間不曉得怎麼讓自己去習慣這樣的變化，所以我決定訴諸文字，透過過去陪伴了我數年的文字來表達出我內心一隅的期盼、忍讓與惋惜。</p>
+<p>我從小就很喜歡日本文化，名字中也包含了日文(旻)，這讓我自小就覺得自己是個適合日本的人，我小時候看的動畫從航海王，線上愛奇藝的死神，到我正式入宅看的Fate&#x2F;Zero、當紅戀愛喜劇我的妹妹哪有那麼可愛、不朽經典的幸運星等等，代表性的動畫不計其數。不同於許多同學，喜歡動畫都在國中、高中階段，我的熱情從未退卻。<br>高中開始聽Galgame OP，開始使用Twitter追蹤喜歡的畫師，接觸可能連日本人都不熟悉的同人誌與同人音樂，還有偷偷瞞著家裡買Galgame豪華特典版，更別說家裡的牆壁早就被我掛滿海報、掛軸、還有畫師親簽的複製原畫。這些年來我從來沒有後悔入宅過，一次都沒有。</p>
+<p>除此之外，我也不是白宅的，我在高中，連一句日文都不會說時，就開始利用Youtube去翻譯動畫、遊戲的預告，因為我希望有著跟我同樣對動畫充滿熱情的人，不會因為語言而停止追逐。<br>在大學時，我正式開始學習日文、或許是宅得無可救藥的緣故，我只考了兩次日文檢定，就拿到了日文檢定最高的JLPT N1。當下拿到時我真的很開心。<br>回顧我學生時期的軌跡，我以自己的熱情為傲，並堅信自己的熱情終有一天會引導我前往更好的生活，也就是住在日本。</p>
+<h4 id="那時我還不知道自己有多天真"><a href="#那時我還不知道自己有多天真" class="headerlink" title="那時我還不知道自己有多天真**"></a>那時我還不知道自己有多天真**</h4><p>大學畢業後的我，成為一名軟體工程師，每天上班Coding，下班後過著快樂宅的生活，然而一枚Gmail吸引了我的目光。</p>
+<p><strong>「日本 樂天 招募台灣工程師」</strong></p>
+<p>這封信就好像一滴墨漬在白紙上暈開般，我忽然間想起自己應該要開始嘗試自己一直以來都想要嘗試的事了。我試著投遞了職缺，但最終因為能力不足而被刷掉。<br>但我沒有氣餒。「不就是能力嗎？我去培養不就好了。」<br>於是我開始對軟體知識認真向學，從只會Coding到可以設計出一個還可以的系統。可以說是<br>日本是我一直以來前進的契機，因為想要，所以必須得努力不可。</p>
+<p>今年，過了一年的我，帶著一年軟體開發的經驗去投遞日本職缺，我使用Linkedin上找尋海外赴日的顧問，請他幫我找適合我的職缺。<br>接著就是一連串的忙碌日子，從第一次跟日本人說話，到面試練習、職務經歷、志望動機、自我PR與自我介紹，我把我所有能做的事情都做了。</p>
+<p>而最後我拿到的職缺是「派遣IT 軟體工程師」</p>
+<p>很滑稽吧，努力到盡頭我得到的居然是派遣IT的工作，在國內的我雖然也只是在名不經傳的小新創企業，但好歹也是一份正職工作，但我要去日本的話，居然只能透過派遣IT的形式過去嗎？</p>
+<p>我琢磨一直以來帶領自己成長與前進的力量，忍不住產生了懷疑。「このまま、本当にいいのか？(這樣下去真的好嗎)」我期望著日本的生活，但卻要因此犧牲目前在台灣的生活、失去穩定的工作，以及成長性。就只是為了前往日本，這樣真的是最佳解嗎？</p>
+<p>我帶著這份困惑，向工作的老闆提出了我想要離開這份工作前往日本的事，老闆表示同意也鼓勵我去趁著自己年輕時追逐自己的夢想。</p>
+<p>然而，心中的那份疑惑終於已某種形式爆發出來了，心中理性的自己告訴自己住手，為了日本拋棄一切根本是愚蠢至極，若是失敗了自己將毫無退路，而另外一道聲音則告訴自己，這是自己的志願，為了日本追逐至今的自己，如今卻要讓機會從手中滑落嗎？</p>
+<p><strong>「祝福，在我始料未及的情況下，逆轉成了詛咒。」</strong></p>
+<p>這份掙扎與痛苦讓我苦苦思慮了相當久的一段時間，有好幾天我早上五點半起床，在家中陽台呆愣著看著窗外，浮現一抹魚肚白的天際。期望著有誰能給我解答，但回應我的只有戶外野狗的吠叫。</p>
+<p>最後，我咬著牙，拋棄了一直以來支持我的理想，也就是日本的生活。我是理想的叛徒，像是小丑一般在Offer面談的前一天拒絕了入職邀約，儘管合理卻對我來說不合理，我看見顧問發來無數詢問的訊息，把手機丟向一旁，身體深深埋入了被窩之中。</p>
+<p>又是一天的五點鐘起床，我望著窗外的天際，心裡也慢慢浮現了一線曙光，為我長久以來的掙扎與苦痛畫下了休止符。</p>
+<p>失去了日本、失去了工作，如今的我還剩下什麼？我沒有答案。</p>
+<p><strong>這是不是正確的？</strong> 這個問題我連想都不敢想，我的意志不夠堅定，所以不能再讓它傷害更多的人了，我咬著指甲，將這份苦澀的情緒，伴隨早餐的咖啡一嚥而下。</p>
+]]></content>
+      <categories>
+        <category>生活紀錄</category>
+      </categories>
+      <tags>
+        <tag>日本求職</tag>
+        <tag>面試</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解說SQL的Transaction與隔離層級</title>
+    <url>/2024/05/19/%E8%A7%A3%E8%AA%AASQL%E7%9A%84Transaction%E8%88%87%E9%9A%94%E9%9B%A2%E5%B1%A4%E7%B4%9A/</url>
+    <content><![CDATA[<h2 id="什麼是Transaction？"><a href="#什麼是Transaction？" class="headerlink" title="什麼是Transaction？"></a>什麼是Transaction？</h2><p>Transaction，大陸有人翻譯為交易或事務，但都同一個意思。</p>
+<span id="more"></span>它是一個執行過程中的一個邏輯單位。比方說SELECT、INSERT、UPDATE，當中也可能包含多個行為，比方說查詢後更新。為了確保資料庫的交易在各種情況下都是維持正確性，交易有四個特性，也就是俗稱的ACID。
+<h3 id="1-Atomicity-原子性"><a href="#1-Atomicity-原子性" class="headerlink" title="1. Atomicity 原子性"></a>1. <strong>A</strong>tomicity 原子性</h3><p>原子性主張交易必須要維持統一不變的狀況，交易必須是全數成功，不然就得是全部失敗。<br>舉例： 假設你是消費者，進行消費後在前台的交易系統有存入這筆交易，但是系統的交易後台卻沒有這筆交易，顯示更新這個功能<strong>只做了一半</strong>，交易的行為破壞了<strong>原子性</strong>。</p>
+<h3 id="2-Consistency-一致性"><a href="#2-Consistency-一致性" class="headerlink" title="2. Consistency 一致性"></a>2. <strong>C</strong>onsistency 一致性</h3><p>一致性主張，交易前與交易後都必須要遵守完整性的規範，比方說店家前台的交易系統與系統後台<strong>必須要維持一致性</strong>，交易的結果不統一破壞了<strong>一致性</strong>。</p>
+<h3 id="3-Isolation-隔離性"><a href="#3-Isolation-隔離性" class="headerlink" title="3. Isolation 隔離性"></a>3. <strong>I</strong>solation 隔離性</h3><p>隔離性代表了交易不應該互相干擾，假設你看到的戶頭有1000元，而你在領800去吃飯時，剛好電費同時扣款導致你無法進行交易。不夠嚴謹的隔離性後續會產生許多問題，等一下會一一介紹。</p>
+<h3 id="4-Durability-永久性"><a href="#4-Durability-永久性" class="headerlink" title="4. Durability 永久性"></a>4. <strong>D</strong>urability 永久性</h3><p>永久性意味對於資料的寫入是永久的，即使系統故障也不會丟失資料。</p>
+<p>這些規範看起來很合理，但未必適合每種商業場景，實際上還是要多多考慮實際上的商業場景在做出決定。就好比高可用性與系統效能永遠都是一個無法兼得的選項一樣。端看你要如何取捨。</p>
+<h2 id="三種SQL隔離性會產生的問題"><a href="#三種SQL隔離性會產生的問題" class="headerlink" title="三種SQL隔離性會產生的問題"></a>三種SQL隔離性會產生的問題</h2><p>設定了錯誤的隔離層級會造成許多系統上難維護的課題，特別是在多執行緒的場景，使用Trasaction特性要特別謹慎。常見的隔離性不正確會有以下問題：</p>
+<h3 id="1-Dirty-Read-髒讀"><a href="#1-Dirty-Read-髒讀" class="headerlink" title="1. Dirty Read 髒讀"></a>1. Dirty Read 髒讀</h3><p>指一筆交易在處理過程中讀取了另外一個交易”未提交”的數據。<br>舉例：<br>帳戶原有1000，<br>A會</p>
+<ol>
+<li>對帳戶領500</li>
+<li>對帳戶存500<br>B會</li>
+<li>讀取帳戶餘額。</li>
+</ol>
+<p>在兩者同時處理的併發情況下可能發生： A1 &gt; B &gt;A2<br>也就是說帳戶其實錢並沒有減少，但在B的視角中，可能產生帳戶少了500元的結果。</p>
+<h3 id="2-Non-Repeatable-不可重複讀"><a href="#2-Non-Repeatable-不可重複讀" class="headerlink" title="2. Non-Repeatable 不可重複讀"></a>2. Non-Repeatable 不可重複讀</h3><p>指一個交易範圍內，多次查詢某個數據，卻得到不同的結果。<br>舉例：<br>呈上例，B初次讀取時得到了500，但過一下子讀取後又得到了1000。兩次結果不一致。</p>
+<h3 id="3-Phantom-Read-幻讀"><a href="#3-Phantom-Read-幻讀" class="headerlink" title="3. Phantom Read 幻讀"></a>3. Phantom Read 幻讀</h3><p>一個交易範圍內，多次查詢某個數據，卻得到不同的資料筆數。</p>
+<h2 id="四種隔離層級"><a href="#四種隔離層級" class="headerlink" title="四種隔離層級"></a>四種隔離層級</h2><h3 id="1-Read-Uncommitted"><a href="#1-Read-Uncommitted" class="headerlink" title="1. Read Uncommitted:"></a>1. Read Uncommitted:</h3><p>這個隔離層級可以讀取尚未commit的資料，因為資料包含為commit的資料，所以可能會產生以上三種問題。<br>這種隔離層級可能產生：</p>
+<ul>
+<li>髒讀</li>
+<li>不可重複讀</li>
+<li>幻讀</li>
+</ul>
+<h3 id="2-Read-Committed："><a href="#2-Read-Committed：" class="headerlink" title="2. Read Committed："></a>2. Read Committed：</h3><p>這個隔離層級只允許讀取其他 transaction commit 過的資料，可以解決髒讀的問題，<br>不過如果一個 transaction 的兩個 SELECT 語法間有另一個交易 commit 了新資料，<br>會造成第一次讀取與第二次讀取結果不一致的問題，也就是上面介紹過的不可重複讀。<br>這種隔離層級可能產生：</p>
+<ul>
+<li>不可重複讀</li>
+<li>幻讀</li>
+</ul>
+<h3 id="3-Repeatable-Read"><a href="#3-Repeatable-Read" class="headerlink" title="3. Repeatable Read"></a>3. Repeatable Read</h3><p>同一個 transaction 內，除非自己修改，否則多次 SELECT 的結果都會相同，解決了不可重複讀的問題。<br>這種隔離層級可能產生：</p>
+<ul>
+<li>幻讀</li>
+</ul>
+<h3 id="4-Serializable"><a href="#4-Serializable" class="headerlink" title="4. Serializable"></a>4. Serializable</h3><p>在一開始提過，是一個用效能換取一致性的隔離層級，<br>讓所有 transaction 序列化執行，避免併發可能會造成的問題。<br>可解決問題但效能低落。</p>
+<p>以上</p>
+]]></content>
+      <categories>
+        <category>Software Knowledge</category>
+      </categories>
+      <tags>
+        <tag>SQL</tag>
+      </tags>
+  </entry>
+</search>
