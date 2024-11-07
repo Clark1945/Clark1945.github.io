@@ -22,7 +22,7 @@
       return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
     },
     Pikaday = function (opts) {
-      var data = '{"2024":{"3":{"19":true,"20":true,"22":true,"24":true},"4":{"1":true,"18":true,"19":true}}}';
+      var data = '{"2024":{"3":{"19":true,"20":true,"22":true,"24":true},"4":{"1":true,"18":true,"19":true},"10":{"7":true}}}';
       this.data = JSON.parse(data);
       window.pdata = this.data;
       this.weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];

@@ -1,6 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Diary in 2024/11/07</title>
+    <url>/2024/11/07/Diary-in-2024-11-07/</url>
+    <content><![CDATA[<p>Hi guy, I just started this new series of article. I try to express myself using my English ability. It might be dull,<br>so I assume no one want to see this. Now bro, get to previous page quickly.</p>
+<p>Hmm…Where should I start…Oh! I know, I know.<br>My name is LIU,CHIH-MIN, everyone call me Clark at work. I worked as a software engineer for more than two years.<br>As a software engineer, I’m best at using Java to develop web application. I have tried many language of programming in my<br>first year engineer days. I have used Python,Javascript,Go,Kolin,Dart. Although this experience. I still decided to put Java<br>as my best skill. The reason is Java has the most active community, I can easy find out the resolution of my issue. Moreover,<br>active community also means better ecosystem. Although it does have some weekly, but it doesn’t affect me to recongize it as<br>a best choice of learning programming.<br>Talk enough about work, let write somethin about myself, shall we?<br>I got admit that I am not a good software engineer, for I have not get satisfactory for now in my career. It troubled me for a<br>long time. I always question myself, did I really feel enough? I am now having a cozy life, I have time to play mobile game, listen<br>Youtube films, have time to sleep 8 hours a day. Sometime I found myself is a orphange of IT. For most of my college classmate go to<br>Studying for a Master Degree. I was the only one who tries to fight as a college student. After these two years, I do find out that<br>there will always have something I don’t even know or hear about. I have get used to this situation. I tries to learning as much as I<br>can. But I can never be better than those who overtime throug holidays.<br>I started to think maybe this is what we called destiny, maybe…just maybe.</p>
+]]></content>
+      <tags>
+        <tag>English Diary Personal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java Stream用法、MapStruct、Lombok語法</title>
+    <url>/2024/05/01/Java-Stream%E7%94%A8%E6%B3%95%E3%80%81MapStruct%E3%80%81Lombok%E8%AA%9E%E6%B3%95/</url>
+    <content><![CDATA[<p>Java 8 加入Stream語法，提供了很多針對陣列物件的便利功能，以下介紹一些常見的用法。</p>
+<span id="more"></span>
+<h3 id="Java-Stream-常見用法"><a href="#Java-Stream-常見用法" class="headerlink" title="Java Stream 常見用法"></a>Java Stream 常見用法</h3><p>Java Stream 主要功能如下</p>
+<ol>
+<li>Filter 透過設定的條件過濾元素</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 找出非Empty數量</span><br><span class="line">long memberCount = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.count();</span><br><span class="line"></span><br><span class="line">// 找出非重複的第一位成員</span><br><span class="line">String firstMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.findFirst()</span><br><span class="line">.get();</span><br><span class="line"></span><br><span class="line">// 找出 陣列中以AL1S開頭的任何一個，若沒有符合的回傳&quot;IS NOT EXIST&quot;</span><br><span class="line">String findQueen = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; string.startsWith(&quot;AL1S&quot;))</span><br><span class="line">.distinct()</span><br><span class="line">.findAny()</span><br><span class="line">.orElse(&quot;IS NOT EXIST&quot;);</span><br><span class="line"></span><br><span class="line">// 找出前三位成員</span><br><span class="line">String findThreeMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.limit(3)</span><br><span class="line">.collect(Collectors.joining());</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Map 映射每个元素到對應的結果</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;),</span><br><span class="line">    new Food(&quot;餛飩湯&quot;),</span><br><span class="line">    new Food(&quot;肉羹湯&quot;),</span><br><span class="line">    new Food(&quot;牛肉湯&quot;),</span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">// 取得物件的字串</span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream().map( food -&gt; food.getFoodName()).toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>forEach 迭代Stream中的每個元素 ( 同樣可以修改 但是不會回傳)</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;), </span><br><span class="line">    new Food(&quot;餛飩湯&quot;), </span><br><span class="line">    new Food(&quot;肉羹湯&quot;), </span><br><span class="line">    new Food(&quot;牛肉湯&quot;), </span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream()</span><br><span class="line">.map( food -&gt; food.getFoodName())</span><br><span class="line">.toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br><span class="line"></span><br><span class="line">// 將所有FoodName 加上 NT$</span><br><span class="line">foodObj</span><br><span class="line">.stream()</span><br><span class="line">.forEach(food -&gt; &#123;</span><br><span class="line">			food.foodName = &quot;NT$&quot;+food.getFoodName();</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>reduce (元素匯總成單一結果。)</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; integers = Arrays.asList(1, 2, 3, 4, 5);</span><br><span class="line">//將列表元素加總</span><br><span class="line">Integer sum = integers.stream().reduce(0, (a, b) -&gt; a + b);</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="MapStruct-用法，MapStruct可以將兩個類別互相轉換"><a href="#MapStruct-用法，MapStruct可以將兩個類別互相轉換" class="headerlink" title="MapStruct 用法，MapStruct可以將兩個類別互相轉換"></a>MapStruct 用法，MapStruct可以將兩個類別互相轉換</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@Builder</span><br><span class="line">@AllArgsConstructor</span><br><span class="line">@NoArgsConstructor</span><br><span class="line">public class UserPo &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@Data</span><br><span class="line">public class UserEntity &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick1;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 轉換器</span><br><span class="line">@Mapper</span><br><span class="line">public interface IPersonMapper &#123;</span><br><span class="line">    IPersonMapper INSTANCT = Mappers.getMapper(IPersonMapper.class);</span><br><span class="line">    @Mapping(target = &quot;userNick1&quot;, source = &quot;userNick&quot;) // 如果名稱不同無法對應 就使用 這個做Mapping</span><br><span class="line">    @Mapping(target = &quot;age&quot;, source = &quot;age&quot;, numberFormat = &quot;#0.00&quot;)</span><br><span class="line"></span><br><span class="line">    UserEntity poToentity(UserPo userPo);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 測試PO 與 Entity 轉換</span><br><span class="line">public static void testNormal() &#123;</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----start------&quot;);</span><br><span class="line">    UserPo userPo = UserPo.builder()</span><br><span class="line">            .id(1L)</span><br><span class="line">            .gmtCreate(new Date())</span><br><span class="line">           .buyerId(666L)</span><br><span class="line">           .userNick(&quot;測試mapstruct&quot;)</span><br><span class="line">           .userVerified(&quot;ok&quot;)</span><br><span class="line">           .age(18L)</span><br><span class="line">           .build();</span><br><span class="line"></span><br><span class="line">    System.out.println(&quot;USERPO = &quot; + userPo);</span><br><span class="line">    UserEntity userEntity = IPersonMapper.INSTANCT.poToentity(userPo);</span><br><span class="line">    System.out.println(&quot;ENTITY = &quot; + userEntity);</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----ent------&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Lombok-的Annonation"><a href="#Lombok-的Annonation" class="headerlink" title="@Lombok 的Annonation"></a>@Lombok 的Annonation</h3><ul>
+<li>@Data 注解：<br>@Data 是 Lombok 提供的最常用的注解之一，它结合了 @ToString、@EqualsAndHashCode、@Getter、@Setter 以及 @RequiredArgsConstructor 的功能。它会自动生成这些方法，并为类的每个非静态字段创建 Getter 和 Setter 方法，还会生成 toString 方法和 equals、hashCode 方法。</li>
+<li>@Builder 注解：<br>@Builder 是 Lombok 提供的注解，用于实现建造者模式。它生成一个嵌套的静态内部类 Builder，使得创建对象时可以链式调用，更加清晰和易读。使用 @Builder 注解时，您可以通过生成器模式设置实例的字段。</li>
+<li>@AllArgsConstructor 注解：<br>@AllArgsConstructor 是 Lombok 提供的注解，用于生成一个包含所有参数的构造函数。它会为类的每个字段生成构造函数参数，方便创建对象时传入所有字段的值。</li>
+<li>@NoArgsConstructor 注解：<br>@NoArgsConstructor 是 Lombok 提供的注解，用于生成一个无参数的默认构造函数。它可以在创建对象时使用，特别是当您在使用 @Builder 注解时，因为默认情况下，@Builder 注解需要一个无参构造函数。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java Optional介紹與使用方法</title>
     <url>/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>Optional是Java 8推出時加入的新功能，Optional被發明出來的初衷是為了解決Java常見的NullPointException。</p>
@@ -48,49 +101,6 @@
 以上就是常見的基本Optional用法，也許不需要全部都會，只需要基本了解就很夠用了也說不定。</li>
 </ol>
 <p>以上</p>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java Stream用法、MapStruct、Lombok語法</title>
-    <url>/2024/05/01/Java-Stream%E7%94%A8%E6%B3%95%E3%80%81MapStruct%E3%80%81Lombok%E8%AA%9E%E6%B3%95/</url>
-    <content><![CDATA[<p>Java 8 加入Stream語法，提供了很多針對陣列物件的便利功能，以下介紹一些常見的用法。</p>
-<span id="more"></span>
-<h3 id="Java-Stream-常見用法"><a href="#Java-Stream-常見用法" class="headerlink" title="Java Stream 常見用法"></a>Java Stream 常見用法</h3><p>Java Stream 主要功能如下</p>
-<ol>
-<li>Filter 透過設定的條件過濾元素</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 找出非Empty數量</span><br><span class="line">long memberCount = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.count();</span><br><span class="line"></span><br><span class="line">// 找出非重複的第一位成員</span><br><span class="line">String firstMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.findFirst()</span><br><span class="line">.get();</span><br><span class="line"></span><br><span class="line">// 找出 陣列中以AL1S開頭的任何一個，若沒有符合的回傳&quot;IS NOT EXIST&quot;</span><br><span class="line">String findQueen = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; string.startsWith(&quot;AL1S&quot;))</span><br><span class="line">.distinct()</span><br><span class="line">.findAny()</span><br><span class="line">.orElse(&quot;IS NOT EXIST&quot;);</span><br><span class="line"></span><br><span class="line">// 找出前三位成員</span><br><span class="line">String findThreeMember = gameDevMember</span><br><span class="line">.stream()</span><br><span class="line">.filter(string -&gt; !string.isEmpty())</span><br><span class="line">.distinct()</span><br><span class="line">.limit(3)</span><br><span class="line">.collect(Collectors.joining());</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>Map 映射每个元素到對應的結果</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;),</span><br><span class="line">    new Food(&quot;餛飩湯&quot;),</span><br><span class="line">    new Food(&quot;肉羹湯&quot;),</span><br><span class="line">    new Food(&quot;牛肉湯&quot;),</span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">// 取得物件的字串</span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream().map( food -&gt; food.getFoodName()).toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>forEach 迭代Stream中的每個元素 ( 同樣可以修改 但是不會回傳)</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">List&lt;Food&gt; foodObj = Arrays.asList(</span><br><span class="line">    new Food(&quot;酸辣湯&quot;), </span><br><span class="line">    new Food(&quot;餛飩湯&quot;), </span><br><span class="line">    new Food(&quot;肉羹湯&quot;), </span><br><span class="line">    new Food(&quot;牛肉湯&quot;), </span><br><span class="line">    new Food(&quot;貢丸湯&quot;), </span><br><span class="line">    new Food(&quot;下水湯&quot;));</span><br><span class="line"></span><br><span class="line">List&lt;String&gt; foodList = foodObj.stream()</span><br><span class="line">.map( food -&gt; food.getFoodName())</span><br><span class="line">.toList();</span><br><span class="line">System.out.println(&quot;食物有&quot;+foodList);</span><br><span class="line"></span><br><span class="line">// 將所有FoodName 加上 NT$</span><br><span class="line">foodObj</span><br><span class="line">.stream()</span><br><span class="line">.forEach(food -&gt; &#123;</span><br><span class="line">			food.foodName = &quot;NT$&quot;+food.getFoodName();</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>reduce (元素匯總成單一結果。)</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; integers = Arrays.asList(1, 2, 3, 4, 5);</span><br><span class="line">//將列表元素加總</span><br><span class="line">Integer sum = integers.stream().reduce(0, (a, b) -&gt; a + b);</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="MapStruct-用法，MapStruct可以將兩個類別互相轉換"><a href="#MapStruct-用法，MapStruct可以將兩個類別互相轉換" class="headerlink" title="MapStruct 用法，MapStruct可以將兩個類別互相轉換"></a>MapStruct 用法，MapStruct可以將兩個類別互相轉換</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@Builder</span><br><span class="line">@AllArgsConstructor</span><br><span class="line">@NoArgsConstructor</span><br><span class="line">public class UserPo &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@Data</span><br><span class="line">public class UserEntity &#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private Date gmtCreate;</span><br><span class="line">    private Date createTime;</span><br><span class="line">    private Long buyerId;</span><br><span class="line">    private Long age;</span><br><span class="line">    private String userNick1;</span><br><span class="line">    private String userVerified;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 轉換器</span><br><span class="line">@Mapper</span><br><span class="line">public interface IPersonMapper &#123;</span><br><span class="line">    IPersonMapper INSTANCT = Mappers.getMapper(IPersonMapper.class);</span><br><span class="line">    @Mapping(target = &quot;userNick1&quot;, source = &quot;userNick&quot;) // 如果名稱不同無法對應 就使用 這個做Mapping</span><br><span class="line">    @Mapping(target = &quot;age&quot;, source = &quot;age&quot;, numberFormat = &quot;#0.00&quot;)</span><br><span class="line"></span><br><span class="line">    UserEntity poToentity(UserPo userPo);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 測試PO 與 Entity 轉換</span><br><span class="line">public static void testNormal() &#123;</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----start------&quot;);</span><br><span class="line">    UserPo userPo = UserPo.builder()</span><br><span class="line">            .id(1L)</span><br><span class="line">            .gmtCreate(new Date())</span><br><span class="line">           .buyerId(666L)</span><br><span class="line">           .userNick(&quot;測試mapstruct&quot;)</span><br><span class="line">           .userVerified(&quot;ok&quot;)</span><br><span class="line">           .age(18L)</span><br><span class="line">           .build();</span><br><span class="line"></span><br><span class="line">    System.out.println(&quot;USERPO = &quot; + userPo);</span><br><span class="line">    UserEntity userEntity = IPersonMapper.INSTANCT.poToentity(userPo);</span><br><span class="line">    System.out.println(&quot;ENTITY = &quot; + userEntity);</span><br><span class="line">    System.out.println(&quot;-----------testNormal-----ent------&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="Lombok-的Annonation"><a href="#Lombok-的Annonation" class="headerlink" title="@Lombok 的Annonation"></a>@Lombok 的Annonation</h3><ul>
-<li>@Data 注解：<br>@Data 是 Lombok 提供的最常用的注解之一，它结合了 @ToString、@EqualsAndHashCode、@Getter、@Setter 以及 @RequiredArgsConstructor 的功能。它会自动生成这些方法，并为类的每个非静态字段创建 Getter 和 Setter 方法，还会生成 toString 方法和 equals、hashCode 方法。</li>
-<li>@Builder 注解：<br>@Builder 是 Lombok 提供的注解，用于实现建造者模式。它生成一个嵌套的静态内部类 Builder，使得创建对象时可以链式调用，更加清晰和易读。使用 @Builder 注解时，您可以通过生成器模式设置实例的字段。</li>
-<li>@AllArgsConstructor 注解：<br>@AllArgsConstructor 是 Lombok 提供的注解，用于生成一个包含所有参数的构造函数。它会为类的每个字段生成构造函数参数，方便创建对象时传入所有字段的值。</li>
-<li>@NoArgsConstructor 注解：<br>@NoArgsConstructor 是 Lombok 提供的注解，用于生成一个无参数的默认构造函数。它可以在创建对象时使用，特别是当您在使用 @Builder 注解时，因为默认情况下，@Builder 注解需要一个无参构造函数。</li>
-</ul>
 ]]></content>
       <categories>
         <category>Coding</category>
@@ -166,27 +176,6 @@
       </categories>
       <tags>
         <tag>Spring</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>什麼是TDD？如何實作？</title>
-    <url>/2024/05/18/%E4%BB%80%E9%BA%BC%E6%98%AFTDD%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%EF%BC%9F/</url>
-    <content><![CDATA[<h3 id="什麼是TDD？"><a href="#什麼是TDD？" class="headerlink" title="什麼是TDD？"></a>什麼是TDD？</h3><p>TDD，全名測試驅動開發(Test Driven Development)是一種軟體開發的方法論，顧名思義這種開發方式以測試驅動。使用TDD進行開發的流程如下：</p>
-<span id="more"></span>
-<ol>
-<li>紅燈</li>
-<li>綠燈</li>
-<li>重構</li>
-</ol>
-<h4 id="紅燈階段"><a href="#紅燈階段" class="headerlink" title="紅燈階段"></a>紅燈階段</h4><p>這個階段必須要撰寫出一個必定會失敗的程式碼</p>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>TDD</tag>
-        <tag>Methology</tag>
       </tags>
   </entry>
   <entry>
@@ -328,6 +317,27 @@
       </categories>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什麼是TDD？如何實作？</title>
+    <url>/2024/05/18/%E4%BB%80%E9%BA%BC%E6%98%AFTDD%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%EF%BC%9F/</url>
+    <content><![CDATA[<h3 id="什麼是TDD？"><a href="#什麼是TDD？" class="headerlink" title="什麼是TDD？"></a>什麼是TDD？</h3><p>TDD，全名測試驅動開發(Test Driven Development)是一種軟體開發的方法論，顧名思義這種開發方式以測試驅動。使用TDD進行開發的流程如下：</p>
+<span id="more"></span>
+<ol>
+<li>紅燈</li>
+<li>綠燈</li>
+<li>重構</li>
+</ol>
+<h4 id="紅燈階段"><a href="#紅燈階段" class="headerlink" title="紅燈階段"></a>紅燈階段</h4><p>這個階段必須要撰寫出一個必定會失敗的程式碼</p>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>TDD</tag>
+        <tag>Methology</tag>
       </tags>
   </entry>
   <entry>
