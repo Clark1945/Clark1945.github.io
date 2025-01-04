@@ -4,7 +4,7 @@ date: 2024-05-23 10:29:06
 category: Programming
 tags: 
   - Java
-  - Optional
+  - API
 ---
 
 之前我在寫Java時，總是覺得一直寫 if (obj != null) {} 這樣的處理會讓整體的程式碼變得不好看，我希望有一種API可以更好地協助我處理NLP問題，於是我後續就開始使用Optional這個套件

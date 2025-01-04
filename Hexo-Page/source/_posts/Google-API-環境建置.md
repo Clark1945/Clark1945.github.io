@@ -1,7 +1,7 @@
 ---
 title: Google API 環境建置
 date: 2024-09-15 12:04:43
-tags:
+tags: Tutorial
 ---
 > **Google Docs API 提供了讀取、寫入、更新三種API**
 >
