@@ -1,6 +1,7 @@
 ---
 title: Java Optional API 紀錄
 date: 2024-05-23 10:29:06
+index_img: /img/code.jpg
 category: Programming
 tags: 
   - Java

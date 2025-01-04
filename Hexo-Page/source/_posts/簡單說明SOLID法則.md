@@ -1,6 +1,8 @@
 ---
 title: 簡單說明SOLID法則
 date: 2025-01-04 15:20:50
+index_img: /img/code.jpg
+category: Software
 tags:
   - Java
   - SOLID
