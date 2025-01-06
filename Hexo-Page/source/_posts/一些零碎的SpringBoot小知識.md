@@ -307,5 +307,45 @@ public String home(@ModelAttribute("top") Map top,Model model) {
 }
 ```
 
+## Java Stream vs ParallelStream
+Java Stream執行是串行的，但ParallelStream是並行的，也就是多執行緒。
+Stream是對集合資料類型是順序執行的，但ParallelStream則是隨機執行的
+比方說以下程式碼：
+```java
+        List<Integer> integerList = Lists.newArrayList();
+        List<String> strList = Lists.newArrayList();
+
+        int practicalSize = 1000000;
+
+        for (int i = 0; i < practicalSize; i++) {
+            strList.add(String.valueOf(i));
+        }
+
+        strList.parallelStream().forEach(each -> {
+            integerList.add(Integer.parseInt(each));
+        });
+
+        System.out.println(strList.size()); // 1000000
+        System.out.println(integerList.size()); // 因為平行化的緣故，幾乎不可能是1000000
+```
+應該要把資料型態改用SychronizeList或是Vector來處理多執行緒問題。
+使用ParallelStream應該要考慮
+1. 是否真正需要並行？
+2. Task是否彼此獨立不受影響？
+3. 是否有順序執行需求？
+
+## 副作用(Side Effect) 是什麼？
+在操作物件當中，無意間改變了物件的值或是型別。
+
+## 記憶體洩漏(Memory Leak) 是什麼？
+- 當一個程式被編譯成bytecode，在框架下運行的話，框架可以協助自動處理momery allocation, security, exception, GC等問題。
+- 若沒有框架處理，就必須要手動處理這些問題，沒有把取用的記憶體全部釋放就會導致Memory leak。
+- 一般程式來說，只要process結束後記憶體就會被虛擬機(JVM)全部釋放，不會有這個問題。
+- C/C++ 因為沒有GC，所以經常出現。另外像是EventListener() 只移除了裡面的元素卻沒有移除Listener()也會造成。另外還有循環引用與存取全域變數。
+
+## 循環引用 (Circular Import)
+物件A參照到B，B又參照到A，就會造成循環引用，會造成記憶體洩漏，同時GC也會無法正常運行(Java除外)。
+
+
 不時更新...
 
