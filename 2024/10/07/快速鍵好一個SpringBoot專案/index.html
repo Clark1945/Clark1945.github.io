@@ -19,18 +19,19 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在進行與資料庫溝通時，使用ORM是常見的作法，因此在開發上就少不了要面對Hibernate，儘管可能使用的技術是Spring JPA、JPQL等等，但Hibernate的持久化、快取等等都是同樣的。 之前在Transactional篇我們提到，在Session中與資料庫物件維持對應關係的狀態被稱作Persistent(持久)狀態，而在這個狀態中，為了減少對資料庫的負擔，Hibernate會將取出的">
+    <meta name="description" content="好啦，講了那麼多篇Java了，我想是時候來看看SpringBoot了 過去，還記得我在學生時期時，光是安裝Java JDK 等等的就可以搞上半天，你得要下載JDK，你還要知道自己需要的是Java EE還是Java SE，下載後你還要知道怎麼開啟系統環境變數加入path以及JAVA_HOME等等。舉凡少了一個細節都會讓一個初接觸程式的朋友感到挫折與對外面籃球場的憧憬。 ( 迷之聲：我還沒說Ecpli">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[2024鐵人賽]18-Spring Hibernate Cache">
-<meta property="og:url" content="https://clark1945.github.io/2024/10/18/2024%E9%90%B5%E4%BA%BA%E8%B3%BD-18-Spring-Hibernate-Cache/index.html">
+<meta property="og:title" content="快速鍵好一個SpringBoot專案">
+<meta property="og:url" content="https://clark1945.github.io/2024/10/07/%E5%BF%AB%E9%80%9F%E9%8D%B5%E5%A5%BD%E4%B8%80%E5%80%8BSpringBoot%E5%B0%88%E6%A1%88/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="在進行與資料庫溝通時，使用ORM是常見的作法，因此在開發上就少不了要面對Hibernate，儘管可能使用的技術是Spring JPA、JPQL等等，但Hibernate的持久化、快取等等都是同樣的。 之前在Transactional篇我們提到，在Session中與資料庫物件維持對應關係的狀態被稱作Persistent(持久)狀態，而在這個狀態中，為了減少對資料庫的負擔，Hibernate會將取出的">
+<meta property="og:description" content="好啦，講了那麼多篇Java了，我想是時候來看看SpringBoot了 過去，還記得我在學生時期時，光是安裝Java JDK 等等的就可以搞上半天，你得要下載JDK，你還要知道自己需要的是Java EE還是Java SE，下載後你還要知道怎麼開啟系統環境變數加入path以及JAVA_HOME等等。舉凡少了一個細節都會讓一個初接觸程式的朋友感到挫折與對外面籃球場的憧憬。 ( 迷之聲：我還沒說Ecpli">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://clark1945.github.io/img/Java_logo.png">
-<meta property="article:published_time" content="2024-10-18T12:31:26.000Z">
-<meta property="article:modified_time" content="2025-01-06T12:34:14.872Z">
+<meta property="article:published_time" content="2024-10-07T12:24:15.000Z">
+<meta property="article:modified_time" content="2025-01-07T12:28:53.107Z">
 <meta property="article:author" content="Clark Liu">
 <meta property="article:tag" content="Java">
+<meta property="article:tag" content="SpringBoot">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://clark1945.github.io/img/Java_logo.png">
   
@@ -38,7 +39,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>[2024鐵人賽]18-Spring Hibernate Cache - Clark&#39;s Blog</title>
+  <title>快速鍵好一個SpringBoot專案 - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -215,7 +216,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[2024鐵人賽]18-Spring Hibernate Cache"></span>
+            <span id="subtitle" data-typed-text="快速鍵好一個SpringBoot專案"></span>
           
         </div>
 
@@ -226,8 +227,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-10-18 20:31" pubdate>
-          October 18, 2024 pm
+        <time datetime="2024-10-07 20:24" pubdate>
+          October 7, 2024 pm
         </time>
       </span>
     
@@ -238,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          631 words
+          890 words
         
       </span>
     
@@ -249,7 +250,7 @@
         
         
         
-          6 mins
+          8 mins
         
       </span>
     
@@ -295,21 +296,38 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">[2024鐵人賽]18-Spring Hibernate Cache</h1>
+            <h1 id="seo-header">快速鍵好一個SpringBoot專案</h1>
             
             
               <div class="markdown-body">
                 
-                <p>在進行與資料庫溝通時，使用ORM是常見的作法，因此在開發上就少不了要面對Hibernate，儘管可能使用的技術是Spring JPA、JPQL等等，但Hibernate的持久化、快取等等都是同樣的。</p>
-<p>之前在Transactional篇我們提到，在Session中與資料庫物件維持對應關係的狀態被稱作Persistent(持久)狀態，而在這個狀態中，為了減少對資料庫的負擔，Hibernate會將取出的資料放入在快取中，避免下一次索取相同資料時重複對資料庫發動不必要的請求而加重資料庫的負擔。</p>
-<p>而這接下來就會有一個議題，Hibernate如何保持快取資料是正確的？</p>
-<p>Hibernate會針對在Persistent狀態的物件建立一個複製品，用來比對是否物件遭到更改，也就是drity check的功能，來確保資料的正確。另外，只要在Session之中，一個持久化的物件就會對應到一個複製品，也就是存在兩個物件。</p>
-<p>當今天在一個Session中資料非常大量存在時，因為這些資源在Session中不會被自動釋放，因此有可能會出現OOM (Out Of Memory) 的狀況。所以實務上為了避免這件事情發生，建議要固定將資料.flush()進資料庫並清除快取。</p>
-<p>已預設情況來說，flush()的時機是在@Transactional結束後自動.flush()與，如果想要根據特殊情況手動觸發flush，以下舉例，假設我要每500筆資料強制寫入資料庫並清除快取。</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">PersistenceContext</span><br>private <span class="hljs-title class_">EntityManager</span> entityManager; <span class="hljs-comment">// 使用EntityMangere管理實體</span><br><br><br>@<span class="hljs-title class_">Transactional</span><br>public <span class="hljs-keyword">void</span> <span class="hljs-title function_">batchInsertStudents</span>(<span class="hljs-params">List&lt;Student&gt; students</span>) &#123;<br>    final int batchSize = <span class="hljs-number">500</span>;<br><br>    <span class="hljs-keyword">for</span> (int i = <span class="hljs-number">0</span>; i &lt; students.<span class="hljs-title function_">size</span>(); i++) &#123;<br>        <span class="hljs-comment">// 物件持久化</span><br>        entityManager.<span class="hljs-title function_">persist</span>(students.<span class="hljs-title function_">get</span>(i));<br>        <span class="hljs-comment">// 每500筆就flush 和 clear</span><br>        <span class="hljs-keyword">if</span> (i % batchSize == <span class="hljs-number">0</span> &amp;&amp; i &gt; <span class="hljs-number">0</span>) &#123;<br>            entityManager.<span class="hljs-title function_">flush</span>();  <span class="hljs-comment">// 將資料更改同步到資料庫</span><br>            entityManager.<span class="hljs-title function_">clear</span>();  <span class="hljs-comment">// 清除Session快取</span><br>        &#125;<br>    &#125;<br>    entityManager.<span class="hljs-title function_">flush</span>();<br>    entityManager.<span class="hljs-title function_">clear</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>另外Hibernate的快取還有分為兩種，Session Level與SessionFactory Level，前者是只快取在Session中，另外一個則是可以在多個Session中被共同使用，更常見的說法我們稱呼它們為 一級快取(Session Cache) 與 二級快取(SessionFactory Session)。Session Level的快取會在Session結束後被清除，二級快取則只會在資料被更新時刪除舊的快取，因此有時二級快取的管理會有一些潛在問題發生。更多可以參考底下的連結。</p>
-<p>今天的分享就先到這邊了，我們明天見了。</p>
+                <p>好啦，講了那麼多篇Java了，我想是時候來看看SpringBoot了</p>
+<p>過去，還記得我在學生時期時，光是安裝Java JDK 等等的就可以搞上半天，你得要下載JDK，你還要知道自己需要的是Java EE還是Java SE，下載後你還要知道怎麼開啟系統環境變數加入path以及JAVA_HOME等等。舉凡少了一個細節都會讓一個初接觸程式的朋友感到挫折與對外面籃球場的憧憬。 ( 迷之聲：我還沒說Ecplise呢 )</p>
+<p>所幸後來，JetBrain的Intellij IDEA 推出了，並最大化簡化了初始環境安裝的複雜程度，讓Java開發者不必在對Java安裝環境焦頭爛額。</p>
+<p>首先，要安裝SpringBoot，你只需要安裝Intellij IDEA：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/idea/">https://www.jetbrains.com/idea/</a></p>
+<p>如果你是免費仔的話安裝Community 版本，這個版本一些功能比較侷限，但如果你只是用來練習而非大量使用的話，Community就足夠應付了。</p>
+<p>如果你是付費仔、或是學生的話可以安裝Ultimate版本，這個項目比較完整，但基本功能都是不受影響的，請各位自行選擇。</p>
+<p>在等待安裝的同時，各位可以先開啟Spring官方提供的專案產生器：<a target="_blank" rel="noopener" href="https://start.spring.io/;">Spring Initializr</a></p>
+<p>在這裡你可以選擇你想要使用的版本及工具，若是懶得想，可以參考我的這張圖。</p>
+<p>記得要引入Spring Web，因為我們要撰寫的是一個Web Application。</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/48871ff2-43a1-4294-ac43-f706269b20d2/b27bbcd3-1719-4916-a911-c8f23e86391f/image.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>下載並解壓縮後，就可以使用你剛剛下載好的Intellij IDEA開啟專案。</p>
+<p>接下來你應該會看到這樣的畫面，這就是一個最原始的SpringBoot專案，簡單吧。</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/48871ff2-43a1-4294-ac43-f706269b20d2/6a5286ad-4cdd-464f-b32b-c06c25eceb25/image.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>再來介紹一下右邊的目錄結構，主要的程式碼都放在src目錄下，src底下有main與test，test主要是提供給寫測試案例時使用，一般開發的程式碼則會聚集在main中。</p>
+<p>main中包含了java與resource，resource主要是可以放一些靜態資源，比方說圖片或檔案等等，以及前端的畫面會放在template位置，java就…..java。</p>
+<p>另外有一個值得一提的就是application.properties這個檔案。application.properties 是SpringBoot用來簡化配置的一個檔案。假設你想要撰寫Application開放的port、DB的連線URL、是否要套用熱重啟等等都可以放在這裡配置，只要記得遵照SpringBoot的格式，就可以運作，而不必撰寫程式碼。</p>
+<p>再來我們來看到DemoApplication這個檔案。這邊是程式的起始點，@SpringBootApplication宣告了這是一個SpringBoot的應用程式。</p>
+<p>最後我們來看一下外面的pom.xml檔案。</p>
+<p><img src="https://prod-files-secure.s3.us-west-2.amazonaws.com/48871ff2-43a1-4294-ac43-f706269b20d2/4d17bc93-d60b-4be7-a2f0-9f2882315a69/image.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>你可能眼花撩亂，但沒關係，你不必每一行都了解它。先關注在現有的重點就好：</p>
+<ol>
+<li>name 它反映了你的應用程式的名稱</li>
+<li>description 它反映了你的應用程式的描述</li>
+<li>java.version 這部分決定了你要在專案使用的JDK版本</li>
+<li><dependecies> 這部分內部就是放置你想要引入的dependency、比方說剛剛引入的Spring Web就會以 spring-boot-starter-web顯示在dependency在裡面，另外還有一些SpringBoot預設引入的dependency，就不一一多做介紹了。<br>之後若是要引入套件，不必自己寫，直接從Maven官方取得就可以複製貼上了，相當方便。<a target="_blank" rel="noopener" href="https://mvnrepository.com/artifact/org.springframework/spring-aop/6.1.12">https://mvnrepository.com/artifact/org.springframework/spring-aop/6.1.12</a></li>
+</ol>
+<p>以上是我的極短SpringBoot專案介紹，下一輪我們要進行開發，後續會提到更多有關Spring SpringBoot的事，那麼我們下次見拉。</p>
 
                 
               </div>
@@ -345,6 +363,8 @@
       
         <a href="/tags/Java/" class="print-no-link">#Java</a>
       
+        <a href="/tags/SpringBoot/" class="print-no-link">#SpringBoot</a>
+      
     </div>
   
 </div>
@@ -355,8 +375,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[2024鐵人賽]18-Spring Hibernate Cache</div>
-      <div>https://clark1945.github.io/2024/10/18/2024鐵人賽-18-Spring-Hibernate-Cache/</div>
+      <div>快速鍵好一個SpringBoot專案</div>
+      <div>https://clark1945.github.io/2024/10/07/快速鍵好一個SpringBoot專案/</div>
     </div>
     <div class="license-meta">
       
@@ -368,7 +388,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>October 18, 2024</div>
+          <div>October 7, 2024</div>
         </div>
       
       
@@ -400,9 +420,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/11/07/Diary-in-2024-11-07/" title="Diary in 2024/11/07">
+                      <a href="/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/" title="SpringBoot的三層式架構">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Diary in 2024/11/07</span>
+                        <span class="hidden-mobile">SpringBoot的三層式架構</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -410,8 +430,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/" title="SpringBoot的三層式架構">
-                        <span class="hidden-mobile">SpringBoot的三層式架構</span>
+                      <a href="/2024/10/05/Java-hashcode-%E8%A7%A3%E8%AA%AA/" title="Java hashcode()解說">
+                        <span class="hidden-mobile">Java hashcode()解說</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -431,8 +451,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'https://clark1945.github.io/2024/10/18/2024%E9%90%B5%E4%BA%BA%E8%B3%BD-18-Spring-Hibernate-Cache/';
-          this.page.identifier = '/2024/10/18/2024%E9%90%B5%E4%BA%BA%E8%B3%BD-18-Spring-Hibernate-Cache/';
+          this.page.url = 'https://clark1945.github.io/2024/10/07/%E5%BF%AB%E9%80%9F%E9%8D%B5%E5%A5%BD%E4%B8%80%E5%80%8BSpringBoot%E5%B0%88%E6%A1%88/';
+          this.page.identifier = '/2024/10/07/%E5%BF%AB%E9%80%9F%E9%8D%B5%E5%A5%BD%E4%B8%80%E5%80%8BSpringBoot%E5%B0%88%E6%A1%88/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');

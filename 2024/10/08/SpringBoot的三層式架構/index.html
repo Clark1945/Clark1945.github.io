@@ -19,18 +19,19 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在進行與資料庫溝通時，使用ORM是常見的作法，因此在開發上就少不了要面對Hibernate，儘管可能使用的技術是Spring JPA、JPQL等等，但Hibernate的持久化、快取等等都是同樣的。 之前在Transactional篇我們提到，在Session中與資料庫物件維持對應關係的狀態被稱作Persistent(持久)狀態，而在這個狀態中，為了減少對資料庫的負擔，Hibernate會將取出的">
+    <meta name="description" content="SpringBoot針對一個Rest Web Service，提出了三層式架構的概念，分別是Controller、Service、Repository。 以下我們簡單建立一個基本的三層式架構應用程式，並說明其中概念。 Controllers Controller是API的進入口，主要的功能是傳入參數的檢測與一些資料的前處理。舉例來說，一個最基本的Cotnroller會像這樣。 1234567891">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[2024鐵人賽]18-Spring Hibernate Cache">
-<meta property="og:url" content="https://clark1945.github.io/2024/10/18/2024%E9%90%B5%E4%BA%BA%E8%B3%BD-18-Spring-Hibernate-Cache/index.html">
+<meta property="og:title" content="SpringBoot的三層式架構">
+<meta property="og:url" content="https://clark1945.github.io/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="在進行與資料庫溝通時，使用ORM是常見的作法，因此在開發上就少不了要面對Hibernate，儘管可能使用的技術是Spring JPA、JPQL等等，但Hibernate的持久化、快取等等都是同樣的。 之前在Transactional篇我們提到，在Session中與資料庫物件維持對應關係的狀態被稱作Persistent(持久)狀態，而在這個狀態中，為了減少對資料庫的負擔，Hibernate會將取出的">
+<meta property="og:description" content="SpringBoot針對一個Rest Web Service，提出了三層式架構的概念，分別是Controller、Service、Repository。 以下我們簡單建立一個基本的三層式架構應用程式，並說明其中概念。 Controllers Controller是API的進入口，主要的功能是傳入參數的檢測與一些資料的前處理。舉例來說，一個最基本的Cotnroller會像這樣。 1234567891">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://clark1945.github.io/img/Java_logo.png">
-<meta property="article:published_time" content="2024-10-18T12:31:26.000Z">
-<meta property="article:modified_time" content="2025-01-06T12:34:14.872Z">
+<meta property="article:published_time" content="2024-10-08T12:26:06.000Z">
+<meta property="article:modified_time" content="2025-01-07T12:28:34.153Z">
 <meta property="article:author" content="Clark Liu">
 <meta property="article:tag" content="Java">
+<meta property="article:tag" content="SpringBoot">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://clark1945.github.io/img/Java_logo.png">
   
@@ -38,7 +39,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>[2024鐵人賽]18-Spring Hibernate Cache - Clark&#39;s Blog</title>
+  <title>SpringBoot的三層式架構 - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -215,7 +216,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[2024鐵人賽]18-Spring Hibernate Cache"></span>
+            <span id="subtitle" data-typed-text="SpringBoot的三層式架構"></span>
           
         </div>
 
@@ -226,8 +227,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-10-18 20:31" pubdate>
-          October 18, 2024 pm
+        <time datetime="2024-10-08 20:26" pubdate>
+          October 8, 2024 pm
         </time>
       </span>
     
@@ -238,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          631 words
+          798 words
         
       </span>
     
@@ -249,7 +250,7 @@
         
         
         
-          6 mins
+          7 mins
         
       </span>
     
@@ -295,21 +296,36 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">[2024鐵人賽]18-Spring Hibernate Cache</h1>
+            <h1 id="seo-header">SpringBoot的三層式架構</h1>
             
             
               <div class="markdown-body">
                 
-                <p>在進行與資料庫溝通時，使用ORM是常見的作法，因此在開發上就少不了要面對Hibernate，儘管可能使用的技術是Spring JPA、JPQL等等，但Hibernate的持久化、快取等等都是同樣的。</p>
-<p>之前在Transactional篇我們提到，在Session中與資料庫物件維持對應關係的狀態被稱作Persistent(持久)狀態，而在這個狀態中，為了減少對資料庫的負擔，Hibernate會將取出的資料放入在快取中，避免下一次索取相同資料時重複對資料庫發動不必要的請求而加重資料庫的負擔。</p>
-<p>而這接下來就會有一個議題，Hibernate如何保持快取資料是正確的？</p>
-<p>Hibernate會針對在Persistent狀態的物件建立一個複製品，用來比對是否物件遭到更改，也就是drity check的功能，來確保資料的正確。另外，只要在Session之中，一個持久化的物件就會對應到一個複製品，也就是存在兩個物件。</p>
-<p>當今天在一個Session中資料非常大量存在時，因為這些資源在Session中不會被自動釋放，因此有可能會出現OOM (Out Of Memory) 的狀況。所以實務上為了避免這件事情發生，建議要固定將資料.flush()進資料庫並清除快取。</p>
-<p>已預設情況來說，flush()的時機是在@Transactional結束後自動.flush()與，如果想要根據特殊情況手動觸發flush，以下舉例，假設我要每500筆資料強制寫入資料庫並清除快取。</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">PersistenceContext</span><br>private <span class="hljs-title class_">EntityManager</span> entityManager; <span class="hljs-comment">// 使用EntityMangere管理實體</span><br><br><br>@<span class="hljs-title class_">Transactional</span><br>public <span class="hljs-keyword">void</span> <span class="hljs-title function_">batchInsertStudents</span>(<span class="hljs-params">List&lt;Student&gt; students</span>) &#123;<br>    final int batchSize = <span class="hljs-number">500</span>;<br><br>    <span class="hljs-keyword">for</span> (int i = <span class="hljs-number">0</span>; i &lt; students.<span class="hljs-title function_">size</span>(); i++) &#123;<br>        <span class="hljs-comment">// 物件持久化</span><br>        entityManager.<span class="hljs-title function_">persist</span>(students.<span class="hljs-title function_">get</span>(i));<br>        <span class="hljs-comment">// 每500筆就flush 和 clear</span><br>        <span class="hljs-keyword">if</span> (i % batchSize == <span class="hljs-number">0</span> &amp;&amp; i &gt; <span class="hljs-number">0</span>) &#123;<br>            entityManager.<span class="hljs-title function_">flush</span>();  <span class="hljs-comment">// 將資料更改同步到資料庫</span><br>            entityManager.<span class="hljs-title function_">clear</span>();  <span class="hljs-comment">// 清除Session快取</span><br>        &#125;<br>    &#125;<br>    entityManager.<span class="hljs-title function_">flush</span>();<br>    entityManager.<span class="hljs-title function_">clear</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+                <p>SpringBoot針對一個Rest Web Service，提出了三層式架構的概念，分別是Controller、Service、Repository。</p>
+<p>以下我們簡單建立一個基本的三層式架構應用程式，並說明其中概念。</p>
+<p>Controllers</p>
+<p>Controller是API的進入口，主要的功能是傳入參數的檢測與一些資料的前處理。舉例來說，一個最基本的Cotnroller會像這樣。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">RestController</span><br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">StudentController</span> &#123;<br><br>    @<span class="hljs-title class_">Autowired</span><br>    private <span class="hljs-title class_">StudentService</span> studentService;<br><br>    @<span class="hljs-title class_">GetMapping</span>(<span class="hljs-string">&quot;/getOneStudent&quot;</span>)<br>    public <span class="hljs-title class_">Student</span> <span class="hljs-title function_">getOneStudent</span>(<span class="hljs-params">@RequestParam(<span class="hljs-string">&quot;name&quot;</span>) <span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-keyword">if</span> (!name.<span class="hljs-title function_">matches</span>(<span class="hljs-string">&quot;/s+&quot;</span>))&#123;<br>            <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(name + <span class="hljs-string">&quot;非姓名欄位&quot;</span>);<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> studentService.<span class="hljs-title function_">getStudent</span>(name);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>另外Hibernate的快取還有分為兩種，Session Level與SessionFactory Level，前者是只快取在Session中，另外一個則是可以在多個Session中被共同使用，更常見的說法我們稱呼它們為 一級快取(Session Cache) 與 二級快取(SessionFactory Session)。Session Level的快取會在Session結束後被清除，二級快取則只會在資料被更新時刪除舊的快取，因此有時二級快取的管理會有一些潛在問題發生。更多可以參考底下的連結。</p>
-<p>今天的分享就先到這邊了，我們明天見了。</p>
+<p>@RestController 是Spring的註解，代表這個class檔作為一個REST API 的 Controller被定義，在這裡可以撰寫各種endPoint(API入口)。</p>
+<p>@Autowired 代表了交給Spring 管理的 Bean，並已全域模式注入到這個檔案中，這部分之後我會之後再說明，現在只需要了解它是一個Service，可以幫我們處理麻煩的事情就好。</p>
+<p>@GetMapping(”&#x2F;getOneStudent”) 代表了一個endPoint，路徑為 &#x2F;getOneStudent。如果你啟動的話，他預設會連線到<a target="_blank" rel="noopener" href="http://localhost:8080/getOneMerchant%E9%80%99%E5%80%8B%E8%B7%AF%E5%BE%91%E4%B8%8B%E3%80%82">http://localhost:8080/getOneMerchant這個路徑下。</a></p>
+<p>EndPoint內部接收了一個參數，如果當初URL帶入的查詢條件有包含name的話，這裡就會被載入進去，他接著會利用正規表達式判斷String是否符合純英文不包含數字，如果判斷失敗的話將會回傳Null，否則呼叫StudentService.getStudent()方法取得Student資料。</p>
+<p>看完了Controller部分，我們接著來了解實際上API是怎麼取得我們所需要的資料的。</p>
+<p>Service是程式主要的功能區域，處理一個API最為複雜的商業邏輯部分。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">Service</span><br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">StudentService</span> &#123;<br><br>    @<span class="hljs-title class_">Autowired</span><br>    private <span class="hljs-title class_">StudentRepository</span> studentRepository;<br><br>    public <span class="hljs-title class_">Student</span> <span class="hljs-title function_">getStudent</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-keyword">return</span> studentRepository.<span class="hljs-title function_">findByName</span>(name);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>@Service 宣告了這個.class是一個Service(廢話)，當中@Autowired引入了StudentRepository。</p>
+<p>getStudent()的方法很簡單，就是又呼叫了一層，取得Student的資料。</p>
+<p>你也許現在會很困惑為什麼要搞得這麼麻煩，但我必須說，當系統功能逐漸複雜，規模逐漸增大後，良好的把功能切分出來是很重要的，Debug時你就會很感謝的。</p>
+<p>最後是Repository的部分，Repository掌管與資料庫的互動，主要是把資料庫的部分從Service層獨立出來。實際的程式碼會像是以下：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">Repository</span><br>public interface <span class="hljs-title class_">StudentRepository</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">CrudRepository</span>&lt;<span class="hljs-title class_">Student</span>, <span class="hljs-title class_">Long</span>&gt; &#123;<br>    <span class="hljs-title class_">Student</span> <span class="hljs-title function_">findByName</span>(<span class="hljs-title class_">String</span> name);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>@Repository的功用…額我就不說了，你們猜得到的。這個StudentRepository的介面繼承了CrudRepository這個類別，這意味著它可以使用以下方法</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs jsx">public interface <span class="hljs-title class_">CrudRepository</span>&lt;T, <span class="hljs-variable constant_">ID</span>&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Repository</span>&lt;T, <span class="hljs-variable constant_">ID</span>&gt; &#123;<br>    &lt;S <span class="hljs-keyword">extends</span> T&gt; S <span class="hljs-title function_">save</span>(S entity);<br>    &lt;S <span class="hljs-keyword">extends</span> T&gt; <span class="hljs-title class_">Iterable</span>&lt;S&gt; <span class="hljs-title function_">saveAll</span>(<span class="hljs-title class_">Iterable</span>&lt;S&gt; entities);<br>    <span class="hljs-title class_">Optional</span>&lt;T&gt; <span class="hljs-title function_">findById</span>(<span class="hljs-variable constant_">ID</span> id);<br>    boolean <span class="hljs-title function_">existsById</span>(<span class="hljs-variable constant_">ID</span> id);<br>    <span class="hljs-title class_">Iterable</span>&lt;T&gt; <span class="hljs-title function_">findAll</span>();<br>    <span class="hljs-title class_">Iterable</span>&lt;T&gt; <span class="hljs-title function_">findAllById</span>(<span class="hljs-title class_">Iterable</span>&lt;<span class="hljs-variable constant_">ID</span>&gt; ids);<br>    long <span class="hljs-title function_">count</span>();<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteById</span>(<span class="hljs-variable constant_">ID</span> id);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">delete</span>(T entity);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteAllById</span>(<span class="hljs-title class_">Iterable</span>&lt;? <span class="hljs-keyword">extends</span> <span class="hljs-variable constant_">ID</span>&gt; ids);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteAll</span>(<span class="hljs-title class_">Iterable</span>&lt;? <span class="hljs-keyword">extends</span> T&gt; entities);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteAll</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上面我就不一一細說，總之就是符合一般日常的對資料庫的異動功能。像上面的功能就是利用Name從資料庫中找出Student的資料，並回傳到Service，再回傳到Controller，最後回覆給API的使用者。以上就是一個最基本的三層式架構的應用程式。</p>
+<p>今天的部分就到此為止了，明天見吧。</p>
 
                 
               </div>
@@ -345,6 +361,8 @@
       
         <a href="/tags/Java/" class="print-no-link">#Java</a>
       
+        <a href="/tags/SpringBoot/" class="print-no-link">#SpringBoot</a>
+      
     </div>
   
 </div>
@@ -355,8 +373,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[2024鐵人賽]18-Spring Hibernate Cache</div>
-      <div>https://clark1945.github.io/2024/10/18/2024鐵人賽-18-Spring-Hibernate-Cache/</div>
+      <div>SpringBoot的三層式架構</div>
+      <div>https://clark1945.github.io/2024/10/08/SpringBoot的三層式架構/</div>
     </div>
     <div class="license-meta">
       
@@ -368,7 +386,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>October 18, 2024</div>
+          <div>October 8, 2024</div>
         </div>
       
       
@@ -400,9 +418,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/11/07/Diary-in-2024-11-07/" title="Diary in 2024/11/07">
+                      <a href="/2024/10/18/2024%E9%90%B5%E4%BA%BA%E8%B3%BD-18-Spring-Hibernate-Cache/" title="[2024鐵人賽]18-Spring Hibernate Cache">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Diary in 2024/11/07</span>
+                        <span class="hidden-mobile">[2024鐵人賽]18-Spring Hibernate Cache</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -410,8 +428,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/" title="SpringBoot的三層式架構">
-                        <span class="hidden-mobile">SpringBoot的三層式架構</span>
+                      <a href="/2024/10/07/%E5%BF%AB%E9%80%9F%E9%8D%B5%E5%A5%BD%E4%B8%80%E5%80%8BSpringBoot%E5%B0%88%E6%A1%88/" title="快速鍵好一個SpringBoot專案">
+                        <span class="hidden-mobile">快速鍵好一個SpringBoot專案</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -431,8 +449,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'https://clark1945.github.io/2024/10/18/2024%E9%90%B5%E4%BA%BA%E8%B3%BD-18-Spring-Hibernate-Cache/';
-          this.page.identifier = '/2024/10/18/2024%E9%90%B5%E4%BA%BA%E8%B3%BD-18-Spring-Hibernate-Cache/';
+          this.page.url = 'https://clark1945.github.io/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/';
+          this.page.identifier = '/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');
