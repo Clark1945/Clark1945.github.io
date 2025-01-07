@@ -19,27 +19,27 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="SpringBoot針對一個Rest Web Service，提出了三層式架構的概念，分別是Controller、Service、Repository。 以下我們簡單建立一個基本的三層式架構應用程式，並說明其中概念。 Controllers Controller是API的進入口，主要的功能是傳入參數的檢測與一些資料的前處理。舉例來說，一個最基本的Cotnroller會像這樣。 1234567891">
+    <meta name="description" content="今天沒什麼時間，決定要來介紹輕鬆又簡單的Lombok，Lombok是一套Java的函式庫，內部包含了許多功能，包括：  @Setter @Getter @Slf4j - 撰寫log的工具，經常以log開頭( ex.log.info()) @ToString - 撰寫物件的toString() 方法，若不複寫只會印出位址資訊 @NoArgsConstructor 建立無參數建構式 @AllArgsC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SpringBoot的三層式架構">
-<meta property="og:url" content="https://clark1945.github.io/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/index.html">
+<meta property="og:title" content="Spring @Lombok介紹">
+<meta property="og:url" content="https://clark1945.github.io/2024/10/11/Spring-Lombok%E4%BB%8B%E7%B4%B9/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="SpringBoot針對一個Rest Web Service，提出了三層式架構的概念，分別是Controller、Service、Repository。 以下我們簡單建立一個基本的三層式架構應用程式，並說明其中概念。 Controllers Controller是API的進入口，主要的功能是傳入參數的檢測與一些資料的前處理。舉例來說，一個最基本的Cotnroller會像這樣。 1234567891">
+<meta property="og:description" content="今天沒什麼時間，決定要來介紹輕鬆又簡單的Lombok，Lombok是一套Java的函式庫，內部包含了許多功能，包括：  @Setter @Getter @Slf4j - 撰寫log的工具，經常以log開頭( ex.log.info()) @ToString - 撰寫物件的toString() 方法，若不複寫只會印出位址資訊 @NoArgsConstructor 建立無參數建構式 @AllArgsC">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://clark1945.github.io/img/Java_logo.png">
-<meta property="article:published_time" content="2024-10-08T12:26:06.000Z">
-<meta property="article:modified_time" content="2025-01-07T12:28:34.153Z">
+<meta property="og:image" content="https://clark1945.github.io/Java_logo.png">
+<meta property="article:published_time" content="2024-10-11T12:39:02.000Z">
+<meta property="article:modified_time" content="2025-01-07T12:40:16.064Z">
 <meta property="article:author" content="Clark Liu">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="SpringBoot">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://clark1945.github.io/img/Java_logo.png">
+<meta name="twitter:image" content="https://clark1945.github.io/Java_logo.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>SpringBoot的三層式架構 - Clark&#39;s Blog</title>
+  <title>Spring @Lombok介紹 - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -216,7 +216,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="SpringBoot的三層式架構"></span>
+            <span id="subtitle" data-typed-text="Spring @Lombok介紹"></span>
           
         </div>
 
@@ -227,8 +227,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-10-08 20:26" pubdate>
-          October 8, 2024 pm
+        <time datetime="2024-10-11 20:39" pubdate>
+          October 11, 2024 pm
         </time>
       </span>
     
@@ -239,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          798 words
+          670 words
         
       </span>
     
@@ -250,7 +250,7 @@
         
         
         
-          7 mins
+          6 mins
         
       </span>
     
@@ -296,36 +296,38 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">SpringBoot的三層式架構</h1>
+            <h1 id="seo-header">Spring @Lombok介紹</h1>
             
             
               <div class="markdown-body">
                 
-                <p>SpringBoot針對一個Rest Web Service，提出了三層式架構的概念，分別是Controller、Service、Repository。</p>
-<p>以下我們簡單建立一個基本的三層式架構應用程式，並說明其中概念。</p>
-<p>Controllers</p>
-<p>Controller是API的進入口，主要的功能是傳入參數的檢測與一些資料的前處理。舉例來說，一個最基本的Cotnroller會像這樣。</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">RestController</span><br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">StudentController</span> &#123;<br><br>    @<span class="hljs-title class_">Autowired</span><br>    private <span class="hljs-title class_">StudentService</span> studentService;<br><br>    @<span class="hljs-title class_">GetMapping</span>(<span class="hljs-string">&quot;/getOneStudent&quot;</span>)<br>    public <span class="hljs-title class_">Student</span> <span class="hljs-title function_">getOneStudent</span>(<span class="hljs-params">@RequestParam(<span class="hljs-string">&quot;name&quot;</span>) <span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-keyword">if</span> (!name.<span class="hljs-title function_">matches</span>(<span class="hljs-string">&quot;/s+&quot;</span>))&#123;<br>            <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(name + <span class="hljs-string">&quot;非姓名欄位&quot;</span>);<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> studentService.<span class="hljs-title function_">getStudent</span>(name);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+                <p>今天沒什麼時間，決定要來介紹輕鬆又簡單的Lombok，Lombok是一套Java的函式庫，內部包含了許多功能，包括：</p>
+<ul>
+<li>@Setter</li>
+<li>@Getter</li>
+<li>@Slf4j - 撰寫log的工具，經常以log開頭( ex.log.info())</li>
+<li>@ToString - 撰寫物件的toString() 方法，若不複寫只會印出位址資訊</li>
+<li>@NoArgsConstructor 建立無參數建構式</li>
+<li>@AllArgsConstructor 建立所有參數的建構式</li>
+<li>@RequireConstructor 建立包含所有final參數的建構式</li>
+<li>@EqualsAndHash 自動複寫equals與hash方法</li>
+<li>@Builder 遵循builerPattern 來建立物件</li>
+<li>@Data &gt;&gt; getter + setter + toString + equals + hashCode + requireArgsConstructor</li>
+</ul>
+<p>以下是一個範例：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs jsx"><br>@<span class="hljs-title class_">Slf4</span>j<br>@<span class="hljs-title class_">NoArgsConstructor</span><br>@<span class="hljs-title class_">AllArgsConstructor</span><br>@<span class="hljs-title class_">Builder</span><br>@<span class="hljs-title class_">Data</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> &#123;<br>   private final int id;<br>   private final <span class="hljs-title class_">String</span> name;<br>   private <span class="hljs-title class_">String</span> status;<br>   private <span class="hljs-title class_">String</span> nickname;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>@RestController 是Spring的註解，代表這個class檔作為一個REST API 的 Controller被定義，在這裡可以撰寫各種endPoint(API入口)。</p>
-<p>@Autowired 代表了交給Spring 管理的 Bean，並已全域模式注入到這個檔案中，這部分之後我會之後再說明，現在只需要了解它是一個Service，可以幫我們處理麻煩的事情就好。</p>
-<p>@GetMapping(”&#x2F;getOneStudent”) 代表了一個endPoint，路徑為 &#x2F;getOneStudent。如果你啟動的話，他預設會連線到<a target="_blank" rel="noopener" href="http://localhost:8080/getOneMerchant%E9%80%99%E5%80%8B%E8%B7%AF%E5%BE%91%E4%B8%8B%E3%80%82">http://localhost:8080/getOneMerchant這個路徑下。</a></p>
-<p>EndPoint內部接收了一個參數，如果當初URL帶入的查詢條件有包含name的話，這裡就會被載入進去，他接著會利用正規表達式判斷String是否符合純英文不包含數字，如果判斷失敗的話將會回傳Null，否則呼叫StudentService.getStudent()方法取得Student資料。</p>
-<p>看完了Controller部分，我們接著來了解實際上API是怎麼取得我們所需要的資料的。</p>
-<p>Service是程式主要的功能區域，處理一個API最為複雜的商業邏輯部分。</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">Service</span><br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">StudentService</span> &#123;<br><br>    @<span class="hljs-title class_">Autowired</span><br>    private <span class="hljs-title class_">StudentRepository</span> studentRepository;<br><br>    public <span class="hljs-title class_">Student</span> <span class="hljs-title function_">getStudent</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-keyword">return</span> studentRepository.<span class="hljs-title function_">findByName</span>(name);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>這是使用了Lombok，讓我們看看沒使用Lombok的版本 ( 同功能 )</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><code class="hljs jsx">public <span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> &#123;<br>    private <span class="hljs-keyword">static</span> final <span class="hljs-title class_">Logger</span> log = <span class="hljs-title class_">LoggerFactory</span>.<span class="hljs-title function_">getLogger</span>(<span class="hljs-title class_">Student</span>.<span class="hljs-property">class</span>);<br><br>    private final int id;<br>    private final <span class="hljs-title class_">String</span> name;<br>    private <span class="hljs-title class_">String</span> status;<br>    private <span class="hljs-title class_">String</span> nickname;<br><br>    <span class="hljs-comment">// No-args constructor</span><br>    public <span class="hljs-title class_">Student</span>() &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span> = <span class="hljs-number">0</span>;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = <span class="hljs-literal">null</span>;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> = <span class="hljs-literal">null</span>;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">nickname</span> = <span class="hljs-literal">null</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// All-args constructor</span><br>    public <span class="hljs-title class_">Student</span>(int id, <span class="hljs-title class_">String</span> name, <span class="hljs-title class_">String</span> status, <span class="hljs-title class_">String</span> nickname) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">id</span> = id;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> = status;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">nickname</span> = nickname;<br>    &#125;<br><br>    <span class="hljs-comment">// Getters</span><br>    public int <span class="hljs-title function_">getId</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> id;<br>    &#125;<br><br>    public <span class="hljs-title class_">String</span> <span class="hljs-title function_">getName</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br><br>    public <span class="hljs-title class_">String</span> <span class="hljs-title function_">getStatus</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> status;<br>    &#125;<br><br>    public <span class="hljs-title class_">String</span> <span class="hljs-title function_">getNickname</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> nickname;<br>    &#125;<br><br>    <span class="hljs-comment">// Setters</span><br>    public <span class="hljs-keyword">void</span> <span class="hljs-title function_">setStatus</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> status</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> = status;<br>    &#125;<br><br>    public <span class="hljs-keyword">void</span> <span class="hljs-title function_">setNickname</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> nickname</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">nickname</span> = nickname;<br>    &#125;<br><br>    <span class="hljs-comment">// toString</span><br>    @<span class="hljs-title class_">Override</span><br>    public <span class="hljs-title class_">String</span> <span class="hljs-title function_">toString</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Student&#123;&quot;</span> +<br>                <span class="hljs-string">&quot;id=&quot;</span> + id +<br>                <span class="hljs-string">&quot;, name=&#x27;&quot;</span> + name + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&quot;, status=&#x27;&quot;</span> + status + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&quot;, nickname=&#x27;&quot;</span> + nickname + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&#x27;&#125;&#x27;</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// equals and hashCode</span><br>    @<span class="hljs-title class_">Override</span><br>    public boolean <span class="hljs-title function_">equals</span>(<span class="hljs-params"><span class="hljs-built_in">Object</span> o</span>) &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span> == o) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        <span class="hljs-keyword">if</span> (o == <span class="hljs-literal">null</span> || <span class="hljs-title function_">getClass</span>() != o.<span class="hljs-title function_">getClass</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        <span class="hljs-title class_">Student</span> student = (<span class="hljs-title class_">Student</span>) o;<br>        <span class="hljs-keyword">return</span> id == student.<span class="hljs-property">id</span> &amp;&amp; <br>               <span class="hljs-title class_">Objects</span>.<span class="hljs-title function_">equals</span>(name, student.<span class="hljs-property">name</span>) &amp;&amp;<br>               <span class="hljs-title class_">Objects</span>.<span class="hljs-title function_">equals</span>(status, student.<span class="hljs-property">status</span>) &amp;&amp;<br>               <span class="hljs-title class_">Objects</span>.<span class="hljs-title function_">equals</span>(nickname, student.<span class="hljs-property">nickname</span>);<br>    &#125;<br><br>    @<span class="hljs-title class_">Override</span><br>    public int <span class="hljs-title function_">hashCode</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-title class_">Objects</span>.<span class="hljs-title function_">hash</span>(id, name, status, nickname);<br>    &#125;<br></code></pre></td></tr></table></figure>
 
-<p>@Service 宣告了這個.class是一個Service(廢話)，當中@Autowired引入了StudentRepository。</p>
-<p>getStudent()的方法很簡單，就是又呼叫了一層，取得Student的資料。</p>
-<p>你也許現在會很困惑為什麼要搞得這麼麻煩，但我必須說，當系統功能逐漸複雜，規模逐漸增大後，良好的把功能切分出來是很重要的，Debug時你就會很感謝的。</p>
-<p>最後是Repository的部分，Repository掌管與資料庫的互動，主要是把資料庫的部分從Service層獨立出來。實際的程式碼會像是以下：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">Repository</span><br>public interface <span class="hljs-title class_">StudentRepository</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">CrudRepository</span>&lt;<span class="hljs-title class_">Student</span>, <span class="hljs-title class_">Long</span>&gt; &#123;<br>    <span class="hljs-title class_">Student</span> <span class="hljs-title function_">findByName</span>(<span class="hljs-title class_">String</span> name);<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>@Repository的功用…額我就不說了，你們猜得到的。這個StudentRepository的介面繼承了CrudRepository這個類別，這意味著它可以使用以下方法</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs jsx">public interface <span class="hljs-title class_">CrudRepository</span>&lt;T, <span class="hljs-variable constant_">ID</span>&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Repository</span>&lt;T, <span class="hljs-variable constant_">ID</span>&gt; &#123;<br>    &lt;S <span class="hljs-keyword">extends</span> T&gt; S <span class="hljs-title function_">save</span>(S entity);<br>    &lt;S <span class="hljs-keyword">extends</span> T&gt; <span class="hljs-title class_">Iterable</span>&lt;S&gt; <span class="hljs-title function_">saveAll</span>(<span class="hljs-title class_">Iterable</span>&lt;S&gt; entities);<br>    <span class="hljs-title class_">Optional</span>&lt;T&gt; <span class="hljs-title function_">findById</span>(<span class="hljs-variable constant_">ID</span> id);<br>    boolean <span class="hljs-title function_">existsById</span>(<span class="hljs-variable constant_">ID</span> id);<br>    <span class="hljs-title class_">Iterable</span>&lt;T&gt; <span class="hljs-title function_">findAll</span>();<br>    <span class="hljs-title class_">Iterable</span>&lt;T&gt; <span class="hljs-title function_">findAllById</span>(<span class="hljs-title class_">Iterable</span>&lt;<span class="hljs-variable constant_">ID</span>&gt; ids);<br>    long <span class="hljs-title function_">count</span>();<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteById</span>(<span class="hljs-variable constant_">ID</span> id);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">delete</span>(T entity);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteAllById</span>(<span class="hljs-title class_">Iterable</span>&lt;? <span class="hljs-keyword">extends</span> <span class="hljs-variable constant_">ID</span>&gt; ids);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteAll</span>(<span class="hljs-title class_">Iterable</span>&lt;? <span class="hljs-keyword">extends</span> T&gt; entities);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteAll</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>上面我就不一一細說，總之就是符合一般日常的對資料庫的異動功能。像上面的功能就是利用Name從資料庫中找出Student的資料，並回傳到Service，再回傳到Controller，最後回覆給API的使用者。以上就是一個最基本的三層式架構的應用程式。</p>
-<p>今天的部分就到此為止了，明天見吧。</p>
+<p>總之，Lombok利用註解來幫你省去一大筆要慢慢手寫物件建立與讀取方法的時間，我過去也很喜歡使用Lombok，但是他也未必都是好處。以下統整出它的缺點：</p>
+<ol>
+<li>高度侵入性。 Lombok 即使如此實用，他也沒有被加入springBoot裡面，而是一個第三方的套件，而且只要在專案使用了，就會建議一律使用，避免同時存在兩種方法不好管理。</li>
+<li>管理不易，通常來說，我們可以透過點選function來找出他的usage，但lombok目前不行，也就是說如果使用Lombok，會導致你無法確認到底有多少地方使用它。</li>
+<li>容易導致壞習慣，當想到建立物件時，想都沒想就放一個@Data上去，並不是一個好習慣，但使用Lombok常常會導致我們這麼做。</li>
+<li>外部套件依賴有時會導致意想不到的問題發生，之前我有一次開發新專案時，引入了Lombok，結果因為套件版本異常，getter與setter出來的值全部變成null，但沒有任何exception回報，我找了一下子才發現是lombok的問題。</li>
+</ol>
+<p>以上就是我今天偷懶的分享，我們明天見，掰掰</p>
 
                 
               </div>
@@ -373,8 +375,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>SpringBoot的三層式架構</div>
-      <div>https://clark1945.github.io/2024/10/08/SpringBoot的三層式架構/</div>
+      <div>Spring @Lombok介紹</div>
+      <div>https://clark1945.github.io/2024/10/11/Spring-Lombok介紹/</div>
     </div>
     <div class="license-meta">
       
@@ -386,7 +388,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>October 8, 2024</div>
+          <div>October 11, 2024</div>
         </div>
       
       
@@ -418,9 +420,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/10/11/Spring-Lombok%E4%BB%8B%E7%B4%B9/" title="Spring @Lombok介紹">
+                      <a href="/2024/10/18/2024%E9%90%B5%E4%BA%BA%E8%B3%BD-18-Spring-Hibernate-Cache/" title="[2024鐵人賽]18-Spring Hibernate Cache">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Spring @Lombok介紹</span>
+                        <span class="hidden-mobile">[2024鐵人賽]18-Spring Hibernate Cache</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -428,8 +430,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/07/%E5%BF%AB%E9%80%9F%E9%8D%B5%E5%A5%BD%E4%B8%80%E5%80%8BSpringBoot%E5%B0%88%E6%A1%88/" title="快速鍵好一個SpringBoot專案">
-                        <span class="hidden-mobile">快速鍵好一個SpringBoot專案</span>
+                      <a href="/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/" title="SpringBoot的三層式架構">
+                        <span class="hidden-mobile">SpringBoot的三層式架構</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -449,8 +451,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'https://clark1945.github.io/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/';
-          this.page.identifier = '/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/';
+          this.page.url = 'https://clark1945.github.io/2024/10/11/Spring-Lombok%E4%BB%8B%E7%B4%B9/';
+          this.page.identifier = '/2024/10/11/Spring-Lombok%E4%BB%8B%E7%B4%B9/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');
