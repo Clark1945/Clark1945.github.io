@@ -26,7 +26,7 @@ tags:
 
 假設我們現在有一隻註冊API，他負責將傳來的會員資料，判斷是否可以被註冊，並將資料存入資料庫中，我們主要要將Member轉為MemberPO，規格如下。
 
-```jsx
+```java
 public class Member {
 
     private String name;
@@ -92,7 +92,7 @@ public class MemberPO {
 
 首先，我們要先定義出一個MapStruct來處理
 
-```jsx
+```java
 @Mapper
 public interface MemberMapper {
 		// 實例化Mapstruct
@@ -102,7 +102,7 @@ public interface MemberMapper {
 
 接著我們可以加入我們的轉換方法
 
-```jsx
+```java
 @Mapper
 public interface MemberMapper {
 		// 實例化Mapstruct
@@ -120,7 +120,7 @@ Member member = MemberMapper.INSTANCE.memberPOToMember(memberPO);
 
 基本上只要這樣兩個物件就可以進行互相轉換了。但我們剛剛有提到，兩者物件的欄位名稱並不相同，針對這部分，可以加上@Mapping進行Mapping，如果邏輯比較特殊，也可以自己掛一個轉換器，我們在加上這部分吧。
 
-```jsx
+```java
 @Mapping(source = "phone",target = "phoneNumber")
 @Mapping(source = "birthday",target = "birthdate")
 @Mapping(source = "ip", target = "ip", qualifiedByName = "stringToInetAddress")
@@ -141,7 +141,7 @@ source 代表來源，也就是傳入的物件屬性，target則代表回傳的�
 
 如果你想要針對一些欄位做出預設值？Mapstruct也支援這個功能，比方說在Member轉換為MemberPO後自動配置角色權限為一般使用者(USER)、並預設帳號狀態為啟用狀態。
 
-```jsx
+```java
 /**
  * 轉型後設定預設值
  * @param memberPO 轉換對象
