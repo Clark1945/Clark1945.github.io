@@ -19,19 +19,19 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="今天要介紹的是一個簡單卻實用的小工具──SpringBoot Validator，它可以協助我們做物件的驗證，減少物件建立後繁瑣的驗證邏輯，以下會介紹一些常用的方法。首先要使用的話我們要先引入依賴，如果是使用Maven的話可以參考以下程式碼： 1234&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&amp;">
+    <meta name="description" content="在開發完你的應用程式後，儘管非必要，但許多人都建議要撰寫測試去確保功能是可以正常運作的。 ( TDD 甚至主張 測試撰寫要在 開發之前 )，不論你是在開發前撰寫測試或是在開發後才寫測試，我都認為測試是重要且不可少的。 對我來說，撰寫測試的主要好處是建立信心，一個覆蓋率高的測試案例，可以讓我更大膽地針對程式碼進行重構，改完後也不需要重新撰寫測試(或者撰寫少量)。他可以帶來的好處是非當下的，也就是說當">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SpringBoot Spring Validation介紹">
-<meta property="og:url" content="https://clark1945.github.io/2025/01/07/SpringBoot-Spring-Validation%E4%BB%8B%E7%B4%B9/index.html">
+<meta property="og:title" content="SpringBoot Test">
+<meta property="og:url" content="https://clark1945.github.io/2025/01/08/SpringBoot-Test/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="今天要介紹的是一個簡單卻實用的小工具──SpringBoot Validator，它可以協助我們做物件的驗證，減少物件建立後繁瑣的驗證邏輯，以下會介紹一些常用的方法。首先要使用的話我們要先引入依賴，如果是使用Maven的話可以參考以下程式碼： 1234&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&amp;">
+<meta property="og:description" content="在開發完你的應用程式後，儘管非必要，但許多人都建議要撰寫測試去確保功能是可以正常運作的。 ( TDD 甚至主張 測試撰寫要在 開發之前 )，不論你是在開發前撰寫測試或是在開發後才寫測試，我都認為測試是重要且不可少的。 對我來說，撰寫測試的主要好處是建立信心，一個覆蓋率高的測試案例，可以讓我更大膽地針對程式碼進行重構，改完後也不需要重新撰寫測試(或者撰寫少量)。他可以帶來的好處是非當下的，也就是說當">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://clark1945.github.io/img/Java_logo.png">
-<meta property="article:published_time" content="2025-01-07T12:47:16.000Z">
-<meta property="article:modified_time" content="2025-01-07T12:48:39.389Z">
+<meta property="article:published_time" content="2025-01-08T14:24:44.000Z">
+<meta property="article:modified_time" content="2025-01-08T14:25:47.779Z">
 <meta property="article:author" content="Clark Liu">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="Hibernate">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="Test">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://clark1945.github.io/img/Java_logo.png">
   
@@ -39,7 +39,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>SpringBoot Spring Validation介紹 - Clark&#39;s Blog</title>
+  <title>SpringBoot Test - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -216,7 +216,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="SpringBoot Spring Validation介紹"></span>
+            <span id="subtitle" data-typed-text="SpringBoot Test"></span>
           
         </div>
 
@@ -227,8 +227,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-01-07 20:47" pubdate>
-          January 7, 2025 pm
+        <time datetime="2025-01-08 22:24" pubdate>
+          January 8, 2025 pm
         </time>
       </span>
     
@@ -239,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          549 words
+          1.1k words
         
       </span>
     
@@ -250,7 +250,7 @@
         
         
         
-          5 mins
+          9 mins
         
       </span>
     
@@ -296,30 +296,36 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">SpringBoot Spring Validation介紹</h1>
+            <h1 id="seo-header">SpringBoot Test</h1>
             
             
               <div class="markdown-body">
                 
-                <p>今天要介紹的是一個簡單卻實用的小工具──SpringBoot Validator，它可以協助我們做物件的驗證，減少物件建立後繁瑣的驗證邏輯，以下會介紹一些常用的方法。首先要使用的話我們要先引入依賴，如果是使用Maven的話可以參考以下程式碼：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jsx">&lt;dependency&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-validation<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br>&lt;/dependency&gt;<br></code></pre></td></tr></table></figure>
+                <p>在開發完你的應用程式後，儘管非必要，但許多人都建議要撰寫測試去確保功能是可以正常運作的。 ( TDD 甚至主張 測試撰寫要在 開發之前 )，不論你是在開發前撰寫測試或是在開發後才寫測試，我都認為測試是重要且不可少的。</p>
+<p>對我來說，撰寫測試的主要好處是建立信心，一個覆蓋率高的測試案例，可以讓我更大膽地針對程式碼進行重構，改完後也不需要重新撰寫測試(或者撰寫少量)。他可以帶來的好處是非當下的，也就是說當下撰寫本身沒有辦法產生效益，也有些公司覺得無法產生效益而不做。但無論如何，了解概念都是重要的。</p>
+<p>本回會使用SpringBootTest撰寫測試。主要要介紹的測試有三種：</p>
+<ol>
+<li>單元測試 UNIT TEST</li>
+<li>整合測試 INTEGER TEST</li>
+<li>端對端測試 END TO END TEST</li>
+</ol>
+<p>單元測試 中的 單元 ，意味著程式中最小的一個單位，也就是方法，單元測試主要用來確保一個被撰寫好的方法，是否正常運作。舉例來說以下有一個Member的驗證方法，我撰寫了一個假資料來確保這樣的資料結構是否足夠通過驗證。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-meta">@RunWith(SpringRunner.class)</span><br><span class="hljs-meta">@SpringBootTest</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">AioApiApplicationTests</span> &#123;<br><br><span class="hljs-meta">@Test</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">testUnitsTest</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">Member</span> <span class="hljs-variable">member</span> <span class="hljs-operator">=</span> Member.builder()<br>                .name(<span class="hljs-string">&quot;Clark&quot;</span>)<br>                .account(<span class="hljs-string">&quot;clark1232&quot;</span>)<br>                .password(<span class="hljs-string">&quot;cclark23123&quot;</span>)<br>                .email(<span class="hljs-string">&quot;test@gmail.con&quot;</span>)<br>                .address(<span class="hljs-string">&quot;台北&quot;</span>).build();<br>        assertTrue(Member.registerValidate(member));<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>假設我們今天有一個交易的Object，我們希望在實際進入Controller前先驗證傳入值是否正確的話，可以看看以下舉例</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TransactionObject</span> &#123;<br>    <span class="hljs-meta">@Size(min = 10, max = 28, message = &quot;長度必須介於10~28之間&quot;)</span><br>    <span class="hljs-keyword">private</span> String transactionId;<br>    <span class="hljs-meta">@Email(regexp = &quot;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]&#123;2,&#125;$&quot;, message = &quot;Email格式不符合&quot;)</span><br>    <span class="hljs-keyword">private</span> String email;<br>    <span class="hljs-meta">@NotBlank(message = &quot;Type is not exist&quot;)</span><br>    <span class="hljs-keyword">private</span> String transactionType;<br>    <span class="hljs-meta">@NotNull</span><br>    <span class="hljs-meta">@PositiveOrZero</span><br>    <span class="hljs-keyword">private</span> BigDecimal amount; <span class="hljs-comment">// 交易金额</span><br>    <span class="hljs-meta">@PastOrPresent</span><br>    <span class="hljs-keyword">private</span> LocalDateTime transactionDate;<br><br><span class="hljs-comment">// ... getter setter constructor</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>整合測試的層級比單元測試高，整合測試主要著重的是在確保當下元件正常之外，與外部服務之間的互動也必須要符合預期結果，撰寫難度也因此比單元測試高。舉例來說，我想要去取得會員的資料並進行驗證，但MemberService同時依賴MemberRepository，所以如果我想測試他的話，我不只要初始化MemberService也要初始化MemberRepository。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MemberService</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> MemberRepository memberRepository;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">MemberService</span><span class="hljs-params">(MemberRepository repo)</span> &#123;<br>    <span class="hljs-built_in">this</span>.repository = repo;<br>    &#125;<br>    <br>    <span class="hljs-keyword">public</span> Optional&lt;MemberPO&gt; <span class="hljs-title function_">findAccountById</span><span class="hljs-params">(Long id)</span> &#123;<br>        <span class="hljs-keyword">return</span> memberRepository.findById(id);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>在TransactionObject中，<br>@Size會在物件建立時判斷transactionId是否在長度10<del>28之間，若不符合會報Excpetion，訊息為 長度必須介於10</del>28之間。<br>@Email 利用正規表達式驗證傳入email格式是否符合，若不符合就跳出錯誤訊息。</p>
-<p>@NotBlank 類似於撰寫StringUtils.isNotBlank()，@NotNull則用來判斷是否不為Null</p>
-<p>@PositiveOrZero 宣告了數值必須是正數或者0</p>
-<p>@PastOrPresent 宣告了交易時間，必須是現在或者現在以前，因為不會有未來的交易。</p>
-<p>以上，透過物件在建立的同時便完成驗證就是Spring Validator的特色。</p>
-<p>通常他會在API Controller就被使用，如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TransactionController</span> &#123;<br><br>    <span class="hljs-keyword">private</span> TransactionService transactionService;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">TransactionController</span><span class="hljs-params">(TransactionService transactionService)</span> &#123;<br>        <span class="hljs-built_in">this</span>.transactionService = transactionService;<br>    &#125;<br>    <span class="hljs-meta">@PostMapping(&quot;/payment&quot;)</span><br>    <span class="hljs-keyword">public</span> TransactionObject <span class="hljs-title function_">payment</span><span class="hljs-params">(<span class="hljs-meta">@RequestBody</span> <span class="hljs-meta">@Valid</span> TransactionObject transactionObject)</span> &#123;<br><br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">success</span> <span class="hljs-operator">=</span> transactionService.payment(transactionObject);<br>        <span class="hljs-keyword">return</span> success ? transactionObject : <span class="hljs-literal">null</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>測試時，為了力求測試的準確度，我們希望會造成影響的變因越小越好，然後實際上，一個整合測試中經常性的依賴多個服務，針對多個服務都直接使用的話，開銷將會非常高。因此現在常見的做法是針對外部依賴採用假造(Mock)的形式完成。</p>
+<p>那怎麼假造呢？這時就可以使用SpringBoot提供的Mockito去完成。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java">    <span class="hljs-meta">@MockBean</span><br>    MemberRepository memberRepository;<br>    <span class="hljs-meta">@Autowired</span><br>    MemberService memberService;<br><br><span class="hljs-meta">@Test</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">optionalTest2</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">MemberPO</span> <span class="hljs-variable">memberPOTest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MemberPO</span>();<br>        memberPOTest.setStatus(<span class="hljs-string">&quot;INACTIVE&quot;</span>);<br>        Mockito.<span class="hljs-keyword">when</span>(memberRepository.findByAccount(Mockito.isNull())).thenReturn(memberPOTest);<br>        Optional&lt;MemberPO&gt; memberPO1 = memberService.findActiveAccount(<span class="hljs-literal">null</span>);<br>        <span class="hljs-keyword">assert</span> !memberPO1.isPresent();<br>    &#125;<br></code></pre></td></tr></table></figure>
 
-<p>其中@Valid 代表了啟動物件驗證的方法，如果不符合就會直接拋出org.springframework.web.bind.MethodArgumentNotValidException，避免讓不合法的物件進入程式內部。</p>
-<p>然而，在Controller作物件驗證有一個缺點，就是無法撰寫try catch，這部分要怎麼解決呢，我們明天在說明吧，感恩感謝。</p>
-<p>參考資源：</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Hello_World_QWP/article/details/116129788">Spring Boot中validation-api和hibernate-validator详解及快速应用实践，@Valid BindingResult实现接口入参自动检验，Java实体字段校验-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.baeldung.com/spring-boot-bean-validation">https://www.baeldung.com/spring-boot-bean-validation</a></p>
+<p>因為MemberPository是一個Bean，所以我引入了MockBean去假造它。此外，我使用了Mockito這個測試框架去模擬memberPository的行為，只要findByAccount方法中傳出了Null，就回傳一個我是先建立好的一個模擬物件(memberPOTest)</p>
+<p>基本上Mockito的寫法是 Mockito.when(要被測試的方法).thenReturn(你預計的回傳內容)，透過這樣的方法可以在測試的@Test中覆蓋原先memberPosiory.findByAccount()的方法 ( 應該也是回傳Null，SpringBootTest 不會真的引入Bean )</p>
+<p>最後，我們使用 assert 斷言去判斷memberPO 是否存在</p>
+<p>最後，我們來看一下端對端測試吧。端對端測試我理解的就是API層級的測試，它包含了更多貼近商業情境的測試，也是測試上不好測試，經常會透過人工執行的測試。SpringBoot我經常使用Mockmvc來進行整合測試，舉例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RunWith(SpringRunner.class)</span><br><span class="hljs-meta">@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)</span><br><span class="hljs-meta">@AutoConfigureMockMvc</span> <span class="hljs-comment">// 注意要額外定義@AutoConfigureMockMvc，否則無法使用</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">AioApiApplicationTests</span> &#123;<br><br><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> MockMvc mockMvc;<br><br><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testGetMember</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-type">MemberPO</span> <span class="hljs-variable">memberPO</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MemberPO</span>();<br>    memberPO.setStatus(<span class="hljs-string">&quot;ACTIVE&quot;</span>);<br>    memberPO.setName(<span class="hljs-string">&quot;Clark&quot;</span>);<br>    Mockito.<span class="hljs-keyword">when</span>(memberRepository.findById(<span class="hljs-number">1L</span>)).thenReturn(Optional.ofNullable(memberPO));<br><br>    mockMvc.perform(get(<span class="hljs-string">&quot;/api/1.0/member&quot;</span>)<br>                    .param(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;1&quot;</span>)<br>                    .accept(MediaType.APPLICATION_JSON))<br>            .andExpect(status().isOk())<br>            .andExpect(content().contentType(MediaType.APPLICATION_JSON))<br>            .andExpect(jsonPath(<span class="hljs-string">&quot;$.info.name&quot;</span>).value(<span class="hljs-string">&quot;Clark&quot;</span>));<br>&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>這三種測試是我在初學階段時經常搞不清楚的，這次也趁著鐵人賽的機會一口氣把它們釐清，希望以上內容能幫助到什麼人。那今天的分享就到此為止了，我們明天見。</p>
 
                 
               </div>
@@ -353,9 +359,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Java/" class="print-no-link">#Java</a>
+        <a href="/tags/SpringBoot/" class="print-no-link">#SpringBoot</a>
       
-        <a href="/tags/Hibernate/" class="print-no-link">#Hibernate</a>
+        <a href="/tags/Test/" class="print-no-link">#Test</a>
       
     </div>
   
@@ -367,8 +373,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>SpringBoot Spring Validation介紹</div>
-      <div>https://clark1945.github.io/2025/01/07/SpringBoot-Spring-Validation介紹/</div>
+      <div>SpringBoot Test</div>
+      <div>https://clark1945.github.io/2025/01/08/SpringBoot-Test/</div>
     </div>
     <div class="license-meta">
       
@@ -380,7 +386,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>January 7, 2025</div>
+          <div>January 8, 2025</div>
         </div>
       
       
@@ -412,18 +418,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/01/08/SpringBoot-Test/" title="SpringBoot Test">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">SpringBoot Test</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/01/05/Spring-Security%E6%8E%A2%E7%A7%98/" title="Spring Security探秘">
-                        <span class="hidden-mobile">Spring Security探秘</span>
+                      <a href="/2025/01/07/SpringBoot-Spring-Validation%E4%BB%8B%E7%B4%B9/" title="SpringBoot Spring Validation介紹">
+                        <span class="hidden-mobile">SpringBoot Spring Validation介紹</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -443,8 +443,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'https://clark1945.github.io/2025/01/07/SpringBoot-Spring-Validation%E4%BB%8B%E7%B4%B9/';
-          this.page.identifier = '/2025/01/07/SpringBoot-Spring-Validation%E4%BB%8B%E7%B4%B9/';
+          this.page.url = 'https://clark1945.github.io/2025/01/08/SpringBoot-Test/';
+          this.page.identifier = '/2025/01/08/SpringBoot-Test/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');
