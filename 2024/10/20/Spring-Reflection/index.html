@@ -19,27 +19,25 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="我們在前幾次的單元中提到了延遲初始化的概念，但延遲初始化其實並不是解決問題的根本方法，當這個議題產生時，通常想要解決的問題就是──我們一次抓出太多不必要的資料了， 那有沒有一個方法，可以讓我們選擇只抓出部分的資料而不是全部呢？有的！去找吧！我把所有的資源都放在那裡了！那我們今天的分享就到這裡── 嘖！不行嗎？好吧。 Spring Projection 主要想要解決的問題，就是避免撈出不必要的資料，">
+    <meta name="description" content="Spring Reflection──反射，是不少新手開發者會感到不熟悉的部分，而他的概念確實也比較複雜，本次就是好好講個Reflection，以及Reflection怎麼使用。 在幾篇前我們有提到過Java的生命週期是 透過javac把Java程式碼轉換成位元碼，再用JVM去讀取ByteCode並把ByteCode轉換成個平台都可以支援的機器碼。而程式碼的類別都是在編譯階段就已經被載入，並固定下">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring Projection">
-<meta property="og:url" content="https://clark1945.github.io/2024/10/19/Spring-Projection/index.html">
+<meta property="og:title" content="Spring Reflection">
+<meta property="og:url" content="https://clark1945.github.io/2024/10/20/Spring-Reflection/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="我們在前幾次的單元中提到了延遲初始化的概念，但延遲初始化其實並不是解決問題的根本方法，當這個議題產生時，通常想要解決的問題就是──我們一次抓出太多不必要的資料了， 那有沒有一個方法，可以讓我們選擇只抓出部分的資料而不是全部呢？有的！去找吧！我把所有的資源都放在那裡了！那我們今天的分享就到這裡── 嘖！不行嗎？好吧。 Spring Projection 主要想要解決的問題，就是避免撈出不必要的資料，">
+<meta property="og:description" content="Spring Reflection──反射，是不少新手開發者會感到不熟悉的部分，而他的概念確實也比較複雜，本次就是好好講個Reflection，以及Reflection怎麼使用。 在幾篇前我們有提到過Java的生命週期是 透過javac把Java程式碼轉換成位元碼，再用JVM去讀取ByteCode並把ByteCode轉換成個平台都可以支援的機器碼。而程式碼的類別都是在編譯階段就已經被載入，並固定下">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://clark1945.github.io/img/Java_logo.png">
-<meta property="article:published_time" content="2024-10-19T13:16:02.000Z">
-<meta property="article:modified_time" content="2025-01-08T13:31:05.396Z">
+<meta property="article:published_time" content="2024-10-20T13:46:52.000Z">
+<meta property="article:modified_time" content="2025-01-08T13:52:16.394Z">
 <meta property="article:author" content="Clark Liu">
-<meta property="article:tag" content="Java">
 <meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="Reflection">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://clark1945.github.io/img/Java_logo.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Spring Projection - Clark&#39;s Blog</title>
+  <title>Spring Reflection - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -216,7 +214,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Spring Projection"></span>
+            <span id="subtitle" data-typed-text="Spring Reflection"></span>
           
         </div>
 
@@ -227,8 +225,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-10-19 21:16" pubdate>
-          October 19, 2024 pm
+        <time datetime="2024-10-20 21:46" pubdate>
+          October 20, 2024 pm
         </time>
       </span>
     
@@ -239,7 +237,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          640 words
+          889 words
         
       </span>
     
@@ -250,7 +248,7 @@
         
         
         
-          6 mins
+          8 mins
         
       </span>
     
@@ -296,29 +294,25 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Spring Projection</h1>
+            <h1 id="seo-header">Spring Reflection</h1>
             
             
               <div class="markdown-body">
                 
-                <p>我們在前幾次的單元中提到了延遲初始化的概念，但延遲初始化其實並不是解決問題的根本方法，當這個議題產生時，通常想要解決的問題就是──我們一次抓出太多不必要的資料了，</p>
-<p>那有沒有一個方法，可以讓我們選擇只抓出部分的資料而不是全部呢？有的！去找吧！我把所有的資源都放在那裡了！那我們今天的分享就到這裡──</p>
-<p>嘖！不行嗎？好吧。</p>
-<p>Spring Projection 主要想要解決的問題，就是避免撈出不必要的資料，透過在Repository 回傳一個介面而不是物件的形式，比方說以下程式碼：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//Part1.</span><br><span class="hljs-meta">@Entity</span><br><span class="hljs-meta">@Getter</span><br><span class="hljs-meta">@Setter</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Address</span> &#123;<br>    <span class="hljs-meta">@Id</span><br>    <span class="hljs-keyword">private</span> Long id;<br>    <span class="hljs-meta">@OneToOne</span><br>    <span class="hljs-keyword">private</span> Person person;<br>    <span class="hljs-keyword">private</span> String state;<br>    <span class="hljs-keyword">private</span> String city;<br>    <span class="hljs-keyword">private</span> String street;<br>    <span class="hljs-keyword">private</span> String zipCode;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">AddressView</span> &#123;<br>    String <span class="hljs-title function_">getZipCode</span><span class="hljs-params">()</span>;<br>    <span class="hljs-meta">@Value(&quot;#&#123;target.city + &#x27; &#x27; + target.state&#125;&quot;)</span><br>    String <span class="hljs-title function_">getCityAndState</span><span class="hljs-params">()</span>;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">AddressRepository</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Repository</span>&lt;Address, Long&gt; &#123;<br>    List&lt;AddressView&gt; <span class="hljs-title function_">getAddressByState</span><span class="hljs-params">(String state)</span>;<br>&#125;<br><br><span class="hljs-comment">// Test</span><br><span class="hljs-type">AddressView</span> <span class="hljs-variable">addressView</span> <span class="hljs-operator">=</span> addressRepository.getAddressByState(<span class="hljs-string">&quot;CA&quot;</span>).get(<span class="hljs-number">0</span>);<br><span class="hljs-comment">// Hibernate: select address0_.zip_code as col_0_0_ from address address0_ where address0_.state=?</span><br>assertThat(addressView.getZipCode()).isEqualTo(<span class="hljs-string">&quot;90001&quot;</span>);<br>assertThat(addressView.getCityAndState()).isEqualTo(<span class="hljs-string">&quot;Los Angeles CA&quot;</span>);<br></code></pre></td></tr></table></figure>
+                <p>Spring Reflection──反射，是不少新手開發者會感到不熟悉的部分，而他的概念確實也比較複雜，本次就是好好講個Reflection，以及Reflection怎麼使用。</p>
+<p>在幾篇前我們有提到過Java的生命週期是 透過javac把Java程式碼轉換成位元碼，再用JVM去讀取ByteCode並把ByteCode轉換成個平台都可以支援的機器碼。而程式碼的類別都是在編譯階段就已經被載入，並固定下來了。</p>
+<p>而Reflection最大的特點就是允許程式碼在執行階段才載入類別。這麼做有甚麼好處呢？就是可以動態化處理問題，假設你今天有一個用來處理Excel資料的物件XLSWorker，他擁有一個readFile方法，來讀取xls的資料。今天你開發了一個新的功能XLSXWorker，而你想要測試這兩個物件的同一個readFile()方法時。這時，你對程式的關注點就不會是 物件本身，而是你希望的方法是否可以得到符合期待的輸出。程式碼的部分以例子來說，會像這樣。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 沒有使用Reflection的寫法</span><br><span class="hljs-type">XLSService</span> <span class="hljs-variable">xlsService</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">XLSService</span>();<br>xlsService.readFile(xlsFile);<br><br><span class="hljs-comment">//反射方法</span><br>Class&lt;?&gt; clazz = Class.forName(<span class="hljs-string">&quot;XLSService&quot;</span>); <span class="hljs-comment">// 替换为你的 XLSService 类的全限定名</span><br><span class="hljs-type">Object</span> <span class="hljs-variable">xlsServiceInstance</span> <span class="hljs-operator">=</span> clazz.getDeclaredConstructor().newInstance(); <span class="hljs-comment">// 使用默认构造函数创建实例</span><br><br><span class="hljs-comment">// 2. 通过反射获取 readFile 方法</span><br><span class="hljs-type">Method</span> <span class="hljs-variable">readFileMethod</span> <span class="hljs-operator">=</span> clazz.getMethod(<span class="hljs-string">&quot;readFile&quot;</span>, String.class); <span class="hljs-comment">// 假设 readFile 方法接受一个 String 类型的参数</span><br><br><span class="hljs-comment">// 3. 调用 readFile 方法</span><br>readFileMethod.invoke(xlsServiceInstance, xlsFile); <span class="hljs-comment">// 传入 xlsFile 作为参数</span><br></code></pre></td></tr></table></figure>
 
-<p>在上面的範例中，於JPA的Repository中建立了getAddressByState()方法，並指定回傳物件為List的AddressView這個自訂物件，這樣的查詢好處是只會選擇到被使用的欄位，避免選擇到不需要的物件造成資源的浪費。</p>
-<p>接著我們再看一個例子。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Entity</span><br><span class="hljs-meta">@Getter</span><br><span class="hljs-meta">@Setter</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-meta">@Id</span><br>    <span class="hljs-keyword">private</span> Long id;<br>    <span class="hljs-keyword">private</span> String firstName;<br>    <span class="hljs-keyword">private</span> String lastName;<br>    <span class="hljs-meta">@OneToOne(mappedBy = &quot;person&quot;)</span><br>    <span class="hljs-keyword">private</span> Address address;<br>    <span class="hljs-comment">// getters and setters</span><br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">PersonView</span> &#123;<br>    String <span class="hljs-title function_">getFirstName</span><span class="hljs-params">()</span>;<br>    String <span class="hljs-title function_">getLastName</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-meta">@Value(&quot;#&#123;target.firstName + &#x27; &#x27; + target.lastName&#125;&quot;)</span><br>    String <span class="hljs-title function_">getFullName</span><span class="hljs-params">()</span>;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">AddressView</span> &#123;<br>    PersonView <span class="hljs-title function_">getPerson</span><span class="hljs-params">()</span>;<br>&#125;<br><br><span class="hljs-comment">// Test</span><br><span class="hljs-type">AddressView</span> <span class="hljs-variable">addressView</span> <span class="hljs-operator">=</span> addressRepository.getAddressByState(<span class="hljs-string">&quot;CA&quot;</span>).get(<span class="hljs-number">0</span>);<br><span class="hljs-type">PersonView</span> <span class="hljs-variable">personView</span> <span class="hljs-operator">=</span> addressView.getPerson();<br>assertThat(personView.getFirstName()).isEqualTo(<span class="hljs-string">&quot;John&quot;</span>);<br>assertThat(personView.getLastName()).isEqualTo(<span class="hljs-string">&quot;Doe&quot;</span>);<br></code></pre></td></tr></table></figure>
+<p>除此之外，它還可以掃描類別以下擁有的方法，甚至可以從外部訪問類別的私有方法，這部分使她有了安全性上的疑慮，比方說以下的程式就可以掃描出類別下有哪些方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java">Class&lt;Person&gt; personClass = Person.class;<br><br>Field[] fields = personClass.getDeclaredFields();<br><span class="hljs-keyword">for</span> (Field i : fields) &#123;<br>    System.out.println(<span class="hljs-string">&quot;Field = &quot;</span>+i.getName()); <span class="hljs-comment">// 印出類別中所有的屬性</span><br>&#125;<br>Method[] methods = personClass.getDeclaredMethods(); <span class="hljs-comment">//宣告的方法</span><br><span class="hljs-keyword">for</span> (Method m : methods) &#123;<br>    System.out.println(<span class="hljs-string">&quot;Method = &quot;</span> + m.getName()); <span class="hljs-comment">// 印出類別中所有的方法</span><br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>我們修改了AddressView，使他可以回傳關聯物件(Person)的資料，但回傳的形式使用了另外一個Interface接，透過PesonView介面，我就可以訪問Person類別的firstName與lastName。</p>
-<p>此外，Projection還有提供 動態投影的效果，比方說可以在上面的Repository加入這一行。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PersonDto</span> &#123;<br>    <span class="hljs-keyword">private</span> String firstName;<br>    <span class="hljs-keyword">private</span> String lastName;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">PersonDto</span><span class="hljs-params">(String firstName, String lastName)</span> &#123;<br>        <span class="hljs-built_in">this</span>.firstName = firstName;<br>        <span class="hljs-built_in">this</span>.lastName = lastName;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">PersonView</span> &#123;<br>    String <span class="hljs-title function_">getFirstName</span><span class="hljs-params">()</span>;<br>    String <span class="hljs-title function_">getLastName</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-meta">@Value(&quot;#&#123;target.firstName + &#x27; &#x27; + target.lastName&#125;&quot;)</span><br>    String <span class="hljs-title function_">getFullName</span><span class="hljs-params">()</span>;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">PersonRepository</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Repository</span>&lt;Person, Long&gt; &#123;<br>    &lt;T&gt; T <span class="hljs-title function_">findByLastName</span><span class="hljs-params">(String lastName, Class&lt;T&gt; type)</span>;<br>&#125;<br><span class="hljs-comment">//Test</span><br><span class="hljs-type">Person</span> <span class="hljs-variable">person</span> <span class="hljs-operator">=</span> personRepository.findByLastName(<span class="hljs-string">&quot;Doe&quot;</span>, Person.class);<br><span class="hljs-type">PersonView</span> <span class="hljs-variable">personView</span> <span class="hljs-operator">=</span> personRepository.findByLastName(<span class="hljs-string">&quot;Doe&quot;</span>, PersonView.class);<br><span class="hljs-type">PersonDto</span> <span class="hljs-variable">personDto</span> <span class="hljs-operator">=</span> personRepository.findByLastName(<span class="hljs-string">&quot;Doe&quot;</span>, PersonDto.class);<br><br>assertThat(person.getFirstName()).isEqualTo(<span class="hljs-string">&quot;John&quot;</span>);<br>assertThat(personView.getFirstName()).isEqualTo(<span class="hljs-string">&quot;John&quot;</span>);<br>assertThat(personDto.getFirstName()).isEqualTo(<span class="hljs-string">&quot;John&quot;</span>);<br></code></pre></td></tr></table></figure>
+<p>假設你是一名不懷好意的攻擊者，你就可以使用Reflection去讀取類別的所有屬性與方法藉而得知如何竊取或竄改資料，像是以下程式碼，就可以任意set 物件的值，你只需要知道類別的方法名稱就可以了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> &lt;T&gt; T <span class="hljs-title function_">setObjectValue</span><span class="hljs-params">(Object object,String colName,Class colNameType,Object colVal)</span> <span class="hljs-keyword">throws</span> NoSuchMethodException, InvocationTargetException, IllegalAccessException &#123;<br>    Class&lt;?&gt; aClass = object.getClass(); <span class="hljs-comment">// 取得類別</span><br>    <span class="hljs-type">Method</span> <span class="hljs-variable">method</span> <span class="hljs-operator">=</span> aClass.getDeclaredMethod(<span class="hljs-string">&quot;set&quot;</span>+StringUtils.capitalize(colName),colNameType); <span class="hljs-comment">// 取得指定值的set方法</span><br>    method.invoke(object,colVal);<br>    <span class="hljs-keyword">return</span> (T) object;<br>&#125;<br><span class="hljs-comment">// TEST </span><br><span class="hljs-type">Billing</span> <span class="hljs-variable">billing</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Billing</span>();<br><span class="hljs-type">Billing</span> <span class="hljs-variable">billingAfterSetId</span> <span class="hljs-operator">=</span> setObjectValue(billing,<span class="hljs-string">&quot;id&quot;</span>,<span class="hljs-type">int</span>.class,id);<br></code></pre></td></tr></table></figure>
 
-<p>你可以使用各種類別或介面去封裝回傳的物件。當然，要確保屬性的命名與SpringDataJPA的風格一致。</p>
-<p>那今天的部分就先到這邊吧，明天見了。</p>
-<p>參考資料：</p>
-<p><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html">https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html</a></p>
+<p>小弟過去的使用場景主要還是在撰寫測試時使用比較常見，有時當程式碼規模很大，你需要去測試某個你撰寫出來的private方法，但你又不想要修改方法的作用域時，Reflection就是一個比較好的選擇，另外Reflection也適合大量測試。</p>
+<p>而Reflection的缺點也很明顯。一，Reflection的寫法會讓程式碼的維護難度直線上升，少了Compiler自動幫你處理型別判斷後，就連大小寫都會導致你開發上功能異常。二，安全性，因為可以透過Reflection方法直接訪問類別的內部結構與自動觸發方法，導致她很危險。三，在執行期間訪問類別會無可避免地導致效能低落。</p>
+<p>以上就是我的一些整理，那麼明天見了。</p>
 
                 
               </div>
@@ -352,9 +346,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Java/" class="print-no-link">#Java</a>
-      
         <a href="/tags/SpringBoot/" class="print-no-link">#SpringBoot</a>
+      
+        <a href="/tags/Reflection/" class="print-no-link">#Reflection</a>
       
     </div>
   
@@ -366,8 +360,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Spring Projection</div>
-      <div>https://clark1945.github.io/2024/10/19/Spring-Projection/</div>
+      <div>Spring Reflection</div>
+      <div>https://clark1945.github.io/2024/10/20/Spring-Reflection/</div>
     </div>
     <div class="license-meta">
       
@@ -379,7 +373,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>October 19, 2024</div>
+          <div>October 20, 2024</div>
         </div>
       
       
@@ -411,9 +405,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/10/20/Spring-Reflection/" title="Spring Reflection">
+                      <a href="/2024/10/21/Spring-MapStruct/" title="Spring MapStruct">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Spring Reflection</span>
+                        <span class="hidden-mobile">Spring MapStruct</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -421,8 +415,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/19/Spring-IOC-%E8%88%87-DI/" title="Spring IOC 與 DI">
-                        <span class="hidden-mobile">Spring IOC 與 DI</span>
+                      <a href="/2024/10/19/Spring-Projection/" title="Spring Projection">
+                        <span class="hidden-mobile">Spring Projection</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -442,8 +436,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'https://clark1945.github.io/2024/10/19/Spring-Projection/';
-          this.page.identifier = '/2024/10/19/Spring-Projection/';
+          this.page.url = 'https://clark1945.github.io/2024/10/20/Spring-Reflection/';
+          this.page.identifier = '/2024/10/20/Spring-Reflection/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');
