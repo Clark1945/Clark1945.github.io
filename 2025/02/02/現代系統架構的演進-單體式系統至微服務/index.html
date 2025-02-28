@@ -19,25 +19,27 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Java──眾所皆知，這是一個非常OOP的語言，Java的萬物皆物件的概念使得Java無法像Python一樣寫出不依賴物件的方法，簡言之，Python可以寫出這樣的程式碼而Java不行 123def printHello():   return &quot;Hello&quot;print(printHello() + &quot;Clark) 因此，Functional Programming被">
+    <meta name="description" content="前一陣子開始在看微服務的書，剛好之前也是在做微服務，剛好跟現在同事在聊微服務時，發現自己對微服務的認識並沒有足夠清楚，於是決定好好學習，釐清這些系統架構的時代演進。本文主要會提到的有  單體式架構(Monolithic Architecture) 前後端分離架構 分散式架構(Distribute Architecture) 服務導向架構(Service Oriented Architecture)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="說明Java @Functionalinterface 的功用">
-<meta property="og:url" content="https://clark1945.github.io/2025/02/02/%E8%AA%AA%E6%98%8EJava-Functionalinterface-%E7%9A%84%E5%8A%9F%E7%94%A8/index.html">
+<meta property="og:title" content="(未完成) 現代系統架構的演進-單體式系統至微服務">
+<meta property="og:url" content="https://clark1945.github.io/2025/02/02/%E7%8F%BE%E4%BB%A3%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B%E7%9A%84%E6%BC%94%E9%80%B2-%E5%96%AE%E9%AB%94%E5%BC%8F%E7%B3%BB%E7%B5%B1%E8%87%B3%E5%BE%AE%E6%9C%8D%E5%8B%99/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="Java──眾所皆知，這是一個非常OOP的語言，Java的萬物皆物件的概念使得Java無法像Python一樣寫出不依賴物件的方法，簡言之，Python可以寫出這樣的程式碼而Java不行 123def printHello():   return &quot;Hello&quot;print(printHello() + &quot;Clark) 因此，Functional Programming被">
+<meta property="og:description" content="前一陣子開始在看微服務的書，剛好之前也是在做微服務，剛好跟現在同事在聊微服務時，發現自己對微服務的認識並沒有足夠清楚，於是決定好好學習，釐清這些系統架構的時代演進。本文主要會提到的有  單體式架構(Monolithic Architecture) 前後端分離架構 分散式架構(Distribute Architecture) 服務導向架構(Service Oriented Architecture)">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-02-02T02:02:32.000Z">
-<meta property="article:modified_time" content="2025-02-02T03:11:29.515Z">
+<meta property="article:published_time" content="2025-02-02T11:36:30.000Z">
+<meta property="article:modified_time" content="2025-02-28T06:19:33.759Z">
 <meta property="article:author" content="Clark Liu">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="Functional Programming">
+<meta property="article:tag" content="System Design">
+<meta property="article:tag" content="Microservice">
+<meta property="article:tag" content="Distribute System">
+<meta property="article:tag" content="Basic">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>說明Java @Functionalinterface 的功用 - Clark&#39;s Blog</title>
+  <title>(未完成) 現代系統架構的演進-單體式系統至微服務 - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +216,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="說明Java @Functionalinterface 的功用"></span>
+            <span id="subtitle" data-typed-text="(未完成) 現代系統架構的演進-單體式系統至微服務"></span>
           
         </div>
 
@@ -225,8 +227,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-02-02 10:02" pubdate>
-          February 2, 2025 am
+        <time datetime="2025-02-02 19:36" pubdate>
+          February 2, 2025 pm
         </time>
       </span>
     
@@ -237,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          938 words
+          954 words
         
       </span>
     
@@ -294,47 +296,25 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">說明Java @Functionalinterface 的功用</h1>
+            <h1 id="seo-header">(未完成) 現代系統架構的演進-單體式系統至微服務</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Java──眾所皆知，這是一個非常OOP的語言，Java的萬物皆物件的概念使得Java無法像Python一樣寫出不依賴物件的方法，簡言之，Python可以寫出這樣的程式碼而Java不行</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">printHello</span>():<br>   <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Hello&quot;</span><br><span class="hljs-built_in">print</span>(printHello() + <span class="hljs-string">&quot;Clark)</span><br></code></pre></td></tr></table></figure>
-<p>因此，<code>Functional Programming</code>被不少人評價使用Java撰寫總是有點彆扭，也有一部分是這個原因。那在提到@Functionalinterface這個註解前，我們先來提一提Java的FP實作，也就是大家常用的Lambda吧。<br>Lambda可以將Function以參數的形式傳遞，恰好符合FP將Function作為一等公民的概念，在Java 8 引入Lambda之後，就可以在不使用物件的情形下使用方法，也就是匿名函式(anonymous function)。我們來看看幾個例子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">Map&lt;String, Integer&gt; nameMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>nameMap.put(<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-number">100</span>);<br><span class="hljs-type">Integer</span> <span class="hljs-variable">value</span> <span class="hljs-operator">=</span> nameMap.computeIfAbsent(<span class="hljs-string">&quot;John&quot;</span>, s -&gt; s.length());<br></code></pre></td></tr></table></figure>
-<p>行3的作用是，假設nameMap中沒有名為John的Key的話，就執行方法中的匿名函式，也就是說將會回傳4這個值。寫法也可以改成方法參照</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Integer</span> <span class="hljs-variable">value</span> <span class="hljs-operator">=</span> nameMap.computeIfAbsent(<span class="hljs-string">&quot;John&quot;</span>, String::length);<br></code></pre></td></tr></table></figure>
-<p>或是將方法提取出來，也就是說上面的方法可以改寫成以下</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">Map&lt;String, Integer&gt; nameMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>nameMap.put(<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-number">100</span>);<br>Function&lt;String,Integer&gt; compute = String::length;<br><span class="hljs-type">Integer</span> <span class="hljs-variable">value</span> <span class="hljs-operator">=</span> nameMap.computeIfAbsent(<span class="hljs-string">&quot;John&quot;</span>, compute); <span class="hljs-comment">// Function介面 接收一個輸入與輸出參數</span><br></code></pre></td></tr></table></figure>
-<p>另外Function也接受組合(Composition)，也就是說Function接續執行</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">Function&lt;String, String&gt; firstExecute = s -&gt; s + <span class="hljs-string">&quot;就只會&quot;</span>;<br>Function&lt;String, String&gt; secondExecute = s -&gt;  s + <span class="hljs-string">&quot;騙人&quot;</span>;<br>Function&lt;String, String&gt; quoteIntToString = secondExecute.compose(firstExecute);<br>assertEquals(<span class="hljs-string">&quot;初華就只會騙人&quot;</span>, quoteIntToString.apply(<span class="hljs-string">&quot;初華&quot;</span>));<br></code></pre></td></tr></table></figure>
-<p>透過以上程式碼，傳入參數會先執行firstExecute，再執行secondExecute，最後我們使用斷言得出一個結論，那就是：初華就只會騙人。Q.E.D. 證明完畢</p>
-<p>Function這個介面目前已經有不少Java得實作，以下介紹部分：</p>
-<ol>
-<li>Suppliers</li>
-<li>Consumers</li>
-<li>Predicates</li>
-<li>Operators</li>
-</ol>
-<h4 id="Suppliers"><a href="#Suppliers" class="headerlink" title="Suppliers"></a>Suppliers</h4><hr>
-<p>不接受傳入，只會傳出一個值，通常用來延遲產生某個運算值，比方說以下程式碼，直到呼叫.get()之前Lambda都不會被執行。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> String <span class="hljs-title function_">squareLazy</span><span class="hljs-params">(Supplier&lt;String&gt; lazyValue)</span> &#123;<br>    <span class="hljs-keyword">return</span> lazyValue.get();<br>&#125;<br><br>Supplier&lt;String&gt; soyoriinWord = () -&gt; <span class="hljs-string">&quot;就由我來將它結束&quot;</span>;<br><span class="hljs-type">String</span> <span class="hljs-variable">valueSquared</span> <span class="hljs-operator">=</span> squareLazy(soyoriinWord);<br></code></pre></td></tr></table></figure>
-
-<h4 id="Consumers"><a href="#Consumers" class="headerlink" title="Consumers"></a>Consumers</h4><hr>
-<p>與Supplier相反，接受一個或多個傳入，但不回傳任何數，下方案例我們可以印出<br><strong><code>從來不覺得, 玩樂團, 開心過,</code></strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">Consumer&lt;String&gt; template = name -&gt; System.out.println(name + <span class="hljs-string">&quot;,&quot;</span>);<br>List&lt;String&gt; sentenceList = Arrays.asList(<span class="hljs-string">&quot;從來不覺得&quot;</span>, <span class="hljs-string">&quot;玩樂團&quot;</span>, <span class="hljs-string">&quot;開心過&quot;</span>);<br>sentenceList.forEach(template);<br></code></pre></td></tr></table></figure>
-
-<h4 id="Predicates"><a href="#Predicates" class="headerlink" title="Predicates"></a>Predicates</h4><hr>
-<p>Predicate的特性是接收值，但只回傳boolean，常用於 .stream()的 filter()當中。以下案例我們可以找出初華</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">Predicate&lt;String&gt; findLiar = name -&gt; name.equals(<span class="hljs-string">&quot;初華&quot;</span>);<br>List&lt;String&gt; aveMujicaList = Arrays.asList(<span class="hljs-string">&quot;睦&quot;</span>, <span class="hljs-string">&quot;海鈴&quot;</span>, <span class="hljs-string">&quot;初華&quot;</span>, <span class="hljs-string">&quot;小祥&quot;</span>, <span class="hljs-string">&quot;破貓&quot;</span>);<br>List&lt;String&gt; liarMemberList = aveMujicaList.stream()<br>        .filter(findLiar)<br>        .toList();<br>System.out.println(liarMemberList);<br></code></pre></td></tr></table></figure>
-
-<h4 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h4><hr>
-<p>Operator是用來處理值的變化，比方說以下程式碼會將每一個Array中的值轉為大寫。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">UnaryOperator&lt;String&gt; changeUppercase = String::toUpperCase;<br>List&lt;String&gt; names = Arrays.asList(<span class="hljs-string">&quot;soyorin&quot;</span>, <span class="hljs-string">&quot;tomorin&quot;</span>, <span class="hljs-string">&quot;rikki&quot;</span>);<br>names.replaceAll(changeUppercase);<br></code></pre></td></tr></table></figure>
-
-<p>最後@Functionalinteface這個註解是用來標示Function的，假設我們有多個lambda都需要實作一個功能，而你可以使用介面去掌控它，但這個介面只是單純用來做Functional的定義的，所以為了把他與一般的類別作區隔，於是就可以加入@Functionalinterface做為區隔。</p>
-<p>以上就是解釋了，不知道看的人了不了解，希望各位除了知道初華就只會騙人之外，還可以學到更多Java的相關知識，連價最後一天，我要去繼續補Ave Mujica了，就這樣。</p>
+                <p>前一陣子開始在看微服務的書，剛好之前也是在做微服務，剛好跟現在同事在聊微服務時，發現自己對微服務的認識並沒有足夠清楚，於是決定好好學習，釐清這些系統架構的時代演進。本文主要會提到的有</p>
+<ul>
+<li>單體式架構(Monolithic Architecture)</li>
+<li>前後端分離架構</li>
+<li>分散式架構(Distribute Architecture)</li>
+<li>服務導向架構(Service Oriented Architecture)</li>
+<li>微服務架構(Microservice Architecture)</li>
+<li>無伺服器架構(Serverless Architecture)</li>
+</ul>
+<p>文可能會有點長，做好心理準備就跟我一起Go!!!!!</p>
+<h3 id="單體式架構-Monolithic-Architecture"><a href="#單體式架構-Monolithic-Architecture" class="headerlink" title="單體式架構(Monolithic Architecture)"></a>單體式架構(Monolithic Architecture)</h3><p>這是最早期的系統架構，也是最直觀的，總言之就是把所有的服務都打包在同一個應用程式中，假設我們有一個寫了一個網頁RPG遊戲，單體式架構是這樣的。<br>[圖片]<br>遊戲伺服器獨立存在，內部主要由 裝備、武器、角色、關卡構成，這個階段的系統架構好處是簡單直觀，壞處有不少，比方說規模逐漸擴大後，維護與Legacy Code的問題逐漸嚴重，只要一個錯誤就會導致整個伺服器無法運作，風險極高。<br>後續為了使架構可以更靈活，漸漸出現了「MVC」的概念，將「資料模型」、「控制器」、「視圖」分開來，儘管都還是在同一個系統中，但也漸漸確立了分門別類的方向。<br>在軟體架構發展的過程中，漸漸地出現了「前後端分離」的概念。</p>
+<h3 id="前後端分離"><a href="#前後端分離" class="headerlink" title="前後端分離"></a>前後端分離</h3><p>前後端分離之所以會出現有幾個原因，除了前面提到的MVC外，也包含了客戶端的設備運算能力增長，在前後端分離出現之前，伺服器掌控了後端的資料處理，資料庫的存入與前端的網頁顯示。如圖，Client向伺服器請求資源時，伺服器回傳HTML整個檔案，Client端的瀏覽器只需要開啟就好。<br>[圖片]<br>在前後端分離推出後，我們開始將畫面邏輯相關的處理放到瀏覽器上，前端有能力處理視圖相關功能後，伺服器就可以使用更輕量的JSON結構。<br>儘管目前已經將前後端分離，但在大型系統中，就算不包含視圖處理，專案還是太大了。於是開發者們決定根據其他角度進行功能的拆分。</p>
+<h3 id="垂直應用架構"><a href="#垂直應用架構" class="headerlink" title="垂直應用架構"></a>垂直應用架構</h3><p>垂直應用架構是單體式架構朝向分散式架構邁進的其中一個原型，如圖，系統中包含 「裝備系統」、「武器系統」、「角色系統」、「關卡系統」，設計的目的是我們希望透過功能切分，讓彼此服務不受影響，獨立運行。<br>[圖片]<br>但是後來實際的商業場景中發現行不通，因為每個服務都必須要實作一些共通的功能，導致同一個邏輯在多個系統中重複出現，另外獨立運行造成系統間不易溝通，也因此後來這樣的系統被後續的分散式系統取代了</p>
+<h3 id="分散式架構-Distribute-Architecture"><a href="#分散式架構-Distribute-Architecture" class="headerlink" title="分散式架構(Distribute Architecture)"></a>分散式架構(Distribute Architecture)</h3><p>與「垂直應用架構」相比，「分布式應用架構」是真正意義上的實現系統間遠端通訊。 關鍵就在「遠端程序調用（RPC）」。<br>試想，在過去我們要如何讓兩隻遠端程式相互溝通呢？<br>我們可以將資料「序列化」，再經由各種不同介面或協定來傳輸，常見的傳輸協議如「HTTP」、「TCP」、「UDP」、「FTP」⋯等，而「RPC」就是這段過程的「通訊協議」，它的目的就是：「讓調用遠端程式時的操作就像是在調用本地端的程式一樣。」</p>
 
                 
               </div>
@@ -368,9 +348,13 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Java/" class="print-no-link">#Java</a>
+        <a href="/tags/System-Design/" class="print-no-link">#System Design</a>
       
-        <a href="/tags/Functional-Programming/" class="print-no-link">#Functional Programming</a>
+        <a href="/tags/Microservice/" class="print-no-link">#Microservice</a>
+      
+        <a href="/tags/Distribute-System/" class="print-no-link">#Distribute System</a>
+      
+        <a href="/tags/Basic/" class="print-no-link">#Basic</a>
       
     </div>
   
@@ -382,8 +366,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>說明Java @Functionalinterface 的功用</div>
-      <div>https://clark1945.github.io/2025/02/02/說明Java-Functionalinterface-的功用/</div>
+      <div>(未完成) 現代系統架構的演進-單體式系統至微服務</div>
+      <div>https://clark1945.github.io/2025/02/02/現代系統架構的演進-單體式系統至微服務/</div>
     </div>
     <div class="license-meta">
       
@@ -427,9 +411,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/02/02/%E7%8F%BE%E4%BB%A3%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B%E7%9A%84%E6%BC%94%E9%80%B2-%E5%96%AE%E9%AB%94%E5%BC%8F%E7%B3%BB%E7%B5%B1%E8%87%B3%E5%BE%AE%E6%9C%8D%E5%8B%99/" title="(未完成) 現代系統架構的演進-單體式系統至微服務">
+                      <a href="/2025/02/28/%E9%87%8D%E6%96%B0%E5%AD%B8Python-1/" title="重新學Python (1)">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">(未完成) 現代系統架構的演進-單體式系統至微服務</span>
+                        <span class="hidden-mobile">重新學Python (1)</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -437,8 +421,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/01/25/HATEOAS-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F/" title="HATEOAS 是什麼？">
-                        <span class="hidden-mobile">HATEOAS 是什麼？</span>
+                      <a href="/2025/02/02/%E8%AA%AA%E6%98%8EJava-Functionalinterface-%E7%9A%84%E5%8A%9F%E7%94%A8/" title="說明Java @Functionalinterface 的功用">
+                        <span class="hidden-mobile">說明Java @Functionalinterface 的功用</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -458,8 +442,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'https://clark1945.github.io/2025/02/02/%E8%AA%AA%E6%98%8EJava-Functionalinterface-%E7%9A%84%E5%8A%9F%E7%94%A8/';
-          this.page.identifier = '/2025/02/02/%E8%AA%AA%E6%98%8EJava-Functionalinterface-%E7%9A%84%E5%8A%9F%E7%94%A8/';
+          this.page.url = 'https://clark1945.github.io/2025/02/02/%E7%8F%BE%E4%BB%A3%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B%E7%9A%84%E6%BC%94%E9%80%B2-%E5%96%AE%E9%AB%94%E5%BC%8F%E7%B3%BB%E7%B5%B1%E8%87%B3%E5%BE%AE%E6%9C%8D%E5%8B%99/';
+          this.page.identifier = '/2025/02/02/%E7%8F%BE%E4%BB%A3%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B%E7%9A%84%E6%BC%94%E9%80%B2-%E5%96%AE%E9%AB%94%E5%BC%8F%E7%B3%BB%E7%B5%B1%E8%87%B3%E5%BE%AE%E6%9C%8D%E5%8B%99/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');
