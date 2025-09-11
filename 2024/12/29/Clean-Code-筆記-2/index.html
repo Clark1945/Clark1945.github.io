@@ -1,0 +1,765 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本次是繼續上回的Clean Code筆記，廢話不多說，Let’s us begin. TDDPrinciple 撰寫一個單元測試前不應該撰寫產品程式碼 只撰寫剛好能通過的產品程式碼 只撰寫剛好能通過當前測試失敗的產品程式碼  注意要點 撰寫測試的好處可以讓你更動程式碼時不那麼恐懼， 需要注意的是，測試程式碼同樣需要與時俱進，若沒有跟著調整容易造成程式碼的腐敗，最終測試程式碼的品質同樣影響產品程式碼">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Clean-Code-筆記-2">
+<meta property="og:url" content="https://clark1945.github.io/2024/12/29/Clean-Code-%E7%AD%86%E8%A8%98-2/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="本次是繼續上回的Clean Code筆記，廢話不多說，Let’s us begin. TDDPrinciple 撰寫一個單元測試前不應該撰寫產品程式碼 只撰寫剛好能通過的產品程式碼 只撰寫剛好能通過當前測試失敗的產品程式碼  注意要點 撰寫測試的好處可以讓你更動程式碼時不那麼恐懼， 需要注意的是，測試程式碼同樣需要與時俱進，若沒有跟著調整容易造成程式碼的腐敗，最終測試程式碼的品質同樣影響產品程式碼">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://clark1945.github.io/img/clean_code.jpg">
+<meta property="article:published_time" content="2024-12-29T03:53:08.000Z">
+<meta property="article:modified_time" content="2025-09-11T03:28:27.148Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Clean Code">
+<meta property="article:tag" content="Programming">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://clark1945.github.io/img/clean_code.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Clean-Code-筆記-2 - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Clean-Code-筆記-2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-29 11:53" pubdate>
+          December 29, 2024 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Clean-Code-筆記-2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本次是繼續上回的Clean Code筆記，廢話不多說，Let’s us begin.</p>
+<h2 id="TDD"><a href="#TDD" class="headerlink" title="TDD"></a>TDD</h2><h4 id="Principle"><a href="#Principle" class="headerlink" title="Principle"></a>Principle</h4><ol>
+<li>撰寫一個單元測試前不應該撰寫產品程式碼</li>
+<li>只撰寫剛好能通過的產品程式碼</li>
+<li>只撰寫剛好能通過當前測試失敗的產品程式碼</li>
+</ol>
+<h4 id="注意要點"><a href="#注意要點" class="headerlink" title="注意要點"></a>注意要點</h4><ul>
+<li>撰寫測試的好處可以讓你更動程式碼時不那麼恐懼， 需要注意的是，測試程式碼同樣需要與時俱進，若沒有跟著調整容易造成程式碼的腐敗，最終測試程式碼的品質同樣影響產品程式碼。</li>
+<li>測試程式碼要求的是可讀性 闡明性(Clarity)，而不是效能。</li>
+<li>盡量維持一個測試一個斷言(Assert)，讓一個測試只會顯示一個結果，方便開發者評估功能。(一個測試只測試一個概念)</li>
+</ul>
+<h4 id="TDD-FIRST原則"><a href="#TDD-FIRST原則" class="headerlink" title="TDD FIRST原則"></a>TDD FIRST原則</h4><ul>
+<li>Fast 測試應該要夠快</li>
+<li>Independent 測試應該要能夠獨立運行，不依賴其他測試程式</li>
+<li>Repeatable 測試應該要能夠重複使用</li>
+<li>Self-Validating 測試應該要能夠自我驗證，顯示要測試的概念是否成功運作</li>
+<li>Timely 要在產品程式之前被撰寫，若是之後才撰寫，經常會發現撰寫出來的產品程式碼並不好被測試</li>
+</ul>
+<h2 id="Class-Level"><a href="#Class-Level" class="headerlink" title="Class-Level"></a>Class-Level</h2><h4 id="單一職責原則-Single-Responsibility-Principle-SRP"><a href="#單一職責原則-Single-Responsibility-Principle-SRP" class="headerlink" title="單一職責原則(Single Responsibility Principle, SRP)"></a>單一職責原則(Single Responsibility Principle, SRP)</h4><p>單一職責原則主張，一個類別或一個模組應該只能有一個，而且只能有一個被修改的理由。<br>個人對這段的理解是，一個類別的職責應該是很明確的，他只該負責一件事，而需要修改類別的原因，<br>必須得是當初認為要做的那件事。 比方說有一個專門處理報表Excel輸出的類別ExcelObject，若今天需要做輸出Excel之外的事 ，比方說：判斷格式、字串拼接、欄位驗證、給定預設值，若因為這些理由而修改了ExcelObject，就是違反了SRP。</p>
+<h4 id="凝聚力"><a href="#凝聚力" class="headerlink" title="凝聚力"></a>凝聚力</h4><p>類別中的方法，盡量讓每個變數都被使用在每一個方法中。<br>當類別失去凝聚力時，就應該將它拆開</p>
+<h4 id="開放閉合原則-Open-Closed-Principle"><a href="#開放閉合原則-Open-Closed-Principle" class="headerlink" title="開放閉合原則(Open-Closed Principle)"></a>開放閉合原則(Open-Closed Principle)</h4><p>類別應該要對擴充具備開放性，但對修改具有閉合性。</p>
+<h4 id="隔離修改"><a href="#隔離修改" class="headerlink" title="隔離修改"></a>隔離修改</h4><p>類別之間不應該實體依賴，而是依賴抽象，透過一層抽象隔離變化，責任分明且易於測試。</p>
+<h2 id="System"><a href="#System" class="headerlink" title="System"></a>System</h2><h4 id="依賴注入-Dependency-Injection-DI"><a href="#依賴注入-Dependency-Injection-DI" class="headerlink" title="依賴注入(Dependency Injection, DI)"></a>依賴注入(Dependency Injection, DI)</h4><p>將物件的建立過程從使用中分離出來，這是控制反轉(Inversion of Control, IOC)在相依性管理裡的一種應用手段。控制反轉是將某個物件的第二個職責，移至其他專注於該職責的物件裡，也因此支援了SRP原則。<br>在相依性管理的範疇中，一個物件不應該負責實體化對本身的相依。而是將責任交給外部。建議可以透過抽象工廠進行。</p>
+<h4 id="抽象工廠-Abstract-Factory-Example"><a href="#抽象工廠-Abstract-Factory-Example" class="headerlink" title="抽象工廠(Abstract Factory) Example"></a>抽象工廠(Abstract Factory) Example</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 抽象產品：Button</span><br><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Button</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">render</span><span class="hljs-params">()</span>;<br>&#125;<br><br><span class="hljs-comment">// 抽象產品：TextBox</span><br><span class="hljs-keyword">interface</span> <span class="hljs-title class_">TextBox</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">render</span><span class="hljs-params">()</span>;<br>&#125;<br><br><span class="hljs-comment">// 具體產品：WindowsButton</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">WindowsButton</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Button</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">render</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Rendering a Windows-style Button&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 具體產品：WindowsTextBox</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">WindowsTextBox</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">TextBox</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">render</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Rendering a Windows-style TextBox&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 具體產品：MacOSButton</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MacOSButton</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Button</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">render</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Rendering a MacOS-style Button&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 具體產品：MacOSTextBox</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MacOSTextBox</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">TextBox</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">render</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Rendering a MacOS-style TextBox&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 抽象工廠：UIFactory</span><br><span class="hljs-keyword">interface</span> <span class="hljs-title class_">UIFactory</span> &#123;<br>    Button <span class="hljs-title function_">createButton</span><span class="hljs-params">()</span>;<br>    TextBox <span class="hljs-title function_">createTextBox</span><span class="hljs-params">()</span>;<br>&#125;<br><br><span class="hljs-comment">// 具體工廠：WindowsFactory</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">WindowsFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">UIFactory</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Button <span class="hljs-title function_">createButton</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">WindowsButton</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> TextBox <span class="hljs-title function_">createTextBox</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">WindowsTextBox</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 具體工廠：MacOSFactory</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MacOSFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">UIFactory</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Button <span class="hljs-title function_">createButton</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MacOSButton</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> TextBox <span class="hljs-title function_">createTextBox</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MacOSTextBox</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 客戶端</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AbstractFactoryExample</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-comment">// 客戶端選擇一個工廠</span><br>        <span class="hljs-type">UIFactory</span> <span class="hljs-variable">factory</span> <span class="hljs-operator">=</span> getFactory(<span class="hljs-string">&quot;Windows&quot;</span>); <span class="hljs-comment">// 可切換為 &quot;MacOS&quot;</span><br><br>        <span class="hljs-comment">// 使用工廠創建產品</span><br>        <span class="hljs-type">Button</span> <span class="hljs-variable">button</span> <span class="hljs-operator">=</span> factory.createButton();<br>        <span class="hljs-type">TextBox</span> <span class="hljs-variable">textBox</span> <span class="hljs-operator">=</span> factory.createTextBox();<br><br>        <span class="hljs-comment">// 渲染產品</span><br>        button.render();<br>        textBox.render();<br>    &#125;<br><br>    <span class="hljs-comment">// 工廠選擇邏輯</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> UIFactory <span class="hljs-title function_">getFactory</span><span class="hljs-params">(String osType)</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">switch</span> (osType) &#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;Windows&quot;</span> -&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">WindowsFactory</span>();<br>            <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;MacOS&quot;</span> -&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">MacOSFactory</span>();<br>            <span class="hljs-keyword">default</span> -&gt; <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(<span class="hljs-string">&quot;Unknown OS type&quot;</span>);<br>        &#125;;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>▲ 這樣的設計可以靈活切換不同風格的 UI，且對於新的 UI 主題（如 Linux），只需添加新的工廠和產品類即可，無需修改現有代碼。</p>
+<h3 id="橫切關注點"><a href="#橫切關注點" class="headerlink" title="橫切關注點"></a>橫切關注點</h3><p>假設我們有一個交易系統，流程如下：</p>
+<ol>
+<li>登入-&gt; 身分驗證  -&gt; 付款</li>
+<li>登入-&gt; 身分驗證  -&gt; 退款</li>
+</ol>
+<p>嘗試以這樣的角度去理解系統的流程，你會發現「登入」與「身分驗證」並不是真正核心的功能，且兩者重複存在。為了使我們可以更專注在真正重要的商業流程上，我們可以將那些次要的細節作為一個個切片(Aspects)從主流程切割出來，這一個步驟我們稱之為關注點分離。<br>而實現這樣的構想的技術就是Java Proxy機制，或是AOP(又名切面導向編程)。<br>關於AOP，可以參考我的另一篇文章：<a target="_blank" rel="noopener" href="https://medium.com/@ziegler7359/spring-boot-aop-%E5%AD%B8%E7%BF%92%E5%BF%83%E5%BE%97-392e2b83cd54">Spring AOP</a></p>
+<p>大約整理到這邊，後面Clean Code的相關討論幾乎都是案例題目了，這邊就不拿出來討論了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Software/" class="category-chain-item">Software</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+        <a href="/tags/Clean-Code/" class="print-no-link">#Clean Code</a>
+      
+        <a href="/tags/Programming/" class="print-no-link">#Programming</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Clean-Code-筆記-2</div>
+      <div>https://clark1945.github.io/2024/12/29/Clean-Code-筆記-2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 29, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/30/Linkedin-%E4%BA%BA%E8%B3%87%E6%80%8E%E9%BA%BC%E7%9C%8B%E4%BD%A0%EF%BC%9F/" title="Linkedin-人資怎麼看你？">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linkedin-人資怎麼看你？</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/26/Clean-Code-%E7%AD%86%E8%A8%98-1/" title="Clean Code 筆記(1)">
+                        <span class="hidden-mobile">Clean Code 筆記(1)</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2024/12/29/Clean-Code-%E7%AD%86%E8%A8%98-2/';
+          this.page.identifier = '/2024/12/29/Clean-Code-%E7%AD%86%E8%A8%98-2/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Access 
+        <span id="busuanzi_value_site_pv"></span>
+         time
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        User Amount 
+        <span id="busuanzi_value_site_uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,755 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SpringBoot針對一個Rest Web Service，提出了三層式架構的概念，分別是Controller、Service、Repository。 以下我們簡單建立一個基本的三層式架構應用程式，並說明其中概念。 Controllers Controller是API的進入口，主要的功能是傳入參數的檢測與一些資料的前處理。舉例來說，一個最基本的Cotnroller會像這樣。 1234567891">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot的三層式架構">
+<meta property="og:url" content="https://clark1945.github.io/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="SpringBoot針對一個Rest Web Service，提出了三層式架構的概念，分別是Controller、Service、Repository。 以下我們簡單建立一個基本的三層式架構應用程式，並說明其中概念。 Controllers Controller是API的進入口，主要的功能是傳入參數的檢測與一些資料的前處理。舉例來說，一個最基本的Cotnroller會像這樣。 1234567891">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://clark1945.github.io/img/Java_logo.png">
+<meta property="article:published_time" content="2024-10-08T12:26:06.000Z">
+<meta property="article:modified_time" content="2025-09-11T03:28:27.153Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="SpringBoot">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://clark1945.github.io/img/Java_logo.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>SpringBoot的三層式架構 - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SpringBoot的三層式架構"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-08 20:26" pubdate>
+          October 8, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          798 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SpringBoot的三層式架構</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>SpringBoot針對一個Rest Web Service，提出了三層式架構的概念，分別是Controller、Service、Repository。</p>
+<p>以下我們簡單建立一個基本的三層式架構應用程式，並說明其中概念。</p>
+<p>Controllers</p>
+<p>Controller是API的進入口，主要的功能是傳入參數的檢測與一些資料的前處理。舉例來說，一個最基本的Cotnroller會像這樣。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">RestController</span><br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">StudentController</span> &#123;<br><br>    @<span class="hljs-title class_">Autowired</span><br>    private <span class="hljs-title class_">StudentService</span> studentService;<br><br>    @<span class="hljs-title class_">GetMapping</span>(<span class="hljs-string">&quot;/getOneStudent&quot;</span>)<br>    public <span class="hljs-title class_">Student</span> <span class="hljs-title function_">getOneStudent</span>(<span class="hljs-params">@RequestParam(<span class="hljs-string">&quot;name&quot;</span>) <span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-keyword">if</span> (!name.<span class="hljs-title function_">matches</span>(<span class="hljs-string">&quot;/s+&quot;</span>))&#123;<br>            <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(name + <span class="hljs-string">&quot;非姓名欄位&quot;</span>);<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> studentService.<span class="hljs-title function_">getStudent</span>(name);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>@RestController 是Spring的註解，代表這個class檔作為一個REST API 的 Controller被定義，在這裡可以撰寫各種endPoint(API入口)。</p>
+<p>@Autowired 代表了交給Spring 管理的 Bean，並已全域模式注入到這個檔案中，這部分之後我會之後再說明，現在只需要了解它是一個Service，可以幫我們處理麻煩的事情就好。</p>
+<p>@GetMapping(”&#x2F;getOneStudent”) 代表了一個endPoint，路徑為 &#x2F;getOneStudent。如果你啟動的話，他預設會連線到<a target="_blank" rel="noopener" href="http://localhost:8080/getOneMerchant%E9%80%99%E5%80%8B%E8%B7%AF%E5%BE%91%E4%B8%8B%E3%80%82">http://localhost:8080/getOneMerchant這個路徑下。</a></p>
+<p>EndPoint內部接收了一個參數，如果當初URL帶入的查詢條件有包含name的話，這裡就會被載入進去，他接著會利用正規表達式判斷String是否符合純英文不包含數字，如果判斷失敗的話將會回傳Null，否則呼叫StudentService.getStudent()方法取得Student資料。</p>
+<p>看完了Controller部分，我們接著來了解實際上API是怎麼取得我們所需要的資料的。</p>
+<p>Service是程式主要的功能區域，處理一個API最為複雜的商業邏輯部分。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">Service</span><br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">StudentService</span> &#123;<br><br>    @<span class="hljs-title class_">Autowired</span><br>    private <span class="hljs-title class_">StudentRepository</span> studentRepository;<br><br>    public <span class="hljs-title class_">Student</span> <span class="hljs-title function_">getStudent</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-keyword">return</span> studentRepository.<span class="hljs-title function_">findByName</span>(name);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>@Service 宣告了這個.class是一個Service(廢話)，當中@Autowired引入了StudentRepository。</p>
+<p>getStudent()的方法很簡單，就是又呼叫了一層，取得Student的資料。</p>
+<p>你也許現在會很困惑為什麼要搞得這麼麻煩，但我必須說，當系統功能逐漸複雜，規模逐漸增大後，良好的把功能切分出來是很重要的，Debug時你就會很感謝的。</p>
+<p>最後是Repository的部分，Repository掌管與資料庫的互動，主要是把資料庫的部分從Service層獨立出來。實際的程式碼會像是以下：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jsx">@<span class="hljs-title class_">Repository</span><br>public interface <span class="hljs-title class_">StudentRepository</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">CrudRepository</span>&lt;<span class="hljs-title class_">Student</span>, <span class="hljs-title class_">Long</span>&gt; &#123;<br>    <span class="hljs-title class_">Student</span> <span class="hljs-title function_">findByName</span>(<span class="hljs-title class_">String</span> name);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>@Repository的功用…額我就不說了，你們猜得到的。這個StudentRepository的介面繼承了CrudRepository這個類別，這意味著它可以使用以下方法</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs jsx">public interface <span class="hljs-title class_">CrudRepository</span>&lt;T, <span class="hljs-variable constant_">ID</span>&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Repository</span>&lt;T, <span class="hljs-variable constant_">ID</span>&gt; &#123;<br>    &lt;S <span class="hljs-keyword">extends</span> T&gt; S <span class="hljs-title function_">save</span>(S entity);<br>    &lt;S <span class="hljs-keyword">extends</span> T&gt; <span class="hljs-title class_">Iterable</span>&lt;S&gt; <span class="hljs-title function_">saveAll</span>(<span class="hljs-title class_">Iterable</span>&lt;S&gt; entities);<br>    <span class="hljs-title class_">Optional</span>&lt;T&gt; <span class="hljs-title function_">findById</span>(<span class="hljs-variable constant_">ID</span> id);<br>    boolean <span class="hljs-title function_">existsById</span>(<span class="hljs-variable constant_">ID</span> id);<br>    <span class="hljs-title class_">Iterable</span>&lt;T&gt; <span class="hljs-title function_">findAll</span>();<br>    <span class="hljs-title class_">Iterable</span>&lt;T&gt; <span class="hljs-title function_">findAllById</span>(<span class="hljs-title class_">Iterable</span>&lt;<span class="hljs-variable constant_">ID</span>&gt; ids);<br>    long <span class="hljs-title function_">count</span>();<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteById</span>(<span class="hljs-variable constant_">ID</span> id);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">delete</span>(T entity);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteAllById</span>(<span class="hljs-title class_">Iterable</span>&lt;? <span class="hljs-keyword">extends</span> <span class="hljs-variable constant_">ID</span>&gt; ids);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteAll</span>(<span class="hljs-title class_">Iterable</span>&lt;? <span class="hljs-keyword">extends</span> T&gt; entities);<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">deleteAll</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上面我就不一一細說，總之就是符合一般日常的對資料庫的異動功能。像上面的功能就是利用Name從資料庫中找出Student的資料，並回傳到Service，再回傳到Controller，最後回覆給API的使用者。以上就是一個最基本的三層式架構的應用程式。</p>
+<p>今天的部分就到此為止了，明天見吧。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Software/" class="category-chain-item">Software</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+        <a href="/tags/SpringBoot/" class="print-no-link">#SpringBoot</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SpringBoot的三層式架構</div>
+      <div>https://clark1945.github.io/2024/10/08/SpringBoot的三層式架構/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 8, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/11/Spring-Lombok%E4%BB%8B%E7%B4%B9/" title="Spring @Lombok介紹">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Spring @Lombok介紹</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/07/%E5%BF%AB%E9%80%9F%E9%8D%B5%E5%A5%BD%E4%B8%80%E5%80%8BSpringBoot%E5%B0%88%E6%A1%88/" title="快速鍵好一個SpringBoot專案">
+                        <span class="hidden-mobile">快速鍵好一個SpringBoot專案</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/';
+          this.page.identifier = '/2024/10/08/SpringBoot%E7%9A%84%E4%B8%89%E5%B1%A4%E5%BC%8F%E6%9E%B6%E6%A7%8B/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Access 
+        <span id="busuanzi_value_site_pv"></span>
+         time
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        User Amount 
+        <span id="busuanzi_value_site_uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

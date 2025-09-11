@@ -1,0 +1,836 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SpringBoot引入Spring Security做了什麼？Spring Boot 引入 Spring Security 後的預設行為：  自動保護所有 endpoint 提供預設帳號 (user) 與隨機密碼 提供登入&#x2F;登出表單 未認證的請求會導向登入頁或回傳 401 提供多種安全防護機制: CSRF 防護 Session Fixation 防護 強制 HTTPS (HSTS) 防">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Security探秘">
+<meta property="og:url" content="https://clark1945.github.io/2025/01/05/Spring-Security%E6%8E%A2%E7%A7%98/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="SpringBoot引入Spring Security做了什麼？Spring Boot 引入 Spring Security 後的預設行為：  自動保護所有 endpoint 提供預設帳號 (user) 與隨機密碼 提供登入&#x2F;登出表單 未認證的請求會導向登入頁或回傳 401 提供多種安全防護機制: CSRF 防護 Session Fixation 防護 強制 HTTPS (HSTS) 防">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://clark1945.github.io/img/SpringBoot_logo.png">
+<meta property="article:published_time" content="2025-01-05T10:56:10.000Z">
+<meta property="article:modified_time" content="2025-09-11T03:28:27.152Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Spring Security">
+<meta property="article:tag" content="JWT">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://clark1945.github.io/img/SpringBoot_logo.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Spring Security探秘 - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Spring Security探秘"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 18:56" pubdate>
+          January 5, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Spring Security探秘</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="SpringBoot引入Spring-Security做了什麼？"><a href="#SpringBoot引入Spring-Security做了什麼？" class="headerlink" title="SpringBoot引入Spring Security做了什麼？"></a>SpringBoot引入Spring Security做了什麼？</h3><p>Spring Boot 引入 Spring Security 後的預設行為：</p>
+<ul>
+<li>自動保護所有 endpoint</li>
+<li>提供預設帳號 (user) 與隨機密碼</li>
+<li>提供登入&#x2F;登出表單</li>
+<li>未認證的請求會導向登入頁或回傳 401</li>
+<li>提供多種安全防護機制:<ul>
+<li>CSRF 防護</li>
+<li>Session Fixation 防護</li>
+<li>強制 HTTPS (HSTS)</li>
+<li>防止內容類型嗅探</li>
+<li>緩存控制</li>
+<li>點擊劫持防護 (X-Frame-Options)</li>
+</ul>
+</li>
+<li>使用 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-hsts">Strict-Transport-Security</a>確保是HTTPS，HSTS用於強制瀏覽器僅通過 HTTPS（而非 HTTP）訪問該網站</li>
+<li>使用 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-content-type-options">X-Content-Type-Options</a> 以緩解 <a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-content-type-options">sniffing attacks</a></li>
+<li>使用 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-cache-control">Cache Control headers</a> that 保護授權後的資源，Cache-Control 和 Pragma 標頭用於指示瀏覽器或代理不要快取授權後的敏感資源，防止未經授權的用戶訪問緩存。</li>
+<li>使用 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-frame-options">X-Frame-Options</a> 緩解 <a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-frame-options">Clickjacking</a>，頭防止網頁內容被嵌入到 <code>&lt;iframe&gt;</code> 中，避免 Clickjacking 攻擊</li>
+<li>與<code>HttpServletReqeust</code>的認證方法整合</li>
+<li>發布成功認證與失敗認證訊息 (<code>AuthenticationSuccessHandler</code> 與 <code>AuthenticationFailureHandler</code> )</li>
+</ul>
+<h4 id="Session-Fixation攻擊模式介紹"><a href="#Session-Fixation攻擊模式介紹" class="headerlink" title="Session Fixation攻擊模式介紹"></a>Session Fixation攻擊模式介紹</h4><ol>
+<li><strong>目標</strong>：<ul>
+<li>攻擊者試圖固定用戶的會話ID，然後在用戶登錄後劫持會話。</li>
+</ul>
+</li>
+<li><strong>方法</strong>：<ul>
+<li>攻擊者需要事先將特定的會話ID注入到用戶的會話中。</li>
+</ul>
+</li>
+<li><strong>SpringSecurity防禦措施</strong>：<ul>
+<li>在用戶登錄後重新生成新的會話ID，使用安全屬性的cookie設置（例如HttpOnly、Secure）。</li>
+</ul>
+</li>
+</ol>
+<h4 id="CSRF攻擊模式介紹"><a href="#CSRF攻擊模式介紹" class="headerlink" title="CSRF攻擊模式介紹"></a>CSRF攻擊模式介紹</h4><ol>
+<li><strong>目標</strong>：<ul>
+<li>攻擊者利用用戶已經登錄的狀態，在未經用戶同意的情況下執行操作。</li>
+</ul>
+</li>
+<li><strong>方法</strong>：<ul>
+<li>攻擊者誘導用戶訪問惡意網站，然後利用用戶的瀏覽器發送請求。</li>
+</ul>
+</li>
+<li><strong>SpringSecurity防禦措施</strong>：<ul>
+<li>使用CSRF令牌（token），驗證請求來源的Referer頭，確保關鍵操作需要用戶確認（例如多因素認證）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="Spring-Security基本設定步驟："><a href="#Spring-Security基本設定步驟：" class="headerlink" title="Spring Security基本設定步驟："></a>Spring Security基本設定步驟：</h3><h4 id="認證流程的重要元件："><a href="#認證流程的重要元件：" class="headerlink" title="認證流程的重要元件："></a>認證流程的重要元件：</h4><ul>
+<li>AuthenticationManager: 負責認證流程</li>
+<li>UserDetailsService: 載入使用者資訊</li>
+<li>PasswordEncoder: 密碼編碼與驗證</li>
+<li>SecurityContextHolder: 儲存認證信息</li>
+<li>SecurityContext: 保存當前使用者的認證信息</li>
+</ul>
+<p>基本範例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-meta">@EnableWebSecurity</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SecurityConfig</span> &#123;<br>    <span class="hljs-comment">// 1. 配置使用者資訊</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> InMemoryUserDetailsManager <span class="hljs-title function_">userDetailsManager</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 建立使用者帳號、密碼、權限</span><br>       <span class="hljs-type">UserDetails</span> <span class="hljs-variable">user1</span> <span class="hljs-operator">=</span> User<br>               .withUsername(<span class="hljs-string">&quot;user1&quot;</span>)<br>               .password(<span class="hljs-string">&quot;&#123;noop&#125;111&quot;</span>)<br>               .authorities(<span class="hljs-string">&quot;STUDENT&quot;</span>)<br>               .build();<br>       <span class="hljs-type">UserDetails</span> <span class="hljs-variable">user2</span> <span class="hljs-operator">=</span> User<br>               .withUsername(<span class="hljs-string">&quot;user2&quot;</span>)<br>               .password(<span class="hljs-string">&quot;&#123;noop&#125;222&quot;</span>)<br>               .authorities(<span class="hljs-string">&quot;TEACHER&quot;</span>)<br>               .build();<br>       <span class="hljs-type">UserDetails</span> <span class="hljs-variable">user3</span> <span class="hljs-operator">=</span> User<br>               .withUsername(<span class="hljs-string">&quot;user3&quot;</span>)<br>               .password(<span class="hljs-string">&quot;&#123;bcrypt&#125;333&quot;</span>)<br>               .authorities(<span class="hljs-string">&quot;ADMIN&quot;</span>, <span class="hljs-string">&quot;TEACHER&quot;</span>)<br>               .build();<br>       <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">InMemoryUserDetailsManager</span>(List.of(user1, user2, user3));<br>    &#125;<br><br>    <span class="hljs-comment">// 2. 配置安全過濾器鏈</span><br>    <span class="hljs-meta">@Bean</span> <br>    <span class="hljs-keyword">public</span> SecurityFilterChain <span class="hljs-title function_">filterChain</span><span class="hljs-params">(HttpSecurity http)</span> &#123;<br>        <span class="hljs-keyword">return</span> http<br>            .authorizeRequests() <span class="hljs-comment">// 設定訪問權限</span><br>            .formLogin()        <span class="hljs-comment">// 啟用表單登入</span><br>            .httpBasic()       <span class="hljs-comment">// 啟用 HTTP Basic 認證</span><br>            .build();<br>    &#125;<br>    <span class="hljs-comment">// OR</span><br>   <span class="hljs-meta">@Bean</span><br>   <span class="hljs-keyword">public</span> SecurityFilterChain <span class="hljs-title function_">securityFilterChain</span><span class="hljs-params">(HttpSecurity httpSecurity)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>      <span class="hljs-keyword">return</span> httpSecurity<br>              .formLogin(Customizer.withDefaults())<br>              .authorizeHttpRequests(requests -&gt; requests<br>                      .requestMatchers(HttpMethod.GET, <span class="hljs-string">&quot;/register&quot;</span>).permitAll()<br>                      .requestMatchers(HttpMethod.GET, <span class="hljs-string">&quot;/selected-courses&quot;</span>).hasAuthority(<span class="hljs-string">&quot;STUDENT&quot;</span>)<br>                      .requestMatchers(HttpMethod.GET, <span class="hljs-string">&quot;/course-feedback&quot;</span>).hasAnyAuthority(<span class="hljs-string">&quot;TEACHER&quot;</span>, <span class="hljs-string">&quot;ADMIN&quot;</span>)<br>                      .requestMatchers(HttpMethod.GET, <span class="hljs-string">&quot;/members&quot;</span>).hasAuthority(<span class="hljs-string">&quot;ADMIN&quot;</span>)<br>                      .anyRequest().authenticated()<br>              )<br>              .csrf(csrf -&gt; csrf.disable())<br>              .build();<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>這裡註冊了一個SecurityFilterChain，定義它們要開放給具有哪些權限的人存取。<br>Spring Security 會將 HttpSecurity 物件注入到建立元件的方法中。透過該物件的一系列方法呼叫，我們能站在安全管理的角度，自定義 request 到達後端時的應對方式。<br>一開始的 formLogin 方法，是啟用先前的登入畫面，便於我們繼續進行測試。<br>接下來的 authorizeHttpRequests 方法，其用途是設定要如何進行授權。定義時，需提供「API」與「授權規則」這兩個部份。<br>呼叫 requestMatchers 方法，可傳入 API 路徑與 HTTP 方法；呼叫 anyRequests 方法，代表要對「其餘」的 API 做設定。這是有先後順序之分的，就像 Java 語言的「if → else if → else」，是由上而下逐一判斷。<br>提供完 API 後，接著要定義授權規則。以下舉例幾個可用的方法：</p>
+<table>
+<thead>
+<tr>
+<th>方法名稱</th>
+<th>意義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>permitAll</td>
+<td>不必登入就能存取。</td>
+</tr>
+<tr>
+<td>hasAuthority</td>
+<td>需具備某一個權限才能存取。</td>
+</tr>
+<tr>
+<td>hasAnyAuthority</td>
+<td>只要具備任一個權限就能存取。</td>
+</tr>
+<tr>
+<td>authenticated</td>
+<td>需登入才能存取。</td>
+</tr>
+</tbody></table>
+<p>看 <code>InMemoryUserDetailsManager</code> 類別的原始碼，會發現它頂層實作了 <code>UserDetailsService</code> 介面。該介面是 Spring Security 用來進行認證的重要元件。它提供一個叫做 <code>loadUserByUsername</code> 的方法，用途是接收帳號的值，並回傳內含使用者資料的 <code>UserDetails</code> 介面物件。繼續追蹤 <code>InMemoryUserDetailsManager</code> 的原始碼，會發現它是用 <code>Map</code> 資料結構來儲存使用者。<br>啟動程式時，Spring Security 會檢查專案中是否有 <code>UserDetailsService</code> 元件。若無，則自動建立一個 <code>InMemoryUserDetailsManager</code> 元件，並包含一個帳號為「user」、密碼為隨機（可在 console 找到）的使用者。<br>權限資料是透過 <code>GrantedAuthority</code> 介面來傳遞。Spring Security 內建了一個叫做 <code>SimpleGrantedAuthority</code> 的實作類別。</p>
+<p>認證方式還有許多變形，例如：</p>
+<h4 id="HTTP-BASIC-Not-Http-Form"><a href="#HTTP-BASIC-Not-Http-Form" class="headerlink" title="HTTP_BASIC (Not Http Form)"></a>HTTP_BASIC (Not Http Form)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// OR</span><br>   <span class="hljs-meta">@Bean</span><br>   <span class="hljs-keyword">public</span> SecurityFilterChain <span class="hljs-title function_">securityFilterChain</span><span class="hljs-params">(HttpSecurity httpSecurity)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>      <span class="hljs-keyword">return</span> httpSecurity<br>              .authorizeHttpRequests(requests -&gt; requests<br>                      .requestMatchers(HttpMethod.GET, <span class="hljs-string">&quot;/home&quot;</span>).permitAll()<br>                      .requestMatchers(HttpMethod.POST, <span class="hljs-string">&quot;/select-course&quot;</span>).hasAuthority(<span class="hljs-string">&quot;STUDENT&quot;</span>)<br>                      .requestMatchers(HttpMethod.PUT, <span class="hljs-string">&quot;/courses&quot;</span>).hasAuthority(<span class="hljs-string">&quot;TEACHER&quot;</span>)<br>                      .anyRequest().authenticated()<br>              )<br>              .csrf(csrf -&gt; csrf.disable())<br>              .httpBasic(Customizer.withDefaults())<br>              .build();<br>   &#125;<br></code></pre></td></tr></table></figure>
+<p>Spring Security 支援一種叫做「HTTP Basic」的認證方式。其做法是在「Authorization」這個 request header 攜帶帳號與密碼，就像在登入畫面輸入帳密一樣。而後端會在每次接收到 request 時，就先進行認證。</p>
+<p>透過上面內容，我們已經知道Spring Security提供了甚麼安裝防護，以及註冊User的過程。那假設我們想要在API取得有關User的資料的話，可以這麼做：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java">  <span class="hljs-meta">@GetMapping(&quot;/home&quot;)</span><br>  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">home</span><span class="hljs-params">()</span> &#123;<br>      <span class="hljs-type">SecurityContext</span> <span class="hljs-variable">context</span> <span class="hljs-operator">=</span> SecurityContextHolder.getContext();<br>      <span class="hljs-type">Authentication</span> <span class="hljs-variable">auth</span> <span class="hljs-operator">=</span> context.getAuthentication();<br>      <span class="hljs-type">Object</span> <span class="hljs-variable">principal</span> <span class="hljs-operator">=</span> auth.getPrincipal(); <span class="hljs-comment">// 取得Spring Security User，若無顯示anonymousUser</span><br><br>      <span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;anonymousUser&quot;</span>.equals(principal)) &#123;<br>          <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;你尚未經過身份認證&quot;</span>;<br>      &#125;<br>      <br>      <span class="hljs-type">UserDetails</span> <span class="hljs-variable">userDetails</span> <span class="hljs-operator">=</span> (UserDetails) principal;<br>      <span class="hljs-keyword">return</span> String.format(<br>              <span class="hljs-string">&quot;你好，%s，你的權限是：%s&quot;</span>,<br>              userDetails.getUsername(),<br>              userDetails.getAuthorities()<br>      );<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Spring Security 是透過 Java Servlet 的「Filter」，才能在 request 到達 Controller 前進行認證與授權。其中 <code>BasicAuthenticationFilter</code> 是專門處理 HTTP Basic 認證的 Filter。<br>Filter 接收到 request 後，首先 <code>AuthenticationConverter</code> 會從 <code>HttpServletRequest</code> 取出「Authorization」這個 header 的值，進行 Base64 解碼。解析出帳密後，封裝成 <code>Authentication</code> 物件。<br>而 <code>AuthenticationConverter</code> 介面的實作類別是 <code>BasicAuthenticationConverter</code>，它會回傳 <code>Authentication</code> 介面的實作類別 <code>UsernamePasswordAuthenticationToken</code>。解析出的帳號，會放在 <code>UsernamePasswordAuthenticationToken</code> 物件的 <code>principal</code> 欄位，而密碼放在 <code>credentials</code> 欄位。<br><img src="/img/spring_security_1.jpg" srcset="/img/loading.gif" lazyload alt="AuthenticationConverter"></p>
+<h3 id="AuthenticationManager-進行認證"><a href="#AuthenticationManager-進行認證" class="headerlink" title="AuthenticationManager 進行認證"></a>AuthenticationManager 進行認證</h3><p>將帳號與密碼的值封裝成 <code>Authentication</code> 介面的物件後，接下來 <code>AuthenticationManager</code> 會進行身份認證，並回傳另一個新的 <code>Authentication</code> 物件。兩個物件的差別在於，新物件會包含認證後的結果，即使用者資料。<br>另外，這個 <code>AuthenticationManager</code> 介面，有個實作類別叫做 <code>ProviderManager</code>，它擁有多個 <code>AuthenticationProvider</code> 介面的物件，讀者可理解成「認證功能的提供者」。<br><img src="/img/spring_security_2.jpg" srcset="/img/loading.gif" lazyload alt="AuthenticationConverter"><br>在 HTTP Basic 認證的情況下，會由 <code>DaoAuthenticationProvider</code> 提供認證功能。它接收 <code>Authentication</code> 物件後，使用了 <code>UserDetailsService</code> 與 <code>PasswordEncoder</code> 進行帳號與密碼的認證。</p>
+<p>認證成功後，<code>DaoAuthenticationProvider</code> 會將 <code>UserDetailsService</code> 回傳的 <code>UserDetails</code> 放入 <code>UsernamePasswordAuthenticationToken</code> 物件的 <code>principal</code> 欄位中，並以 <code>Authentication</code> 介面回傳。</p>
+<h3 id="SecurityContextHolderStrategy-管理認證資訊"><a href="#SecurityContextHolderStrategy-管理認證資訊" class="headerlink" title="SecurityContextHolderStrategy 管理認證資訊"></a>SecurityContextHolderStrategy 管理認證資訊</h3><p>Spring Security 會將認證後的使用者資料儲存於記憶體，讓我們在程式邏輯中能使用。就像在 Controller 的範例程式取出 <code>UserDetails</code> 物件那樣。<br>負責管理認證資訊的是 <code>SecurityContextHolder</code> 中的 <code>SecurityContextHolderStrategy</code>。後者是一個介面，代表管理的「策略」，Spring Security 內建數種實作好的策略。<br>而前者是一個類別，會在啟動程式時選擇其中一種管理策略。除此之外，就只是對外提供存取認證資訊的方法罷了。<br><img src="/img/spring_security_3.jpg" srcset="/img/loading.gif" lazyload alt="AuthenticationConverter"><br>預設的管理策略是 <code>ThreadLocalSecurityContextHolderStrategy</code>，它採用了「ThreadLocal」的技術，讓每個執行緒只能取得屬於自己的資料。因此，即便 Spring Boot 同時處理許多 request，但並不會意外地取得他人的認證資訊。<br>回到 Filter 的邏輯。接下來會產生一個 <code>SecurityContext</code> 介面的物件，將認證後的 <code>Authentication</code> 物件封裝起來。<br>最後將 <code>SecurityContext</code> 存回 <code>SecurityContextHolderStrategy</code>，就完成 HTTP Basic 認證的流程。</p>
+<p>認證方法有很多種，除了HTTP_BASIC，也可以考慮安全性更高的JWT Token 或是 Oauth。以下僅介紹JWT<br>JWT是一種特殊的Token格式，主要由</p>
+<ul>
+<li>Header (類型、演算法)</li>
+<li>Payload (聲明資訊)</li>
+<li>Signature (簽名)<br>三個部分形成，實務上則有兩種形式</li>
+<li>Access Token 用戶存取 API 時會攜帶於 request header，證明自己的身份。為了安全性，其有效期限較短，例如 1 小時。因此若外洩，則盜用者也無法使用太久的時間</li>
+<li>Refresh Token 在換發新的 Access Token 時提供。有效期限較長，例如 7 天。</li>
+</ul>
+<p>透過 Refresh Token，就能在不重新登入的條件下，取得新的 Access Token，有助於使用者體驗。等到 Refresh Token 到期，就真的要重新登入，取得以上 2 種 Token 了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Software/" class="category-chain-item">Software</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+        <a href="/tags/Spring-Security/" class="print-no-link">#Spring Security</a>
+      
+        <a href="/tags/JWT/" class="print-no-link">#JWT</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Spring Security探秘</div>
+      <div>https://clark1945.github.io/2025/01/05/Spring-Security探秘/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 5, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/07/SpringBoot-Spring-Validation%E4%BB%8B%E7%B4%B9/" title="SpringBoot Spring Validation介紹">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SpringBoot Spring Validation介紹</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/05/%E4%B8%80%E4%BA%9B%E9%9B%B6%E7%A2%8E%E7%9A%84SpringBoot%E5%B0%8F%E7%9F%A5%E8%AD%98/" title="一些零碎的SpringBoot小知識">
+                        <span class="hidden-mobile">一些零碎的SpringBoot小知識</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2025/01/05/Spring-Security%E6%8E%A2%E7%A7%98/';
+          this.page.identifier = '/2025/01/05/Spring-Security%E6%8E%A2%E7%A7%98/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Access 
+        <span id="busuanzi_value_site_pv"></span>
+         time
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        User Amount 
+        <span id="busuanzi_value_site_uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,826 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="這邊的是提到許多一個個SpringBoot的小知識，內容沒有多到可以變成一篇文章，所以整理在這裡： Spring Bean 模式Spring Bean 有Singleton、Prototype模式  Singleton 只有一個，每次作為Bean被呼叫時，都是使用同一個Bean。生命週期從容器啟動到第一次被請求而實體化開始，只要容器不銷毀或終止，這類的Bean就會一直存活。 原型 可有多個，每次作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些零碎的SpringBoot小知識">
+<meta property="og:url" content="https://clark1945.github.io/2025/01/05/%E4%B8%80%E4%BA%9B%E9%9B%B6%E7%A2%8E%E7%9A%84SpringBoot%E5%B0%8F%E7%9F%A5%E8%AD%98/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="這邊的是提到許多一個個SpringBoot的小知識，內容沒有多到可以變成一篇文章，所以整理在這裡： Spring Bean 模式Spring Bean 有Singleton、Prototype模式  Singleton 只有一個，每次作為Bean被呼叫時，都是使用同一個Bean。生命週期從容器啟動到第一次被請求而實體化開始，只要容器不銷毀或終止，這類的Bean就會一直存活。 原型 可有多個，每次作">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://clark1945.github.io/img/SpringBoot_logo.png">
+<meta property="article:published_time" content="2025-01-05T04:05:00.000Z">
+<meta property="article:modified_time" content="2025-09-11T03:28:27.154Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://clark1945.github.io/img/SpringBoot_logo.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>一些零碎的SpringBoot小知識 - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="一些零碎的SpringBoot小知識"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 12:05" pubdate>
+          January 5, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">一些零碎的SpringBoot小知識</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>這邊的是提到許多一個個SpringBoot的小知識，內容沒有多到可以變成一篇文章，所以整理在這裡：</p>
+<h2 id="Spring-Bean-模式"><a href="#Spring-Bean-模式" class="headerlink" title="Spring Bean 模式"></a>Spring Bean 模式</h2><p>Spring Bean 有Singleton、Prototype模式</p>
+<ul>
+<li>Singleton 只有一個，每次作為Bean被呼叫時，都是使用同一個Bean。生命週期從容器啟動到第一次被請求而實體化開始，只要容器不銷毀或終止，這類的Bean就會一直存活。</li>
+<li>原型 可有多個，每次作為Bean被呼叫時，都重新初始化，定義出一個新的Bean，再請求完成後便無法引用，請求方須要自己負責後續生命週期的管理工作，包括銷毀等等。</li>
+<li>Spring Bean 默認是 單例模式。</li>
+</ul>
+<h2 id="Spring-Data-JPA"><a href="#Spring-Data-JPA" class="headerlink" title="Spring Data JPA"></a>Spring Data JPA</h2><ul>
+<li>JPA的查詢語言是物件導向而非面向資料庫的，它以物件導向的自然語法構造查詢語句，可以看成是Hibernate HQL的等價物。</li>
+<li>JPA定義了獨特的JPQL（Java Persistence Query Language），JPQL是EJB QL的一種擴展，它操作對象是實體，而不是關聯資料庫的表。</li>
+<li>它而且能夠支持批量更新和修改、JOIN、GROUP BY、HAVING 等通常只有 SQL 才能夠提供的高級查詢特性，甚至還能夠支持子查詢。</li>
+</ul>
+<h2 id="Spring-Bean-掃描功能"><a href="#Spring-Bean-掃描功能" class="headerlink" title="Spring Bean 掃描功能"></a>Spring Bean 掃描功能</h2><ul>
+<li>為了能 Spring 能自動掃描 Bean 的存在，可以使用<code>@ComponentScan</code>，如此 Spring 預設會自動掃描同一套件以及其子套件下，是否有 Bean 元件的存在。</li>
+</ul>
+<h2 id="RestTemplate的妙用"><a href="#RestTemplate的妙用" class="headerlink" title="RestTemplate的妙用"></a>RestTemplate的妙用</h2><p>你可以使用RestTemplate發送request，並強行把回傳的string內容轉換成想要的Object</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> RespInfo <span class="hljs-title function_">SendRequest</span><span class="hljs-params">(Fundmentals funds, String body)</span> &#123;<br>        <span class="hljs-type">HttpHeaders</span> <span class="hljs-variable">headers</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpHeaders</span>(); <span class="hljs-comment">// 請求 Header</span><br>        headers.setContentType(MediaType.APPLICATION_JSON);<br>        headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON));<br>        headers.set(<span class="hljs-string">&quot;Ocp-Apim-Subscription-Key&quot;</span>, funds.getApiKey());<br>        HttpEntity&lt;String&gt; httpEntity = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpEntity</span>&lt;&gt;(body, headers);<br><br>        <span class="hljs-type">MappingJackson2HttpMessageConverter</span> <span class="hljs-variable">mappingJackson2HttpMessageConverter</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MappingJackson2HttpMessageConverter</span>();<br>        mappingJackson2HttpMessageConverter.setSupportedMediaTypes(Collections.singletonList(MediaType.TEXT_PLAIN)); <span class="hljs-comment">// OP Response Header 為 text/plain RestTemplate 預設 為 application/json (允許接受text/plain)</span><br><br>        <span class="hljs-type">RestTemplate</span> <span class="hljs-variable">restTemplate</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RestTemplateBuilder</span>()<br>                .setConnectTimeout(<span class="hljs-number">22000</span>)<span class="hljs-comment">// 連接Timeout單位毫秒</span><br>                .setReadTimeout(<span class="hljs-number">25000</span>) <span class="hljs-comment">// 讀取Timeout 單位毫秒</span><br>                .build();<br><br>        restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter);<span class="hljs-comment">// 調整可接收的 MediaType 不加會爆炸</span><br><br>        <span class="hljs-keyword">return</span> restTemplate<br>                .exchange(funds.getAccessUrl(), HttpMethod.POST, httpEntity, RespInfo.class)<br>                .getBody();<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="String-特性"><a href="#String-特性" class="headerlink" title="String 特性"></a>String 特性</h2><ul>
+<li>String 是不可變的，每次對String的操作都會產生新的String物件，建議使用StringBuffer或StringBuilder。</li>
+<li>當中StringBuffer是執行緒安全的，StringBuilder是非執行緒安全的，在單一執行緒下使用為好。</li>
+</ul>
+<h2 id="Controller-與-RestController"><a href="#Controller-與-RestController" class="headerlink" title="@Controller 與 @RestController"></a>@Controller 與 @RestController</h2><ul>
+<li>差別就在於是否包含視圖(View)</li>
+</ul>
+<h2 id="IOC-控制反轉。"><a href="#IOC-控制反轉。" class="headerlink" title="IOC 控制反轉。"></a>IOC 控制反轉。</h2><ul>
+<li>指的是一種Spring的開發模式，不是由你去掌控流程，而是由框架去掌控流程。</li>
+</ul>
+<h2 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h2><p>Target是針對Spring Bean的定義，用來告訴Java你的Annotation是想要標記在哪一些元素類別上，包括 TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, ANNOTATION_TYPE 等等…。在一般來說，我們最常用的應該也是有列出來的這些，像是 TYPE 其實就包括了我們常用的 Class, Interface, Enum 了。</p>
+<h2 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h2><p>Retention是針對Spring Bean的定義，主要有以下三種策略：SOURCE, CLASS (default), RUNTIME。</p>
+<ul>
+<li>SOURCE 的意思就是你所使用的註解在 compile 後會被丟掉，如果要以最簡單的看法去理解這件事，可以看 IDE 在幫你 compile 後的 target 資料夾，會發現 <code>@Data</code> 的標記不見了，反而多了很多 Getter Setter。</li>
+<li>另外 CLASS 與 RUNTIME 的差別就在 VM 是否會記得你所寫的 Annotation，只有後者能夠透過reflection 去存取與使用元件。所以一般你若是需要進行一些業務邏輯的處理時，則都會宣告<code>ElementType.RUNTIME</code></li>
+</ul>
+<h2 id="interface"><a href="#interface" class="headerlink" title="@interface"></a>@interface</h2><p>如果說 interface 是一個給 implemented class 的介面，那 @interface 就是一個給 Annotation 互動的介面，因此所有的 Annotation 在宣告時都需要使用 @interface。並且在現在會有越來越多人不想寫 Comment，反而透過這種方式寫註解。</p>
+<h2 id="RepositoryRestResource"><a href="#RepositoryRestResource" class="headerlink" title="@RepositoryRestResource"></a>@RepositoryRestResource</h2><p>是 Spring Data REST 提供的註解，用於自動將 Spring Data Repositories 曝露為 RESTful Web API。也就是說會自動生成Entity的Rest API</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RepositoryRestResource(path = &quot;books&quot;, collectionResourceRel = &quot;bookList&quot;, itemResourceRel = &quot;bookItem&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">BookRepository</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">JpaRepository</span>&lt;Book, Long&gt; &#123;<br>    <span class="hljs-comment">// 可以自定義查詢方法</span><br>    List&lt;Book&gt; <span class="hljs-title function_">findByAuthor</span><span class="hljs-params">(String author)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>將會自動生成</p>
+<ul>
+<li>GET &#x2F;books：獲取所有書籍的集合。 </li>
+<li>GET &#x2F;books&#x2F;{id}：根據 ID 獲取單個書籍。 </li>
+<li>POST &#x2F;books：新增一本書。 </li>
+<li>PUT &#x2F;books&#x2F;{id}：更新一本書（完整更新）。 </li>
+<li>PATCH &#x2F;books&#x2F;{id}：部分更新一本書。 </li>
+<li>DELETE &#x2F;books&#x2F;{id}：刪除一本書。</li>
+</ul>
+<h2 id="ServerSocket"><a href="#ServerSocket" class="headerlink" title="ServerSocket"></a>ServerSocket</h2><p>ServerSocket是Java最底層建立網路伺服器的基本概念，Server端透過Socket建立監聽，並持續等待Client的Request，使用Accept()取得Socket物件，就可以與Client端進行對話與取得資訊，接著就是IO的讀寫，最後釋放Socket資源。</p>
+<p><img src="/img/ServerSocket.png" srcset="/img/loading.gif" lazyload alt="ServerSocket圖示"></p>
+<p>想自己動手做可以參考以下範例程式碼：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Main</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-comment">// 定義埠號</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">serverPort</span> <span class="hljs-operator">=</span> <span class="hljs-number">5001</span>;<br><br>        <span class="hljs-type">ServerSocket</span> <span class="hljs-variable">serverSocket</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br><br>        <span class="hljs-type">int</span> <span class="hljs-variable">receiveMsgSize</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><br>        <span class="hljs-type">byte</span>[] receiveBuffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">32</span>];<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">// 建立 ServerSocket</span><br>            serverSocket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerSocket</span>(serverPort);<br><br>            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>                System.out.println(<span class="hljs-string">&quot;服務已經啟動，port: &quot;</span> + serverPort);<br><br>                <span class="hljs-type">Socket</span> <span class="hljs-variable">clientSocket</span> <span class="hljs-operator">=</span> serverSocket.accept();<br>                <span class="hljs-type">SocketAddress</span> <span class="hljs-variable">clientAddress</span> <span class="hljs-operator">=</span> clientSocket.getRemoteSocketAddress();<br>                System.out.println(<span class="hljs-string">&quot;收到客戶端連線, ip: &quot;</span> + clientAddress);<br>                <span class="hljs-type">InputStream</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> clientSocket.getInputStream();<br>                <span class="hljs-type">OutputStream</span> <span class="hljs-variable">out</span> <span class="hljs-operator">=</span> clientSocket.getOutputStream();<br><br>                <span class="hljs-keyword">while</span>((receiveMsgSize = in.read(receiveBuffer)) != -<span class="hljs-number">1</span>) &#123;<br>                    out.write(<span class="hljs-string">&quot;伺服器回應: &quot;</span>.getBytes());<br>                    out.write(receiveBuffer, <span class="hljs-number">0</span>, receiveMsgSize);<br>                &#125;<br>                <span class="hljs-comment">// 釋放 Socket 資源</span><br>                clientSocket.close();<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="SpringBoot-Validation"><a href="#SpringBoot-Validation" class="headerlink" title="SpringBoot Validation"></a>SpringBoot Validation</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jsx">&lt;dependency&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-validation<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br>&lt;/dependency&gt;<br></code></pre></td></tr></table></figure>
+<p>在ObjectMapper進行序列化轉換時，有些方便工具</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jsx">&lt;dependency&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-validation<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br>&lt;/dependency&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@NotEmpty(message = &quot;Product name is undefined.&quot;)</span><br><span class="hljs-keyword">private</span> String name;<br><span class="hljs-comment">// 在 Java 物件的欄位加上 @JsonProperty 標記，可以調整序列化為 JSON 的欄位名稱。</span><br><span class="hljs-meta">@JsonProperty(&quot;telephone&quot;)</span><br><span class="hljs-keyword">private</span> String tel;<br><br><span class="hljs-comment">// 在 Java 物件的欄位加上 @JsonIgnore 標記，可以在序列化為 JSON 時忽略該欄位，連 null 值都不會出現</span><br><span class="hljs-meta">@JsonIgnore</span><br><span class="hljs-keyword">private</span> String isbn;<br><br><span class="hljs-comment">// 在 Java 物件的物件欄位加上 @JsonUnwrapped 標記，可以在序列化為 JSON 時，將該欄位展開。</span><br><span class="hljs-meta">@JsonUnwrapped</span><br><span class="hljs-keyword">private</span> Publisher publisher;<br><br><span class="hljs-meta">@PostConstruct</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span> &#123;<br> System.out.println(<span class="hljs-string">&quot;開始載入&quot;</span>);<br>&#125;<br><br><span class="hljs-meta">@PreDestroy</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span> &#123;<br> System.out.println(<span class="hljs-string">&quot;完成，將銷毀&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Spring-Filter"><a href="#Spring-Filter" class="headerlink" title="Spring Filter"></a>Spring Filter</h2><p>有時我們的SpringBoot應用程式會想要對API進入口之前做一些前處理，這時候不僅可以考慮Spring AOP，也可以使用Filter，以下是實現的程式碼</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LogProcessTimeFilter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">OncePerRequestFilter</span> &#123;<br>    <span class="hljs-comment">// 紀錄API耗費時間</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doFilterInternal</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response, FilterChain chain)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>    <span class="hljs-type">long</span> <span class="hljs-variable">startTime</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>    chain.doFilter(request, response);<br>    <span class="hljs-type">long</span> <span class="hljs-variable">processTime</span> <span class="hljs-operator">=</span> System.currentTimeMillis() - startTime;<br><br>    System.out.println(processTime + <span class="hljs-string">&quot; ms&quot;</span>);<br>&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>實作完 Filter 的程式後，需要向 Spring 註冊，才會建立它的元件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FilterConfig</span> &#123;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> FilterRegistrationBean <span class="hljs-title function_">logProcessTimeFilter</span><span class="hljs-params">()</span> &#123;<br>        FilterRegistrationBean&lt;LogProcessTimeFilter&gt; bean = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FilterRegistrationBean</span>&lt;&gt;();<br>        bean.setFilter(<span class="hljs-keyword">new</span> <span class="hljs-title class_">LogProcessTimeFilter</span>());<br>        bean.addUrlPatterns(<span class="hljs-string">&quot;/*&quot;</span>);<br>        bean.setName(<span class="hljs-string">&quot;logProcessTimeFilter&quot;</span>);<br><br>		    <span class="hljs-comment">//bean.setOrder(1); //多個存在可以設置順序 </span><br>        <span class="hljs-keyword">return</span> bean;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>FilterRegistrationBean 是 Spring 提供的工具，用於註冊 Filter 並配置其屬性：</p>
+<ul>
+<li>setFilter()：設置具體的 Filter。 </li>
+<li>addUrlPatterns()：指定哪些路徑會被該 Filter 攔截。 </li>
+<li>setOrder()：設置該 Filter 的執行順序（可選）多filter時用來排序處理。</li>
+</ul>
+<h2 id="Spring-Exception處理"><a href="#Spring-Exception處理" class="headerlink" title="Spring Exception處理"></a>Spring Exception處理</h2><p>當你的API報錯回復你的自定義Exception時，可以為它加入指定的錯誤代碼</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@ResponseStatus(HttpStatus.NOT_FOUND)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ItemNotFoundException</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RuntimeException</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ItemNotFoundException</span><span class="hljs-params">(String message)</span> &#123;<br>        <span class="hljs-built_in">super</span>(message);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>為你的自定義Exception捕捉異常並處理回傳</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@ExceptionHandler(OperateAbsentItemsException.class)</span><br><span class="hljs-keyword">public</span> ResponseEntity&lt;ExceptionResponse&gt; <span class="hljs-title function_">handleOperateAbsentItem</span><span class="hljs-params">(OperateAbsentItemsException e)</span> &#123;<br>    Map&lt;String, Object&gt; info = Map.of(<span class="hljs-string">&quot;itemIds&quot;</span>, e.getItemIds());<br>    <span class="hljs-type">var</span> <span class="hljs-variable">res</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ExceptionResponse</span>();<br>    res.setType(BusinessExceptionType.OPERATE_ABSENT_ITEM);<br>    res.setInfo(info);<br><br>    <span class="hljs-keyword">return</span> ResponseEntity.unprocessableEntity().body(res); <span class="hljs-comment">// HTTP 422</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>另外還可以使用Global的Exception處理Annotation</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestControllerAdvice(assignableTypes = &#123;ProductController.class, UserController.class&#125;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GeneralAdvice</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">CustomDateEditor</span> <span class="hljs-variable">customDateEditor</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomDateEditor</span>(CommonUtil.sdf, <span class="hljs-literal">true</span>);<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">ToSearchTextEditor</span> <span class="hljs-variable">toSearchTextEditor</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ToSearchTextEditor</span>();<br><br>    <span class="hljs-comment">// 異常處理方法</span><br>    <span class="hljs-meta">@ExceptionHandler(OperateAbsentItemsException.class)</span><br>    <span class="hljs-keyword">public</span> ResponseEntity&lt;ExceptionResponse&gt; <span class="hljs-title function_">handleOperateAbsentItem</span><span class="hljs-params">(OperateAbsentItemsException e)</span> &#123;<br>        Map&lt;String, Object&gt; info = Map.of(<span class="hljs-string">&quot;itemIds&quot;</span>, e.getItemIds());<br>        <span class="hljs-type">var</span> <span class="hljs-variable">res</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ExceptionResponse</span>();<br>        res.setType(BusinessExceptionType.OPERATE_ABSENT_ITEM);<br>        res.setInfo(info);<br><br>        <span class="hljs-keyword">return</span> ResponseEntity.unprocessableEntity().body(res);<br>    &#125;<br><br>    <span class="hljs-comment">// 綁定自定義屬性編輯器</span><br>    <span class="hljs-meta">@InitBinder(&#123;&quot;createdFrom&quot;, &quot;createdTo&quot;&#125;)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">bindDate</span><span class="hljs-params">(WebDataBinder binder)</span> &#123;<br>        binder.registerCustomEditor(Date.class, customDateEditor);<br>    &#125;<br><br>    <span class="hljs-meta">@InitBinder(&#123;&quot;name&quot;, &quot;email&quot;&#125;)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">bindSearchText</span><span class="hljs-params">(WebDataBinder binder)</span> &#123;<br>        binder.registerCustomEditor(String.class, toSearchTextEditor);<br>    &#125;<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ToSearchTextEditor</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">PropertyEditorSupport</span> &#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setAsText</span><span class="hljs-params">(String text)</span> <span class="hljs-keyword">throws</span> IllegalArgumentException &#123;<br>        <span class="hljs-type">var</span> <span class="hljs-variable">t</span> <span class="hljs-operator">=</span> CommonUtil.toSearchText(text);<br>        <span class="hljs-built_in">super</span>.setValue(t);<br>    &#125;<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">toSearchText</span><span class="hljs-params">(String s)</span> &#123;<br>    <span class="hljs-keyword">return</span> Optional.ofNullable(s)<br>            .map(String::trim)<br>            .map(String::toLowerCase)<br>            .orElse(<span class="hljs-string">&quot;&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="SpringMVC-ModelAttribute"><a href="#SpringMVC-ModelAttribute" class="headerlink" title="SpringMVC @ModelAttribute"></a>SpringMVC @ModelAttribute</h2><ol>
+<li>用來Controller上，執行home()前先執行top()把資料放到model中<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@ModelAttribute(&quot;top&quot;)</span><br><span class="hljs-keyword">public</span> Map <span class="hljs-title function_">top</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> pageTop.getDataMap();<br>&#125;<br><span class="hljs-meta">@ReqeustMapping(&quot;/&quot;)</span><br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">home</span><span class="hljs-params">(<span class="hljs-meta">@Reqeust(require=true)</span> Map&lt;String,Object&gt; params,Model model)</span> &#123;<br>    model.addAttriute(<span class="hljs-string">&quot;model&quot;</span>,dataAssembly.homePageData(params));<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;home&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>用來方法的參數中，這種用法會將 Model 中 key 為 “top” 的值注入到這個參數中<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@ModelAttribute(&quot;top&quot;)</span><br><span class="hljs-keyword">public</span> Map&lt;String, Object&gt; <span class="hljs-title function_">top</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// 假設這裡是從某個服務中獲取資料並放到 model 中</span><br>    <span class="hljs-keyword">return</span> pageTop.getDataMap();<br>&#125;<br><span class="hljs-meta">@ReqeustMapping(&quot;/&quot;)</span><br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">home</span><span class="hljs-params">(<span class="hljs-meta">@ModelAttribute(&quot;top&quot;)</span> Map top,Model model)</span> &#123;<br>    <span class="hljs-type">JsonArray</span> <span class="hljs-variable">js</span> <span class="hljs-operator">=</span> JSONArray.fromObject(map);<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;test&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Java-Stream-vs-ParallelStream"><a href="#Java-Stream-vs-ParallelStream" class="headerlink" title="Java Stream vs ParallelStream"></a>Java Stream vs ParallelStream</h2><p>Java Stream執行是串行的，但ParallelStream是並行的，也就是多執行緒。<br>Stream是對集合資料類型是順序執行的，但ParallelStream則是隨機執行的<br>比方說以下程式碼：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;Integer&gt; integerList = Lists.newArrayList();<br>List&lt;String&gt; strList = Lists.newArrayList();<br><br><span class="hljs-type">int</span> <span class="hljs-variable">practicalSize</span> <span class="hljs-operator">=</span> <span class="hljs-number">1000000</span>;<br><br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; practicalSize; i++) &#123;<br>    strList.add(String.valueOf(i));<br>&#125;<br><br>strList.parallelStream().forEach(each -&gt; &#123;<br>    integerList.add(Integer.parseInt(each));<br>&#125;);<br><br>System.out.println(strList.size()); <span class="hljs-comment">// 1000000</span><br>System.out.println(integerList.size()); <span class="hljs-comment">// 因為平行化的緣故，幾乎不可能是1000000</span><br></code></pre></td></tr></table></figure>
+<p>應該要把資料型態改用SychronizeList或是Vector來處理多執行緒問題。<br>使用ParallelStream應該要考慮</p>
+<ol>
+<li>是否真正需要並行？</li>
+<li>Task是否彼此獨立不受影響？</li>
+<li>是否有順序執行需求？</li>
+</ol>
+<h2 id="副作用-Side-Effect-是什麼？"><a href="#副作用-Side-Effect-是什麼？" class="headerlink" title="副作用(Side Effect) 是什麼？"></a>副作用(Side Effect) 是什麼？</h2><p>在操作物件當中，無意間改變了物件的值或是型別。</p>
+<h2 id="記憶體洩漏-Memory-Leak-是什麼？"><a href="#記憶體洩漏-Memory-Leak-是什麼？" class="headerlink" title="記憶體洩漏(Memory Leak) 是什麼？"></a>記憶體洩漏(Memory Leak) 是什麼？</h2><ul>
+<li>當一個程式被編譯成bytecode，在框架下運行的話，框架可以協助自動處理momery allocation, security, exception, GC等問題。</li>
+<li>若沒有框架處理，就必須要手動處理這些問題，沒有把取用的記憶體全部釋放就會導致Memory leak。</li>
+<li>一般程式來說，只要process結束後記憶體就會被虛擬機(JVM)全部釋放，不會有這個問題。</li>
+<li>C&#x2F;C++ 因為沒有GC，所以經常出現。另外像是EventListener() 只移除了裡面的元素卻沒有移除Listener()也會造成。另外還有循環引用與存取全域變數。</li>
+</ul>
+<h2 id="循環引用-Circular-Import"><a href="#循環引用-Circular-Import" class="headerlink" title="循環引用 (Circular Import)"></a>循環引用 (Circular Import)</h2><p>物件A參照到B，B又參照到A，就會造成循環引用，會造成記憶體洩漏，同時GC也會無法正常運行(Java除外)。</p>
+<p>不時更新…</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Software/" class="category-chain-item">Software</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/SpringBoot/" class="print-no-link">#SpringBoot</a>
+      
+        <a href="/tags/note/" class="print-no-link">#note</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>一些零碎的SpringBoot小知識</div>
+      <div>https://clark1945.github.io/2025/01/05/一些零碎的SpringBoot小知識/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 5, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/Spring-Security%E6%8E%A2%E7%A7%98/" title="Spring Security探秘">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Spring Security探秘</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/04/%E7%B0%A1%E5%96%AE%E8%AA%AA%E6%98%8ESOLID%E6%B3%95%E5%89%87/" title="簡單說明SOLID法則">
+                        <span class="hidden-mobile">簡單說明SOLID法則</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2025/01/05/%E4%B8%80%E4%BA%9B%E9%9B%B6%E7%A2%8E%E7%9A%84SpringBoot%E5%B0%8F%E7%9F%A5%E8%AD%98/';
+          this.page.identifier = '/2025/01/05/%E4%B8%80%E4%BA%9B%E9%9B%B6%E7%A2%8E%E7%9A%84SpringBoot%E5%B0%8F%E7%9F%A5%E8%AD%98/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Access 
+        <span id="busuanzi_value_site_pv"></span>
+         time
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        User Amount 
+        <span id="busuanzi_value_site_uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,770 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Optional是Java 8推出時加入的新功能，Optional被發明出來的初衷是為了解決Java常見的NullPointException。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Optional介紹與使用方法">
+<meta property="og:url" content="https://clark1945.github.io/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="Optional是Java 8推出時加入的新功能，Optional被發明出來的初衷是為了解決Java常見的NullPointException。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-04-24T05:08:13.000Z">
+<meta property="article:modified_time" content="2025-09-11T03:28:27.149Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Java Optional介紹與使用方法 - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java Optional介紹與使用方法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-24 13:08" pubdate>
+          April 24, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java Optional介紹與使用方法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Optional是Java 8推出時加入的新功能，Optional被發明出來的初衷是為了解決Java常見的NullPointException。</p>
+<span id="more"></span>
+<p>為沒寫過Java的人科普一下，NullPointException大多數的發生原因都是針對value為Null進行操作而導致的例外狀況，Optional為此出現。</p>
+<h4 id="Java-8-Optional-使用方式"><a href="#Java-8-Optional-使用方式" class="headerlink" title="Java 8 Optional 使用方式"></a>Java 8 Optional 使用方式</h4><p>使用方式很簡單，可以理解為將值外部再包了一層類別，比方說以下程式：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs fortran"><span class="hljs-keyword">Optional</span>&lt;Student&gt; student = <span class="hljs-keyword">Optional</span>.ofNullable(studentRepo.getAllStudent())<br></code></pre></td></tr></table></figure>
+<p>Student類別的外部包了一個Optional類別，可以想像為程式外部又包了一個try catch的處理。</p>
+<h4 id="Optioal常用的方法如下："><a href="#Optioal常用的方法如下：" class="headerlink" title="Optioal常用的方法如下："></a>Optioal常用的方法如下：</h4><ul>
+<li>isPresent() <strong>判斷是否為Null，是則回傳True，否則回傳False</strong></li>
+<li>get() <strong>取得Optional內的值，需要先使用isPresent()確認是否為Null</strong></li>
+<li>Optional.of() <strong>建立Optional的方法，若為Null會直接報錯</strong></li>
+<li>Optional.ofNullable() <strong>建立Optional的方法，可以放入Null與非Null物件</strong></li>
+<li>ifPresent() <strong>如果值為非Null就執行某方法，沒有回傳值</strong></li>
+<li>orElse() <strong>如果值為Null就用參數代替</strong></li>
+<li>orElseGet() <strong>如果值為Null就執行該方法，與orElse()相差在可接受傳入參數不同</strong></li>
+<li>orElseThrow() <strong>如果值為Null就拋出某些Exception</strong></li>
+</ul>
+<h4 id="以下介紹一些常用的方法"><a href="#以下介紹一些常用的方法" class="headerlink" title="以下介紹一些常用的方法"></a>以下介紹一些常用的方法</h4><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">Optional&lt;String&gt; opt = Optional.ofNullable(InputName);<br><span class="hljs-keyword">if</span>(opt.isPresent())&#123; // 判斷 是否為<span class="hljs-keyword">Null</span><br>    <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(&quot;String = &quot; + opt.<span class="hljs-keyword">get</span>()); // 非<span class="hljs-keyword">Null</span>才取值<br>&#125;<br><br>opt.ifPresent(<span class="hljs-type">name</span> -&gt; <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(<span class="hljs-type">name</span>)); // 同一個意思，只是寫得比較簡潔<br><br>String <span class="hljs-type">name</span> = Optional.ofNullable(InputName).orElse(&quot;John&quot;); //若inputName 是 <span class="hljs-keyword">null</span> 回傳&quot;John&quot;<br><br>opNull.orElseGet(() -&gt; &quot;John&quot;); // 同個意思 只是orElseGet() 接受的是方法<br><br><span class="hljs-type">name</span> = Optional.ofNullable(insertName).orElseThrow(IllegalArgumentException::<span class="hljs-built_in">new</span>); // <span class="hljs-keyword">null</span>　就拋出IllegalArgumentException<br></code></pre></td></tr></table></figure>
+
+<h4 id="更多實際應用"><a href="#更多實際應用" class="headerlink" title="更多實際應用"></a>更多實際應用</h4><p>使用Optional還有一個好處，就是可以套用Java 8 的API</p>
+<ol>
+<li>判斷是否為2016年</li>
+</ol>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Optional&lt;Integer&gt; yearOptional <span class="hljs-operator">=</span> Optional.of(year)<span class="hljs-comment">;</span><br>boolean is2016 <span class="hljs-operator">=</span> yearOptional<br>                    .filter(y -&gt; y <span class="hljs-operator">=</span><span class="hljs-operator">=</span> <span class="hljs-number">2016</span>)<br>                    .isPresent()<span class="hljs-comment">; // 判斷值是否為2016年</span><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>判斷物件價格範圍是否介於15~20之間</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-comment">// 可以使用 function進行值的檢測判斷</span><br>Modem modem2 = new Modem(<span class="hljs-number">13.10d</span>);<br>System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;Result = &quot;</span> + priceIsInRange2(modem2));<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Modem</span> &#123;<br>      <span class="hljs-keyword">private</span> <span class="hljs-built_in">Double</span> price;<br><br>      <span class="hljs-keyword">public</span> Modem(<span class="hljs-built_in">Double</span> price) &#123;<br>          <span class="hljs-keyword">this</span>.price = price;<br>      &#125;<br>      <span class="hljs-comment">// standard getters and setters</span><br><br>      <span class="hljs-keyword">public</span> void setPrice(<span class="hljs-built_in">Double</span> price) &#123;<br>          <span class="hljs-keyword">this</span>.price = price;<br>      &#125;<br><br>      <span class="hljs-keyword">public</span> <span class="hljs-built_in">Double</span> getPrice() &#123;<br>          <span class="hljs-keyword">return</span> price;<br>      &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> boolean priceIsInRange2(Modem modem2) &#123;<br>    <span class="hljs-keyword">return</span> Optional.ofNullable(modem2)<br>            .map(Modem::getPrice).<br>            filter(p -&gt; p &gt;= <span class="hljs-number">10</span>).<br>            filter(p -&gt; p &lt;= <span class="hljs-number">15</span>).<br>            isPresent();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>先處理過再判斷。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python">String password = <span class="hljs-string">&quot; password &quot;</span>;<br><span class="hljs-type">Optional</span>&lt;String&gt; passOpt = <span class="hljs-type">Optional</span>.of(password);<br>boolean correctPassword = passOpt<br>	.<span class="hljs-built_in">filter</span>(<span class="hljs-keyword">pass</span> -&gt; <span class="hljs-keyword">pass</span>.equals(<span class="hljs-string">&quot;password&quot;</span>))<br>	.isPresent();<br>assertFalse(correctPassword);<br><br>correctPassword = passOpt<br>	.<span class="hljs-built_in">map</span>(String::trim)<br>	.<span class="hljs-built_in">filter</span>(<span class="hljs-keyword">pass</span> -&gt; <span class="hljs-keyword">pass</span>.equals(<span class="hljs-string">&quot;password&quot;</span>))<br>	.isPresent();<br>assertTrue(correctPassword);<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>取得陣列長度，null為0</li>
+</ol>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-built_in">List</span><span class="hljs-operator">&lt;</span><span class="hljs-built_in">String</span><span class="hljs-operator">&gt;</span> <span class="hljs-variable">companyNames</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">Arrays</span><span class="hljs-operator">.</span><span class="hljs-variable">asList</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;paypal&quot;</span><span class="hljs-operator">,</span> <span class="hljs-string">&quot;oracle&quot;</span><span class="hljs-operator">,</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-operator">,</span> <span class="hljs-string">&quot;microsoft&quot;</span><span class="hljs-operator">,</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-operator">,</span> <span class="hljs-string">&quot;apple&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-operator">;</span><br><span class="hljs-built_in">Optional</span><span class="hljs-operator">&lt;</span><span class="hljs-built_in">List</span><span class="hljs-operator">&lt;</span><span class="hljs-built_in">String</span><span class="hljs-operator">&gt;&gt;</span> <span class="hljs-variable">listOptional</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">Optional</span><span class="hljs-operator">.</span><span class="hljs-variable">ofNullable</span><span class="hljs-punctuation">(</span><span class="hljs-variable">companyNames</span><span class="hljs-punctuation">)</span><span class="hljs-operator">;</span><br><span class="hljs-variable">int</span> <span class="hljs-variable">size</span> <span class="hljs-operator">=</span> <span class="hljs-variable">listOptional</span><span class="hljs-operator">.</span><span class="hljs-variable">map</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">List</span><span class="hljs-string">::size</span><span class="hljs-punctuation">)</span><span class="hljs-operator">.</span><span class="hljs-variable">orElse</span><span class="hljs-punctuation">(</span><span class="hljs-number">0</span><span class="hljs-punctuation">)</span><span class="hljs-operator">;</span><br><span class="hljs-variable">System</span><span class="hljs-operator">.</span><span class="hljs-variable">out</span><span class="hljs-operator">.</span><span class="hljs-variable">println</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;SIZE = &quot;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">size</span><span class="hljs-punctuation">)</span><span class="hljs-operator">;</span><br></code></pre></td></tr></table></figure>
+<ol start="5">
+<li>map 與 flatmap 的差異 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-comment">// 假設我們有一個包含字串的列表</span><br>List&lt;String&gt; words = Arrays.<span class="hljs-keyword">asList</span>(<span class="hljs-string">&quot;Java&quot;</span>, <span class="hljs-string">&quot;Stream&quot;</span>, <span class="hljs-string">&quot;API&quot;</span>);<br><br><span class="hljs-comment">// 使用map操作，將每個字串轉換為它的長度</span><br>List&lt;Integer&gt; wordLengths = words.stream()<br>        .map(String::length)<br>        .<span class="hljs-keyword">collect</span>(Collectors.<span class="hljs-keyword">toList</span>());<br>System.out.<span class="hljs-keyword">println</span>(<span class="hljs-string">&quot;使用 map 操作得到的長度列表: &quot;</span> + wordLengths);<br><br><span class="hljs-comment">// 使用flatMap操作，將每個字串拆分為單個字符並平坦化為單獨的流</span><br>List&lt;Character&gt; characters = words.stream()<br>        .flatMap(word -&gt; word.chars().mapToObj(c -&gt; (<span class="hljs-keyword">char</span>) c))<br>        .<span class="hljs-keyword">collect</span>(Collectors.<span class="hljs-keyword">toList</span>());<br>System.out.<span class="hljs-keyword">println</span>(<span class="hljs-string">&quot;使用 flatMap 操作得到的字符列表: &quot;</span> + characters);<br><br><span class="hljs-regexp">/ /</span>使用 map 操作得到的長度列表: [<span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">3</span>]<br><span class="hljs-comment">// 使用 flatMap 操作得到的字符列表: [J, a, v, a, S, t, r, e, a, m, A, P, I]</span><br> <br></code></pre></td></tr></table></figure></li>
+<li>參考用法<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><code class="hljs lasso"><span class="hljs-comment">//  取得第一個非null的值，Optional::get 是為了取得&lt;Stream&lt;String&gt;&gt;</span><br><span class="hljs-comment">//  方法會全數執行</span><br><span class="hljs-built_in">String</span> found = Stream.of(getEmpty(), getHello(), getBye())<br>        .filter(Optional<span class="hljs-type">::isPresent</span>)<br>        .<span class="hljs-built_in">map</span>(Optional<span class="hljs-type">::get</span>)<br>        .findFirst()<br>        .get();<br><br><span class="hljs-comment">//  同樣意思，但方法不會全數執行</span><br>Optional&lt;<span class="hljs-built_in">String</span>&gt; found2 =<br>      Stream.&lt;Supplier&lt;Optional&lt;<span class="hljs-built_in">String</span>&gt;&gt;&gt;of(this<span class="hljs-type">::getEmpty</span>, this<span class="hljs-type">::getHello</span>, this<span class="hljs-type">::getBye</span>)<br>              .<span class="hljs-built_in">map</span>(Supplier<span class="hljs-type">::get</span>)<br>              .filter(Optional<span class="hljs-type">::isPresent</span>)<br>              .<span class="hljs-built_in">map</span>(Optional<span class="hljs-type">::get</span>)<br>              .findFirst();<br><br><span class="hljs-comment">// 若function想要帶上參數 需使用lambda</span><br>Optional&lt;<span class="hljs-built_in">String</span>&gt; found3 = Stream.&lt;Supplier&lt;Optional&lt;<span class="hljs-built_in">String</span>&gt;&gt;&gt;of(<br>              () -&gt; createOptional(<span class="hljs-string">&quot;empty&quot;</span>),<br>              () -&gt; createOptional(<span class="hljs-string">&quot;hello&quot;</span>)<br>      )<br>      .<span class="hljs-built_in">map</span>(Supplier<span class="hljs-type">::get</span>)<br>      .filter(Optional<span class="hljs-type">::isPresent</span>)<br>      .<span class="hljs-built_in">map</span>(Optional<span class="hljs-type">::get</span>)<br>      .findFirst();<br><br><br><span class="hljs-comment">//        判斷是否全數為null</span><br><span class="hljs-built_in">String</span> found4 = Stream.&lt;Supplier&lt;Optional&lt;<span class="hljs-built_in">String</span>&gt;&gt;&gt;of(<br>                () -&gt; createOptional(<span class="hljs-string">&quot;empty&quot;</span>),<br>                () -&gt; createOptional(<span class="hljs-string">&quot;E&quot;</span>)<br>        )<br>        .<span class="hljs-built_in">map</span>(Supplier<span class="hljs-type">::get</span>)<br>        .filter(Optional<span class="hljs-type">::isPresent</span>)<br>        .<span class="hljs-built_in">map</span>(Optional<span class="hljs-type">::get</span>)<br>        .findFirst()<br>        .orElseGet(() -&gt; <span class="hljs-string">&quot;default&quot;</span>);<br><br>assertEquals(<span class="hljs-string">&quot;E&quot;</span>,found4);<br><br><span class="hljs-keyword">private</span> Optional&lt;<span class="hljs-built_in">String</span>&gt; getEmpty() &#123;<br>        <span class="hljs-keyword">return</span> Optional.empty();<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> Optional&lt;<span class="hljs-built_in">String</span>&gt; getHello() &#123;<br>        <span class="hljs-keyword">return</span> Optional.of(<span class="hljs-string">&quot;hello&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> Optional&lt;<span class="hljs-built_in">String</span>&gt; getBye() &#123;<br>        <span class="hljs-keyword">return</span> Optional.of(<span class="hljs-string">&quot;bye&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> Optional&lt;<span class="hljs-built_in">String</span>&gt; createOptional(<span class="hljs-built_in">String</span> input) &#123;<br>        <span class="hljs-keyword">if</span> (input == <span class="hljs-built_in">null</span> || <span class="hljs-string">&quot;&quot;</span>.<span class="hljs-keyword">equals</span>(input) || <span class="hljs-string">&quot;empty&quot;</span>.<span class="hljs-keyword">equals</span>(input)) &#123;<br>            <span class="hljs-keyword">return</span> Optional.empty();<br>        &#125;<br>        <span class="hljs-keyword">return</span> Optional.of(input);<br>    &#125;<br><br></code></pre></td></tr></table></figure></li>
+<li>map與flatmap<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">public</span> static String testOptionalFlatMap(Student student) &#123;<br>			<br><span class="hljs-comment">// 這段是使用Optional 檢測 Null</span><br>        <span class="hljs-keyword">var</span> score = student.getScore();<br>        <span class="hljs-keyword">if</span>(score.isPresent()) &#123;<br>            <span class="hljs-keyword">var</span> word = score.<span class="hljs-keyword">get</span>().getWord();<br>            <span class="hljs-keyword">if</span>(word .isPresent()) &#123;<br>                <span class="hljs-keyword">return</span> word.<span class="hljs-keyword">get</span>();<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;NA&quot;</span>;<br><br><span class="hljs-comment">// 這段是使用Optional Flatmap 檢測 Null</span><br>        <span class="hljs-keyword">return</span> student.getScore()<br>                .flatMap(Score::getWord)<br>                .orElse(<span class="hljs-string">&quot;n.a.&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+以上就是常見的基本Optional用法，也許不需要全部都會，只需要基本了解就很夠用了也說不定。</li>
+</ol>
+<p>以上</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Coding/" class="category-chain-item">Coding</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java Optional介紹與使用方法</div>
+      <div>https://clark1945.github.io/2024/04/24/Java-Optional介紹與使用方法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 24, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/01/%E5%9C%A8SpringBoot-%E5%AF%AB%E6%B8%AC%E8%A9%A6-Mock-MockBean/" title="在SpringBoot 寫測試 @Mock,@MockBean,MvcResult">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">在SpringBoot 寫測試 @Mock,@MockBean,MvcResult</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/22/%E7%B0%A1%E5%96%AE%E4%BD%BF%E7%94%A8Swagger%E5%8A%9F%E8%83%BD-%E9%81%A9%E7%94%A8Java-17/" title="使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)">
+                        <span class="hidden-mobile">使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/';
+          this.page.identifier = '/2024/04/24/Java-Optional%E4%BB%8B%E7%B4%B9%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Access 
+        <span id="busuanzi_value_site_pv"></span>
+         time
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        User Amount 
+        <span id="busuanzi_value_site_uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

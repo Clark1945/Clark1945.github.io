@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="之前我在寫Java時，總是覺得一直寫 if (obj !&#x3D; null) {} 這樣的處理會讓整體的程式碼變得不好看，我希望有一種API可以更好地協助我處理NLP問題，於是我後續就開始使用Optional這個套件，覺得它挺好用的。它好用的點如下：  提供兩種對Null的處理方式，使你更安全地操作你的變數。例如說：Optional.of() 與 Optional.ofNullable() 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Optional API 紀錄">
+<meta property="og:url" content="https://clark1945.github.io/2024/05/23/Java-Optional-API-%E7%B4%80%E9%8C%84/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="之前我在寫Java時，總是覺得一直寫 if (obj !&#x3D; null) {} 這樣的處理會讓整體的程式碼變得不好看，我希望有一種API可以更好地協助我處理NLP問題，於是我後續就開始使用Optional這個套件，覺得它挺好用的。它好用的點如下：  提供兩種對Null的處理方式，使你更安全地操作你的變數。例如說：Optional.of() 與 Optional.ofNullable() 1">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://clark1945.github.io/img/code.jpg">
+<meta property="article:published_time" content="2024-05-23T02:29:06.000Z">
+<meta property="article:modified_time" content="2025-09-11T03:28:27.149Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="API">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://clark1945.github.io/img/code.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Java Optional API 紀錄 - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java Optional API 紀錄"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-23 10:29" pubdate>
+          May 23, 2024 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          843 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java Optional API 紀錄</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>之前我在寫Java時，總是覺得一直寫 if (obj !&#x3D; null) {} 這樣的處理會讓整體的程式碼變得不好看，我希望有一種API可以更好地協助我處理NLP問題，於是我後續就開始使用Optional這個套件<br>，覺得它挺好用的。它好用的點如下：</p>
+<ul>
+<li><p>提供兩種對Null的處理方式，使你更安全地操作你的變數。例如說：Optional.of() 與 Optional.ofNullable()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Object</span> <span class="hljs-variable">object</span> <span class="hljs-operator">=</span> Optional.ofNullable(object); <br><span class="hljs-type">boolean</span> <span class="hljs-variable">isExist</span> <span class="hljs-operator">=</span> object.isPresent(); <span class="hljs-comment">// Null 顯示為 false</span><br><span class="hljs-keyword">if</span>(isExist) &#123;<br>    System.out.println(<span class="hljs-string">&quot;String = &quot;</span> + object.get());<br>&#125;<br><br><span class="hljs-type">Object</span> <span class="hljs-variable">object</span> <span class="hljs-operator">=</span> Optional.of(object); <span class="hljs-comment">// 若Object為Null會立即爆錯</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>支援Lambda function</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Object</span> <span class="hljs-variable">object</span> <span class="hljs-operator">=</span> Optional.ofNullable(object);<br>object.ifPresent(name -&gt; System.out.println(name.length()));<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>例外處理可以賦值、執行Lambda、拋錯誤</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 若InputName存在顯示InputName否則回傳orElse Value</span><br><span class="hljs-type">String</span> <span class="hljs-variable">inputName</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Kevin&quot;</span>;<br><span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> Optional.ofNullable(inputName).orElse(<span class="hljs-string">&quot;John&quot;</span>); <br><br><span class="hljs-comment">// 如果為Null 可以使用orElse() 與 orElseGet() 處理Null問題</span><br><span class="hljs-type">String</span> <span class="hljs-variable">text</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br><span class="hljs-type">String</span> <span class="hljs-variable">defaultText</span> <span class="hljs-operator">=</span> Optional.ofNullable(text).orElseGet(<span class="hljs-built_in">this</span>::getMyDefault);<br><span class="hljs-type">String</span> <span class="hljs-variable">defaultText</span> <span class="hljs-operator">=</span> Optional.ofNullable(text).orElse(getMyDefault());<br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">getMyDefault</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Default Value&quot;</span>;<br>&#125;<br><br><span class="hljs-comment">// 如果為null 拋出Exception</span><br><span class="hljs-type">String</span> <span class="hljs-variable">insertName</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Kelvin&quot;</span>;<br>name = Optional.ofNullable(insertName).orElseThrow(IllegalArgumentException::<span class="hljs-keyword">new</span>);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>支援Java Stream API，提供更多資料處理的協助。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 使用filter可以篩選判斷</span><br><span class="hljs-type">Integer</span> <span class="hljs-variable">year</span> <span class="hljs-operator">=</span> <span class="hljs-number">2016</span>;<br>Optional&lt;Integer&gt; yearOptional = Optional.of(year);<br><span class="hljs-type">boolean</span> <span class="hljs-variable">is2016</span> <span class="hljs-operator">=</span> yearOptional.filter(y -&gt; y == <span class="hljs-number">2016</span>).isPresent();<br><br><span class="hljs-comment">// 可以使用 function進行值的檢測判斷</span><br><span class="hljs-type">Modem</span> <span class="hljs-variable">modem2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Modem</span>(<span class="hljs-number">13.10d</span>);<br>System.out.println(<span class="hljs-string">&quot;Result = &quot;</span> + priceIsInRange2(modem2));<br><span class="hljs-type">boolean</span> <span class="hljs-title function_">priceIsInRange2</span><span class="hljs-params">(Modem modem2)</span> &#123;<br>    <span class="hljs-keyword">return</span> Optional.ofNullable(modem2)<br>            .map(Modem::getPrice).<br>            filter(p -&gt; p &gt;= <span class="hljs-number">10</span>).<br>            filter(p -&gt; p &lt;= <span class="hljs-number">15</span>).<br>            isPresent();<br>&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Modem</span> &#123;<br>      <span class="hljs-keyword">private</span> Double price;<br><br>      Modem(Double price) &#123;<br>          <span class="hljs-built_in">this</span>.price = price;<br>      &#125;<br>      <span class="hljs-comment">// standard getters and setters</span><br><br>      <span class="hljs-keyword">void</span> <span class="hljs-title function_">setPrice</span><span class="hljs-params">(Double price)</span> &#123;<br>          <span class="hljs-built_in">this</span>.price = price;<br>      &#125;<br><br>      Double <span class="hljs-title function_">getPrice</span><span class="hljs-params">()</span> &#123;<br>          <span class="hljs-keyword">return</span> price;<br>      &#125;<br>&#125;<br><br><br><span class="hljs-comment">// 利用map進行映射，再用filter處理值</span><br><span class="hljs-type">String</span> <span class="hljs-variable">password</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot; password &quot;</span>;<br>Optional&lt;String&gt; passOpt = Optional.of(password);<br><span class="hljs-type">boolean</span> <span class="hljs-variable">correctPassword</span> <span class="hljs-operator">=</span> passOpt<br>	.filter(pass -&gt; pass.equals(<span class="hljs-string">&quot;password&quot;</span>))<br>	.isPresent();<br>assertFalse(correctPassword);<br>correctPassword = passOpt<br>	.map(String::trim)<br>	.filter(pass -&gt; pass.equals(<span class="hljs-string">&quot;password&quot;</span>))<br>	.isPresent();<br>assertTrue(correctPassword);<br></code></pre></td></tr></table></figure></li>
+<li><p>對Collection API的處理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 使用map 處理陣列</span><br>List&lt;String&gt; companyNames = Arrays.asList(<span class="hljs-string">&quot;paypal&quot;</span>, <span class="hljs-string">&quot;oracle&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;microsoft&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;apple&quot;</span>);<br>Optional&lt;List&lt;String&gt;&gt; listOptional = Optional.of(companyNames);<br><span class="hljs-type">int</span> <span class="hljs-variable">size</span> <span class="hljs-operator">=</span> listOptional.map(List::size).orElse(<span class="hljs-number">0</span>);<br>System.out.println(<span class="hljs-string">&quot;SIZE = &quot;</span> + size);<br><br><span class="hljs-type">Person</span> <span class="hljs-variable">person</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>(<span class="hljs-string">&quot;john&quot;</span>, <span class="hljs-number">26</span>);<br>Optional&lt;Person&gt; personOptional = Optional.of(person);<br>Optional&lt;String&gt; nameOptional = personOptional<br>                                    .map(Person::getName)<br>                                    .orElseThrow(IllegalArgumentException::<span class="hljs-keyword">new</span>);<br>Optional&lt;String&gt; namesOptional = personOptional.flatMap(Person::getName);<br><br><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testflatMap</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    List&lt;Integer&gt; together = Stream.of(asList(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), asList(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)) <span class="hljs-comment">// Stream of List&lt;Integer&gt;</span><br>            .flatMap(List::stream)<br>            .map(integer -&gt; integer + <span class="hljs-number">1</span>)<br>            .collect(Collectors.toList());<br>    assertEquals(asList(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>), together);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> age;<br>    <span class="hljs-keyword">private</span> String password;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Person</span><span class="hljs-params">(String name, <span class="hljs-type">int</span> i)</span> &#123;<br>        <span class="hljs-built_in">this</span>.age = i;<br>        <span class="hljs-built_in">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> Optional&lt;String&gt; <span class="hljs-title function_">getName</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> Optional.ofNullable(name);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> Optional&lt;Integer&gt; <span class="hljs-title function_">getAge</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> Optional.ofNullable(age);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> Optional&lt;String&gt; <span class="hljs-title function_">getPassword</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> Optional.ofNullable(password);<br>    &#125;<br><br>    <span class="hljs-comment">// normal constructors and setters</span><br>    &#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>更多參考</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//  取得第一個非null的值，Optional::get 是為了取得&lt;Stream&lt;String&gt;&gt;</span><br><span class="hljs-comment">//  方法會全數執行</span><br><span class="hljs-type">String</span> <span class="hljs-variable">found</span> <span class="hljs-operator">=</span> Stream.of(getEmpty(), getHello(), getBye())<br>        .filter(Optional::isPresent)<br>        .map(Optional::get)<br>        .findFirst()<br>        .get();<br><br><span class="hljs-comment">//  同樣意思，但方法不會全數執行</span><br>Optional&lt;String&gt; found2 =<br>      Stream.&lt;Supplier&lt;Optional&lt;String&gt;&gt;&gt;of(<span class="hljs-built_in">this</span>::getEmpty, <span class="hljs-built_in">this</span>::getHello, <span class="hljs-built_in">this</span>::getBye)<br>              .map(Supplier::get)<br>              .filter(Optional::isPresent)<br>              .map(Optional::get)<br>              .findFirst();<br><br><span class="hljs-comment">// 若function想要帶上參數 需使用lambda</span><br>Optional&lt;String&gt; found3 = Stream.&lt;Supplier&lt;Optional&lt;String&gt;&gt;&gt;of(<br>              () -&gt; createOptional(<span class="hljs-string">&quot;empty&quot;</span>),<br>              () -&gt; createOptional(<span class="hljs-string">&quot;hello&quot;</span>)<br>      )<br>      .map(Supplier::get)<br>      .filter(Optional::isPresent)<br>      .map(Optional::get)<br>      .findFirst();<br><br><span class="hljs-comment">//        判斷是否全數為null</span><br><span class="hljs-type">String</span> <span class="hljs-variable">found4</span> <span class="hljs-operator">=</span> Stream.&lt;Supplier&lt;Optional&lt;String&gt;&gt;&gt;of(<br>                () -&gt; createOptional(<span class="hljs-string">&quot;empty&quot;</span>),<br>                () -&gt; createOptional(<span class="hljs-string">&quot;E&quot;</span>)<br>        )<br>        .map(Supplier::get)<br>        .filter(Optional::isPresent)<br>        .map(Optional::get)<br>        .findFirst()<br>        .orElseGet(() -&gt; <span class="hljs-string">&quot;default&quot;</span>);<br><br>assertEquals(<span class="hljs-string">&quot;E&quot;</span>,found4);<br><br><span class="hljs-keyword">private</span> Optional&lt;String&gt; <span class="hljs-title function_">getEmpty</span><span class="hljs-params">()</span> &#123;<br>      <span class="hljs-keyword">return</span> Optional.empty();<br>&#125;<br><br><span class="hljs-keyword">private</span> Optional&lt;String&gt; <span class="hljs-title function_">getHello</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> Optional.of(<span class="hljs-string">&quot;hello&quot;</span>);<br>&#125;<br><br><span class="hljs-keyword">private</span> Optional&lt;String&gt; <span class="hljs-title function_">getBye</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> Optional.of(<span class="hljs-string">&quot;bye&quot;</span>);<br>&#125;<br><br><span class="hljs-keyword">private</span> Optional&lt;String&gt; <span class="hljs-title function_">createOptional</span><span class="hljs-params">(String input)</span> &#123;<br>    <span class="hljs-keyword">if</span> (input == <span class="hljs-literal">null</span> || <span class="hljs-string">&quot;&quot;</span>.equals(input) || <span class="hljs-string">&quot;empty&quot;</span>.equals(input)) &#123;<br>        <span class="hljs-keyword">return</span> Optional.empty();<br>    &#125;<br>    <span class="hljs-keyword">return</span> Optional.of(input);<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Programming/" class="category-chain-item">Programming</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+        <a href="/tags/API/" class="print-no-link">#API</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java Optional API 紀錄</div>
+      <div>https://clark1945.github.io/2024/05/23/Java-Optional-API-紀錄/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 23, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/06/21/%E6%97%A5%E6%9C%AC%E8%BB%9F%E9%8A%80%E9%87%91%E6%B5%81API%E7%AD%86%E8%A8%98/" title="日本軟銀金流API筆記">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">日本軟銀金流API筆記</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/19/%E8%A7%A3%E8%AA%AASQL%E7%9A%84Transaction%E8%88%87%E9%9A%94%E9%9B%A2%E5%B1%A4%E7%B4%9A/" title="解說SQL的Transaction與隔離層級">
+                        <span class="hidden-mobile">解說SQL的Transaction與隔離層級</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2024/05/23/Java-Optional-API-%E7%B4%80%E9%8C%84/';
+          this.page.identifier = '/2024/05/23/Java-Optional-API-%E7%B4%80%E9%8C%84/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Access 
+        <span id="busuanzi_value_site_pv"></span>
+         time
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        User Amount 
+        <span id="busuanzi_value_site_uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

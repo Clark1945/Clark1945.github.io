@@ -1,0 +1,890 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="這篇文章主要在介紹Java的各種集合資料結構，久久來複習一下基本功。 Java 集合框架的主要類型與差異Java 的集合框架提供了三大主要類型：List、Set 和 Map，每種類型都有不同的特性與適用場景。 List特性：有序、允許重複元素、以索引存取    類型 特性 適用場景    ArrayList - 動態大小，基於陣列實現- 隨機讀取快 (O(1))- 插入、刪除效率低 (O(n))-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基本資料結構介紹">
+<meta property="og:url" content="https://clark1945.github.io/2024/07/27/Java%E5%9F%BA%E6%9C%AC%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E4%BB%8B%E7%B4%B9/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="這篇文章主要在介紹Java的各種集合資料結構，久久來複習一下基本功。 Java 集合框架的主要類型與差異Java 的集合框架提供了三大主要類型：List、Set 和 Map，每種類型都有不同的特性與適用場景。 List特性：有序、允許重複元素、以索引存取    類型 特性 適用場景    ArrayList - 動態大小，基於陣列實現- 隨機讀取快 (O(1))- 插入、刪除效率低 (O(n))-">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://clark1945.github.io/img/Java_logo.png">
+<meta property="article:published_time" content="2024-07-27T01:24:22.000Z">
+<meta property="article:modified_time" content="2025-09-11T03:28:27.149Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Data Structure">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://clark1945.github.io/img/Java_logo.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Java基本資料結構介紹 - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java基本資料結構介紹"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-27 09:24" pubdate>
+          July 27, 2024 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java基本資料結構介紹</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>這篇文章主要在介紹Java的各種集合資料結構，久久來複習一下基本功。</p>
+<h2 id="Java-集合框架的主要類型與差異"><a href="#Java-集合框架的主要類型與差異" class="headerlink" title="Java 集合框架的主要類型與差異"></a>Java 集合框架的主要類型與差異</h2><p>Java 的集合框架提供了三大主要類型：<code>List</code>、<code>Set</code> 和 <code>Map</code>，每種類型都有不同的特性與適用場景。</p>
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><p>特性：有序、允許重複元素、以索引存取</p>
+<table>
+<thead>
+<tr>
+<th>類型</th>
+<th>特性</th>
+<th>適用場景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ArrayList</strong></td>
+<td>- 動態大小，基於陣列實現<br/>- 隨機讀取快 (<code>O(1)</code>)<br/>- 插入、刪除效率低 (<code>O(n)</code>)<br/>- 非同步<br/>- 容量自動擴充（1.5 倍）<br/>- 預設初始容量為 10</td>
+<td>- 資料讀取頻繁、變動少的場合<br/>- 需要快速隨機存取<br/>- 主要在尾部新增&#x2F;刪除元素</td>
+</tr>
+<tr>
+<td><strong>LinkedList</strong></td>
+<td>- 雙向鏈結串列<br/>- 插入、刪除快 (<code>O(1)</code>)<br/>- 讀取效率低 (<code>O(n)</code>)<br/>- 非同步<br/>- 實現了 Deque 介面，可當作佇列或堆疊使用</td>
+<td>- 資料頻繁插入、刪除的情況<br/>- 需要從兩端操作集合的場景<br/>- 不需要隨機存取</td>
+</tr>
+<tr>
+<td><strong>Vector</strong></td>
+<td>- 同步版的 ArrayList<br/>- 執行緒安全但效率較低<br/>- 容量自動擴充（2 倍）<br/>- 已被 Collections.synchronizedList() 取代</td>
+<td>- 需要執行緒安全但不頻繁操作的場合<br/>- 建議使用 ArrayList 配合 Collections.synchronizedList()</td>
+</tr>
+</tbody></table>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p>特性：無序、不允許重複元素、基於 equals() 和 hashCode() 判斷重複</p>
+<table>
+<thead>
+<tr>
+<th>類型</th>
+<th>特性</th>
+<th>適用場景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HashSet</strong></td>
+<td>- 基於 <code>HashMap</code> 實現<br/>- 無序儲存，存取快 (<code>O(1)</code>)<br/>- 允許 null 元素<br/>- 非同步</td>
+<td>- 需要快速去重的集合<br/>- 不在意元素順序<br/>- 需要 O(1) 時間複雜度的添加&#x2F;刪除&#x2F;查詢</td>
+</tr>
+<tr>
+<td><strong>TreeSet</strong></td>
+<td>- 基於 <code>TreeMap</code> 實現<br/>- 元素排序儲存<br/>- 不允許 null 元素<br/>- 使用自然排序或自定義 Comparator<br/>- 操作複雜度為 O(log n)</td>
+<td>- 需要有序的去重集合<br/>- 需要範圍查詢<br/>- 需要獲得排序後的元素</td>
+</tr>
+<tr>
+<td><strong>LinkedHashSet</strong></td>
+<td>- 基於 <code>LinkedHashMap</code> 實現<br/>- 維護插入順序<br/>- 結合 HashSet 的快速和有序性</td>
+<td>- 需要記住插入順序的去重集合<br/>- 需要可預測的迭代順序</td>
+</tr>
+</tbody></table>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p>特性：key-value 資料結構、key 不可重複、value 可重複</p>
+<table>
+<thead>
+<tr>
+<th>類型</th>
+<th>特性</th>
+<th>適用場景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HashMap</strong></td>
+<td>- 無序鍵值映射<br/>- 存取快 (<code>O(1)</code>)<br/>- 非同步<br/>- 允許 null 鍵和值<br/>- Java 8 後使用紅黑樹優化碰撞</td>
+<td>- 單執行緒下的快速查詢與更新<br/>- 不需要排序的鍵值對應用</td>
+</tr>
+<tr>
+<td><strong>TreeMap</strong></td>
+<td>- 鍵值排序存儲<br/>- 基於紅黑樹<br/>- 存取速度為 <code>O(log n)</code><br/>- 不允許 null 鍵，允許 null 值<br/>- 可使用自定義 Comparator</td>
+<td>- 需要按鍵排序的映射<br/>- 需要範圍操作<br/>- 需要最接近值查詢</td>
+</tr>
+<tr>
+<td><strong>Hashtable</strong></td>
+<td>- 同步版的 HashMap<br/>- 執行緒安全但效率較低<br/>- 不允許 null 鍵和值<br/>- 已被 ConcurrentHashMap 取代</td>
+<td>- 建議使用 ConcurrentHashMap 替代<br/>- 舊系統維護</td>
+</tr>
+<tr>
+<td><strong>LinkedHashMap</strong></td>
+<td>- 維護插入順序或訪問順序<br/>- 結合 HashMap 的快速和有序性<br/>- 可實現 LRU 快取</td>
+<td>- 需要記住鍵值對插入順序<br/>- 需要實現 LRU 快取機制</td>
+</tr>
+</tbody></table>
+<h3 id="補充說明"><a href="#補充說明" class="headerlink" title="補充說明"></a>補充說明</h3><ol>
+<li><p><strong>執行緒安全的選擇</strong>：</p>
+<ul>
+<li>使用 Collections 的同步包裝器：<code>Collections.synchronizedList/Set/Map()</code></li>
+<li>使用 <code>java.util.concurrent</code> 包中的實現：<ul>
+<li><code>CopyOnWriteArrayList</code></li>
+<li><code>ConcurrentHashMap</code></li>
+<li><code>ConcurrentSkipListSet/Map</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>效能考量</strong>：</p>
+<ul>
+<li>初始容量設置：若預知集合大小，建議設定適當的初始容量</li>
+<li>載入因子：HashMap&#x2F;HashSet 預設 0.75，可根據需求調整</li>
+<li>迭代效能：LinkedHashMap&#x2F;Set 比 HashMap&#x2F;Set 稍慢，但提供可預測的迭代順序</li>
+</ul>
+</li>
+<li><p><strong>選擇建議</strong>：</p>
+<ul>
+<li>一般場景：ArrayList、HashMap</li>
+<li>需要排序：TreeSet、TreeMap</li>
+<li>需要執行緒安全：ConcurrentHashMap、CopyOnWriteArrayList</li>
+<li>需要記住順序：LinkedHashMap、LinkedHashSet</li>
+</ul>
+</li>
+</ol>
+<h2 id="Array-與-ArrayList-的差別"><a href="#Array-與-ArrayList-的差別" class="headerlink" title="Array 與 ArrayList 的差別"></a>Array 與 ArrayList 的差別</h2><h3 id="1-Array（陣列）"><a href="#1-Array（陣列）" class="headerlink" title="1. Array（陣列）"></a><strong>1. Array（陣列）</strong></h3><p><strong>簡介</strong>：</p>
+<p><code>Array</code> 是 Java 中最基本的陣列結構，提供了固定大小的、連續存儲的數據結構。特性：</p>
+<ul>
+<li><strong>固定大小</strong>：在創建時需要指定大小，且不能動態調整。</li>
+<li><strong>快速存取</strong>：<code>Array</code> 提供 <strong>O(1)</strong> 的隨機存取速度，非常適合頻繁讀取資料的場合。</li>
+<li><strong>元素類型固定</strong>：只能存儲相同類型的元素，且元素可以是任何物件或基本類型（如 <code>int</code>、<code>char</code> 等）。</li>
+</ul>
+<p>兩者之間的比較</p>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>Array</th>
+<th>ArrayList</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>大小</strong></td>
+<td>固定</td>
+<td>可動態調整</td>
+</tr>
+<tr>
+<td><strong>型別</strong></td>
+<td>支援基本類型與物件</td>
+<td>只支援物件類型</td>
+</tr>
+<tr>
+<td><strong>效能</strong></td>
+<td>記憶體占用較少，效能較高</td>
+<td>增刪元素時效能較低</td>
+</tr>
+<tr>
+<td><strong>線程安全</strong></td>
+<td>非同步</td>
+<td>非同步</td>
+</tr>
+</tbody></table>
+<h3 id="堆疊-Stack-：後進先出-LIFO-原理"><a href="#堆疊-Stack-：後進先出-LIFO-原理" class="headerlink" title="堆疊 (Stack)：後進先出 (LIFO) 原理"></a>堆疊 (Stack)：後進先出 (LIFO) 原理</h3><p><strong>堆疊（Stack）</strong> 是一種遵循<strong>後進先出（Last In, First Out, LIFO）</strong>的數據結構。在 Java 中，當方法被調用時，會被壓入堆疊頂部，方法結束後會從堆疊中彈出。</p>
+<h4 id="運作原理："><a href="#運作原理：" class="headerlink" title="運作原理："></a>運作原理：</h4><p>假設方法調用順序如下：</p>
+<p><code>method1()</code> → <code>method2()</code> → <code>method3()</code></p>
+<ol>
+<li><code>method3()</code> 會先執行並完成，然後從堆疊中彈出。</li>
+<li>接著 <code>method2()</code> 完成並彈出。</li>
+<li>最後 <code>method1()</code> 完成。</li>
+</ol>
+<h3 id="案例：呼叫堆疊-Call-Stack-與-堆疊追蹤-Stack-Trace"><a href="#案例：呼叫堆疊-Call-Stack-與-堆疊追蹤-Stack-Trace" class="headerlink" title="案例：呼叫堆疊 (Call Stack) 與 堆疊追蹤 (Stack Trace)"></a>案例：呼叫堆疊 (Call Stack) 與 堆疊追蹤 (Stack Trace)</h3><ul>
+<li><strong>Call Stack</strong>：管理方法調用順序，每次方法調用會生成一個 <code>StackTraceElement</code>，記錄方法名稱、文件名、行號等，方法完成後該元素從堆疊中彈出。</li>
+<li><strong>Stack Trace</strong>：當發生錯誤時，堆疊追蹤會列出從方法調用開始到錯誤發生時的完整堆疊路徑，幫助開發者定位錯誤來源。</li>
+</ul>
+<p>大致介紹如上。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Software/" class="category-chain-item">Software</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+        <a href="/tags/Data-Structure/" class="print-no-link">#Data Structure</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java基本資料結構介紹</div>
+      <div>https://clark1945.github.io/2024/07/27/Java基本資料結構介紹/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 27, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/09/15/Google-API-%E7%92%B0%E5%A2%83%E5%BB%BA%E7%BD%AE/" title="Google API 環境建置">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Google API 環境建置</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/06/21/%E6%97%A5%E6%9C%AC%E8%BB%9F%E9%8A%80%E9%87%91%E6%B5%81API%E7%AD%86%E8%A8%98/" title="日本軟銀金流API筆記">
+                        <span class="hidden-mobile">日本軟銀金流API筆記</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2024/07/27/Java%E5%9F%BA%E6%9C%AC%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E4%BB%8B%E7%B4%B9/';
+          this.page.identifier = '/2024/07/27/Java%E5%9F%BA%E6%9C%AC%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E4%BB%8B%E7%B4%B9/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Access 
+        <span id="busuanzi_value_site_pv"></span>
+         time
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        User Amount 
+        <span id="busuanzi_value_site_uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

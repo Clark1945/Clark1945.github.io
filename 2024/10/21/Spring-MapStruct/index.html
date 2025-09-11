@@ -1,0 +1,755 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在Java的歷史中，我們為了更責任分明的處理資料，誕生出了許多物件，如對應資料庫的Persistent Object(PO)、用來傳輸溝通使用的Data Transfer Object(DTO)、以及用來顯示的Value Object(VO)，等等… 這樣針對同一個(廣義來說)物件，根據不同使用情境進行封裝，很好展現出Java的特色(隱藏不必要的細節)，但缺點是管理這些物件變得比較麻煩，我們會經常">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring MapStruct">
+<meta property="og:url" content="https://clark1945.github.io/2024/10/21/Spring-MapStruct/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="在Java的歷史中，我們為了更責任分明的處理資料，誕生出了許多物件，如對應資料庫的Persistent Object(PO)、用來傳輸溝通使用的Data Transfer Object(DTO)、以及用來顯示的Value Object(VO)，等等… 這樣針對同一個(廣義來說)物件，根據不同使用情境進行封裝，很好展現出Java的特色(隱藏不必要的細節)，但缺點是管理這些物件變得比較麻煩，我們會經常">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://clark1945.github.io/img/Java_logo.png">
+<meta property="article:published_time" content="2024-10-21T13:50:57.000Z">
+<meta property="article:modified_time" content="2025-09-11T03:28:27.151Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="MapStruct">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://clark1945.github.io/img/Java_logo.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Spring MapStruct - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Spring MapStruct"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-21 21:50" pubdate>
+          October 21, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          962 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Spring MapStruct</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在Java的歷史中，我們為了更責任分明的處理資料，誕生出了許多物件，如對應資料庫的Persistent Object(PO)、用來傳輸溝通使用的Data Transfer Object(DTO)、以及用來顯示的Value Object(VO)，等等…</p>
+<p>這樣針對同一個(廣義來說)物件，根據不同使用情境進行封裝，很好展現出Java的特色(隱藏不必要的細節)，但缺點是管理這些物件變得比較麻煩，我們會經常將一個物件轉換為另外一個物件，比方說我們把DTO轉為PO並存入資料庫中。那有沒有一個方法可以幫助我們處理物件轉換。</p>
+<p>有，就今天要介紹的Mapstruct。MapStruct比起傳統常看到的ObjectMapper，多了更多的功能可以使用，以符合現在更複雜的場景。</p>
+<p>要使用Mapstruct，你首先要導入依賴。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs jsx">&lt;dependency&gt;<br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.mapstruct<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mapstruct<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.6.0.Beta1<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br>&lt;/dependency&gt;<br></code></pre></td></tr></table></figure>
+
+<p>假設我們現在有一隻註冊API，他負責將傳來的會員資料，判斷是否可以被註冊，並將資料存入資料庫中，我們主要要將Member轉為MemberPO，規格如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Member</span> &#123;<br><br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-meta">@Schema(description = &quot;Unique identifier of the User&quot;, example = &quot;Clark&quot;)</span><br>    <span class="hljs-keyword">private</span> String account;<br>    <span class="hljs-keyword">private</span> String password;<br>    <span class="hljs-keyword">private</span> String email;<br>    <span class="hljs-keyword">private</span> String phone;<br>    <span class="hljs-keyword">private</span> String address;<br>    <span class="hljs-keyword">private</span> LocalDate birthday;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MemberPO</span> &#123;<br>    <span class="hljs-meta">@Id</span><br>    <span class="hljs-meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span><br>    <span class="hljs-keyword">private</span> Long id;<br>    <span class="hljs-meta">@Column(nullable = false)</span><br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-meta">@Column(nullable = false, unique = true)</span><br>    <span class="hljs-keyword">private</span> String account;<br>    <span class="hljs-meta">@Column(nullable = false)</span><br>    <span class="hljs-keyword">private</span> String password;<br>    <span class="hljs-meta">@Column(columnDefinition = &quot;INET&quot;)</span><br>    <span class="hljs-keyword">private</span> InetAddress ip;<br>    <span class="hljs-meta">@Column(name = &quot;wallet_id&quot;)</span><br>    <span class="hljs-keyword">private</span> Long walletId;<br>    <span class="hljs-meta">@Column(nullable = false, unique = true)</span><br>    <span class="hljs-keyword">private</span> String email;<br>    <span class="hljs-meta">@Column(name = &quot;phone_number&quot;)</span><br>    <span class="hljs-keyword">private</span> String phoneNumber;<br>    <span class="hljs-meta">@Column(columnDefinition = &quot;TEXT&quot;)</span><br>    <span class="hljs-keyword">private</span> String address;<br>    <span class="hljs-comment">// Update by SQL Trigger</span><br>    <span class="hljs-meta">@Column(name = &quot;created_at&quot;, nullable = false, updatable = false)</span><br>    <span class="hljs-meta">@Temporal(TemporalType.TIMESTAMP)</span><br>    <span class="hljs-keyword">private</span> LocalDateTime createdAt;<br>    <span class="hljs-comment">// Update by SQL Trigger</span><br>    <span class="hljs-meta">@Column(name = &quot;updated_at&quot;, nullable = false)</span><br>    <span class="hljs-meta">@Temporal(TemporalType.TIMESTAMP)</span><br>    <span class="hljs-keyword">private</span> LocalDateTime updatedAt;<br>    <span class="hljs-meta">@Column(nullable = false)</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> <span class="hljs-variable">status</span> <span class="hljs-operator">=</span> MemberStatus.ACTIVE.name();<br>    <span class="hljs-meta">@Column(nullable = false)</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> <span class="hljs-variable">role</span> <span class="hljs-operator">=</span> MemberRole.USER.name();<br>    <span class="hljs-meta">@Column</span><br>    <span class="hljs-keyword">private</span> LocalDate birthdate;<br>    <span class="hljs-meta">@Column(name = &quot;profile_picture_url&quot;)</span><br>    <span class="hljs-keyword">private</span> String profilePictureUrl;<br>    <span class="hljs-meta">@Column(name = &quot;last_login&quot;)</span><br>    <span class="hljs-keyword">private</span> LocalDateTime lastLogin;<br>    <span class="hljs-meta">@Column(name = &quot;login_attempts&quot;, nullable = false)</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">loginAttempts</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-meta">@Column(name = &quot;security_question&quot;)</span><br>    <span class="hljs-keyword">private</span> String securityQuestion;<br>    <span class="hljs-meta">@Column(name = &quot;security_answer&quot;)</span><br>    <span class="hljs-keyword">private</span> String securityAnswer;<br>    <span class="hljs-meta">@Column(name = &quot;two_factor_enabled&quot;, nullable = false)</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">twoFactorEnabled</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>這兩個物件差異很大，欄位名稱，資料數量等等都不同，要怎麼做呢？</p>
+<p>首先，我們要先定義出一個MapStruct來處理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Mapper</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">MemberMapper</span> &#123;<br>		<span class="hljs-comment">// 實例化Mapstruct</span><br>    <span class="hljs-type">MemberMapper</span> <span class="hljs-variable">INSTANCE</span> <span class="hljs-operator">=</span> Mappers.getMapper(MemberMapper.class);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接著我們可以加入我們的轉換方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Mapper</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">MemberMapper</span> &#123;<br>		<span class="hljs-comment">// 實例化Mapstruct</span><br>    <span class="hljs-type">MemberMapper</span> <span class="hljs-variable">INSTANCE</span> <span class="hljs-operator">=</span> Mappers.getMapper(MemberMapper.class);<br>    <br>    MemberPO <span class="hljs-title function_">memberToMemberPo</span><span class="hljs-params">(Member member)</span>;<br>    Member <span class="hljs-title function_">memberPOToMember</span><span class="hljs-params">(MemberPO memberPO)</span>;<br>&#125;<br><span class="hljs-comment">// TEST</span><br><span class="hljs-type">MemberPO</span> <span class="hljs-variable">memberPO</span> <span class="hljs-operator">=</span> MemberMapper.INSTANCE.memberToMemberPo(member);<br><span class="hljs-type">Member</span> <span class="hljs-variable">member</span> <span class="hljs-operator">=</span> MemberMapper.INSTANCE.memberPOToMember(memberPO);<br></code></pre></td></tr></table></figure>
+
+<p>我建立了兩個方法，以應對Member轉MemberPO與MemberPO轉回Member物件的情境。</p>
+<p>基本上只要這樣兩個物件就可以進行互相轉換了。但我們剛剛有提到，兩者物件的欄位名稱並不相同，針對這部分，可以加上@Mapping進行Mapping，如果邏輯比較特殊，也可以自己掛一個轉換器，我們在加上這部分吧。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Mapping(source = &quot;phone&quot;,target = &quot;phoneNumber&quot;)</span><br><span class="hljs-meta">@Mapping(source = &quot;birthday&quot;,target = &quot;birthdate&quot;)</span><br><span class="hljs-meta">@Mapping(source = &quot;ip&quot;, target = &quot;ip&quot;, qualifiedByName = &quot;stringToInetAddress&quot;)</span><br>MemberPO <span class="hljs-title function_">memberToMemberPo</span><span class="hljs-params">(Member member)</span>;<br><br><span class="hljs-meta">@Named(&quot;stringToInetAddress&quot;)</span><br>    <span class="hljs-keyword">default</span> InetAddress <span class="hljs-title function_">stringToInetAddress</span><span class="hljs-params">(String ip)</span> &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">return</span> InetAddress.getByName(ip);<br>        &#125; <span class="hljs-keyword">catch</span> (UnknownHostException e) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RuntimeException</span>(<span class="hljs-string">&quot;Invalid IP address: &quot;</span> + ip, e);<br>        &#125;<br>    &#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>source 代表來源，也就是傳入的物件屬性，target則代表回傳的物件屬性，透過這樣的方式去映射兩個物件，qualifiedByName則可以掛一個轉換器，以下把String的 IP轉換為 InetAddress物件。</p>
+<p>如果你想要針對一些欄位做出預設值？Mapstruct也支援這個功能，比方說在Member轉換為MemberPO後自動配置角色權限為一般使用者(USER)、並預設帳號狀態為啟用狀態。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 轉型後設定預設值</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> memberPO 轉換對象</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> member 轉換來源</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@AfterMapping</span><br><span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setDefaultValues</span><span class="hljs-params">(<span class="hljs-meta">@MappingTarget</span> MemberPO memberPO, Member member)</span> &#123;<br>  <span class="hljs-keyword">if</span> (memberPO.getRole() == <span class="hljs-literal">null</span>) &#123;<br>      memberPO.setRole(MemberRole.USER.name());<br>  &#125;<br>  <span class="hljs-keyword">if</span> (memberPO.getStatus() == <span class="hljs-literal">null</span>) &#123;<br>      memberPO.setStatus(MemberStatus.ACTIVE.name());<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>基本上，我常用的主要操作就是以上這些了。Mapstruct非常靈活，提供了額外寫一個方法進行手動轉換以外的方法，有興趣的朋友可以試試看這個工具，那今天的部分就到這裡了，就明天見吧。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Software/" class="category-chain-item">Software</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+        <a href="/tags/MapStruct/" class="print-no-link">#MapStruct</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Spring MapStruct</div>
+      <div>https://clark1945.github.io/2024/10/21/Spring-MapStruct/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 21, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/07/Diary-in-2024-11-07/" title="Diary in 2024/11/07">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Diary in 2024/11/07</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/20/Spring-Reflection/" title="Spring Reflection">
+                        <span class="hidden-mobile">Spring Reflection</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2024/10/21/Spring-MapStruct/';
+          this.page.identifier = '/2024/10/21/Spring-MapStruct/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Access 
+        <span id="busuanzi_value_site_pv"></span>
+         time
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        User Amount 
+        <span id="busuanzi_value_site_uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

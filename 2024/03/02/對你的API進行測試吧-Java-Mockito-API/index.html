@@ -1,0 +1,746 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在開發SpringBoot應用程式的途中，一般來說會建議盡量要寫測試(但也有例外，比如說我現在待的這間)，其中測試又有分為單元測試、整合測試、端對端測試等等。但本文並不是要說明這三者測試之間的差別，而是介紹測試用的Mock框架。所以想要了解那三者之間的差別的人，可以參考： 一般來說，想要在SpringBoot中撰寫測試時，就會在預設的@SpringBootTest中撰寫測試程式碼。以下是一個測試的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="對你的API進行測試吧 - Java Mockito API">
+<meta property="og:url" content="https://clark1945.github.io/2024/03/02/%E5%B0%8D%E4%BD%A0%E7%9A%84API%E9%80%B2%E8%A1%8C%E6%B8%AC%E8%A9%A6%E5%90%A7-Java-Mockito-API/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="在開發SpringBoot應用程式的途中，一般來說會建議盡量要寫測試(但也有例外，比如說我現在待的這間)，其中測試又有分為單元測試、整合測試、端對端測試等等。但本文並不是要說明這三者測試之間的差別，而是介紹測試用的Mock框架。所以想要了解那三者之間的差別的人，可以參考： 一般來說，想要在SpringBoot中撰寫測試時，就會在預設的@SpringBootTest中撰寫測試程式碼。以下是一個測試的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://clark1945.github.io/img/code.jpg">
+<meta property="article:published_time" content="2024-03-02T13:01:01.000Z">
+<meta property="article:modified_time" content="2025-09-11T03:28:27.155Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="Mockito">
+<meta property="article:tag" content="UnitTest">
+<meta property="article:tag" content="IntegrationTest">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://clark1945.github.io/img/code.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>對你的API進行測試吧 - Java Mockito API - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="對你的API進行測試吧 - Java Mockito API"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-03-02 21:01" pubdate>
+          March 2, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">對你的API進行測試吧 - Java Mockito API</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在開發SpringBoot應用程式的途中，一般來說會建議盡量要寫測試(但也有例外，比如說我現在待的這間)，其中測試又有分為單元測試、整合測試、端對端測試等等。<br>但本文並不是要說明這三者測試之間的差別，而是介紹測試用的Mock框架。所以想要了解那三者之間的差別的人，可以參考：</p>
+<p>一般來說，想要在SpringBoot中撰寫測試時，就會在預設的@SpringBootTest中撰寫測試程式碼。以下是一個測試的範例：</p>
+<p>RoutingHealth是一個存放於資料庫的物件，該物件可以決定通路(聯邦銀行)是否被鎖定，系統假設設定了鎖定的條件，而我要測試鎖定的狀況，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><code class="hljs java">   <span class="hljs-meta">@MockBean</span><br>   <span class="hljs-keyword">private</span> RoutingHealthRepository rhRepo;<br>   <span class="hljs-comment">// 這是Mockito使用的假造一個bean，使用假造的代表裡面很乾淨，</span><br>   <span class="hljs-comment">//不會有什麼Spring的配置，poperties等都沒有</span><br>   <br>   <span class="hljs-meta">@Test</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">HealthTunnelDuringLockTime</span><span class="hljs-params">()</span> &#123;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">outChannel</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;UBOT&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">reqTime</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2023-11-24T16:30:48.183&quot;</span>; <span class="hljs-comment">// 交易時間</span><br>       <span class="hljs-type">String</span> <span class="hljs-variable">lastTimeWasLock</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2023-11-24T16:25:48.183&quot;</span>; <span class="hljs-comment">// 上次UBOT被鎖定時間</span><br>       <span class="hljs-type">String</span> <span class="hljs-variable">healthFlag</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Y&quot;</span>; <span class="hljs-comment">// 健康度分流功能</span><br>       MockDBObject(outChannel,lastTimeWasLock,healthFlag); <span class="hljs-comment">// 偽造DB物件</span><br>       <span class="hljs-type">boolean</span> <span class="hljs-variable">isPass</span> <span class="hljs-operator">=</span> routingHealthService.getRoutingHealthByOutChannel(outChannel,reqTime);<br>       Assert.assertFalse(isPass);<br>       System.out.println(<span class="hljs-string">&quot;鎖定狀態下，健康度分流已開啟，交易時間30分鐘內 block success!&quot;</span>);<br>   &#125;<br>   <span class="hljs-meta">@Test</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">HealthTunnelOverLockTime</span><span class="hljs-params">()</span> &#123;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">outChannel</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;UBOT&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">reqTime</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2023-11-24T16:56:48.183&quot;</span>; <span class="hljs-comment">// 時間設定超過前次鎖定時間加30分鐘</span><br>       <span class="hljs-type">String</span> <span class="hljs-variable">lastTimeWasLock</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2023-11-24T16:25:48.183&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">healthFlag</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Y&quot;</span>;<br>       MockDBObject(outChannel,lastTimeWasLock,healthFlag);<br>       <span class="hljs-type">boolean</span> <span class="hljs-variable">isPass</span> <span class="hljs-operator">=</span> routingHealthService.getRoutingHealthByOutChannel(outChannel,reqTime);<br>       Assert.assertTrue(isPass);<br>       System.out.println(<span class="hljs-string">&quot;鎖定狀態下，健康度分流已開啟，交易時間超過30分鐘 pass success!&quot;</span>);<br>   &#125;<br>   <span class="hljs-meta">@Test</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">HealthTunnelClosed</span><span class="hljs-params">()</span> &#123;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">outChannel</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;UBOT&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">reqTime</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2023-11-24T16:30:48.183&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">lastTimeWasLock</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2023-11-24T16:25:48.183&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">healthFlag</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;N&quot;</span>; <span class="hljs-comment">// 關閉健康度分流</span><br>       MockDBObject(outChannel,lastTimeWasLock,healthFlag);<br>       <span class="hljs-type">boolean</span> <span class="hljs-variable">isPass</span> <span class="hljs-operator">=</span> routingHealthService.getRoutingHealthByOutChannel(outChannel,reqTime);<br>       Assert.assertTrue(isPass);<br>       System.out.println(<span class="hljs-string">&quot;鎖定狀態下，健康度分流已關閉，交易時間30分鐘內 pass success!&quot;</span>);<br>   &#125;<br><br>   <span class="hljs-meta">@Test</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">HealthTunnelUBTestBefore</span><span class="hljs-params">()</span> &#123; <span class="hljs-comment">// UB未鎖定，</span><br>       <span class="hljs-type">String</span> <span class="hljs-variable">outChannel</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;UBOT&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">reqTime</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2024-03-15T14:00:48.183&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">lastTimeWasLock</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2024-03-18T16:00:48.183&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">healthFlag</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Y&quot;</span>; <span class="hljs-comment">// 啟用健康度分流</span><br>       MockDBObjectUBTest(outChannel,lastTimeWasLock,healthFlag);<br>       <span class="hljs-type">boolean</span> <span class="hljs-variable">isPass</span> <span class="hljs-operator">=</span> routingHealthService.getRoutingHealthByOutChannel(outChannel,reqTime);<br>       Assert.assertTrue(isPass);<br>       System.out.println(<span class="hljs-string">&quot;鎖定狀態下，健康度分流已啟用，交易時間早於鎖定時間 pass success!&quot;</span>);<br>   &#125;<br><br>   <span class="hljs-meta">@Test</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">HealthTunnelUBTestAfter</span><span class="hljs-params">()</span> &#123; <span class="hljs-comment">// UB未鎖定，</span><br>       <span class="hljs-type">String</span> <span class="hljs-variable">outChannel</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;UBOT&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">reqTime</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2024-03-18T17:00:48.183&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">lastTimeWasLock</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2024-03-18T16:00:48.183&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">healthFlag</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Y&quot;</span>; <span class="hljs-comment">// 啟用健康度分流</span><br>       MockDBObjectUBTest(outChannel,lastTimeWasLock,healthFlag);<br>       <span class="hljs-type">boolean</span> <span class="hljs-variable">isPass</span> <span class="hljs-operator">=</span> routingHealthService.getRoutingHealthByOutChannel(outChannel,reqTime);<br>       Assert.assertTrue(isPass);<br>       System.out.println(<span class="hljs-string">&quot;鎖定狀態下，健康度分流已啟用，交易時間晚於鎖定時間30分鐘後 pass success!&quot;</span>);<br>   &#125;<br><br>   <span class="hljs-meta">@Test</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">HealthTunnelUBTestDuring</span><span class="hljs-params">()</span> &#123; <span class="hljs-comment">// UB未鎖定，</span><br>       <span class="hljs-type">String</span> <span class="hljs-variable">outChannel</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;UBOT&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">reqTime</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2024-03-18T16:00:49.183&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">lastTimeWasLock</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2024-03-18T16:00:48.183&quot;</span>;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">healthFlag</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Y&quot;</span>; <span class="hljs-comment">// 啟用健康度分流</span><br>       MockDBObjectUBTest(outChannel,lastTimeWasLock,healthFlag);<br>       <span class="hljs-type">boolean</span> <span class="hljs-variable">isPass</span> <span class="hljs-operator">=</span> routingHealthService.getRoutingHealthByOutChannel(outChannel,reqTime);<br>       Assert.assertFalse(isPass);<br>       System.out.println(<span class="hljs-string">&quot;鎖定狀態下，健康度分流已啟用，交易時間於鎖定時間30分鐘內 ban success!&quot;</span>);<br>   &#125;<br><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">MockDBObjectUBTest</span><span class="hljs-params">(String outChannel,String lastTimeWasLock,String healthFlag)</span> &#123;<br>       <span class="hljs-type">RoutingHealth</span> <span class="hljs-variable">rh</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RoutingHealth</span>();<br>       rh.setRhType(outChannel);<br>       rh.setRhIsActive(<span class="hljs-string">&quot;N&quot;</span>); <span class="hljs-comment">// 假設聯邦Gateway是被鎖住的</span><br>       rh.setRhLockTime(LocalDateTime.parse(lastTimeWasLock)); <span class="hljs-comment">// 聯邦Gateway上次被鎖定的時間點</span><br>       Mockito.<span class="hljs-keyword">when</span>(coreFacade.getSystemSetting(SSCode.LOCK_MINUTES)).thenReturn(<span class="hljs-string">&quot;30&quot;</span>);<br>       Mockito.<span class="hljs-keyword">when</span>(coreFacade.getSystemSetting(SSCode.ROUTING_HEALTH_FLAG)).thenReturn(healthFlag); <span class="hljs-comment">// 健康度分流是否開啟</span><br>       Mockito.<span class="hljs-keyword">when</span>(rhRepo.getRoutingHealthByRhTypeAndRhLockTimeBetween(outChannel)).thenReturn(rh);<br>   &#125;<br><br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">MockDBObject</span><span class="hljs-params">(String outChannel,String lastTimeWasLock,String healthFlag)</span> &#123;<br>       <span class="hljs-type">RoutingHealth</span> <span class="hljs-variable">rh</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RoutingHealth</span>();<br>       rh.setRhType(outChannel);<br>       rh.setRhIsActive(<span class="hljs-string">&quot;N&quot;</span>); <span class="hljs-comment">// 假設聯邦Gateway是被鎖住的</span><br>       rh.setRhLockTime(LocalDateTime.parse(lastTimeWasLock)); <span class="hljs-comment">// 聯邦Gateway上次被鎖定的時間點</span><br>       Mockito.<span class="hljs-keyword">when</span>(coreFacade.getSystemSetting(SSCode.LOCK_MINUTES)).thenReturn(<span class="hljs-string">&quot;30&quot;</span>);<br>       Mockito.<span class="hljs-keyword">when</span>(coreFacade.getSystemSetting(SSCode.ROUTING_HEALTH_FLAG)).thenReturn(healthFlag); <span class="hljs-comment">// 健康度分流是否開啟</span><br>       Mockito.<span class="hljs-keyword">when</span>(rhRepo.getRoutingHealthByRhTypeAndRhLockTimeBetween(outChannel)).thenReturn(rh);<br>   &#125;<br>   <br>   <span class="hljs-comment">// poperties 的假造</span><br> <span class="hljs-meta">@Test</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testRefundPoint</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	<span class="hljs-type">MainService</span> <span class="hljs-variable">mainService</span> <span class="hljs-operator">=</span> MockConfig();<br><br>	<span class="hljs-type">HashMap</span> <span class="hljs-variable">reqJson</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>();<br>	reqJson.put(<span class="hljs-string">&quot;pmMemberNo&quot;</span>,<span class="hljs-string">&quot;GID76683851296887&quot;</span>);<br>	reqJson.put(<span class="hljs-string">&quot;pmPointAmt&quot;</span>,<span class="hljs-string">&quot;50000&quot;</span>);<br>	reqJson.put(<span class="hljs-string">&quot;pointId&quot;</span>,<span class="hljs-string">&quot;ResIsFatF2-4&quot;</span>);<br>	reqJson.put(<span class="hljs-string">&quot;pmSellerName&quot;</span>,<span class="hljs-string">&quot;testMerchantLaLaLa&quot;</span>);<br>	reqJson.put(<span class="hljs-string">&quot;allowInsufficient&quot;</span>,<span class="hljs-string">&quot;Y&quot;</span>);<br>	reqJson.put(<span class="hljs-string">&quot;merchantNo&quot;</span>,<span class="hljs-string">&quot;0904000001&quot;</span>);<br>	reqJson.put(<span class="hljs-string">&quot;refundId&quot;</span>,<span class="hljs-string">&quot;ResIsChubby01&quot;</span>);<br>	reqJson.put(<span class="hljs-string">&quot;mchId&quot;</span>,<span class="hljs-string">&quot;ACpay&quot;</span>);<br><br>	<span class="hljs-type">Fundmentals</span> <span class="hljs-variable">fundmentals</span> <span class="hljs-operator">=</span> Fundmentals.builder()<br>			.tradeType(TradeType.CANCEL)<br>			.apiKey(<span class="hljs-string">&quot;xyz123&quot;</span>)<br>			.accessUrl(<span class="hljs-string">&quot;https://icash-apim.icashsys.com.tw/Point-UAT/v1/RefundPoint&quot;</span>).build();<br>	<span class="hljs-type">String</span> <span class="hljs-variable">respJSON</span> <span class="hljs-operator">=</span> mainService.mainprocedure(reqJson,fundmentals);<br>	HashMap&lt;String,String&gt; result = objectMapper.readValue(respJSON, HashMap.class);<br>	Assert.assertEquals(<span class="hljs-string">&quot;3003&quot;</span>,result.get(<span class="hljs-string">&quot;resultCode&quot;</span>));<br>&#125;<br><br><span class="hljs-keyword">public</span> MainService <span class="hljs-title function_">MockConfig</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	<span class="hljs-type">MainService</span> <span class="hljs-variable">mainService</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MainService</span>();<br>	<span class="hljs-type">MainService</span> <span class="hljs-variable">mainService_mock</span> <span class="hljs-operator">=</span> Mockito.spy(mainService);<br>	Mockito.doReturn(<span class="hljs-literal">null</span>).<span class="hljs-keyword">when</span>(mainService_mock).SendRequest(Mockito.anyObject(),Mockito.anyString()); <span class="hljs-comment">// 先不發到OP</span><br>	Mockito.doNothing().<span class="hljs-keyword">when</span>(mainService_mock).validate(Mockito.anyObject()); <span class="hljs-comment">// 先不做欄位檢查</span><br>	ReflectionTestUtils.setField(mainService_mock, <span class="hljs-string">&quot;queryDomain&quot;</span>, <span class="hljs-string">&quot;https://icash-apim.icashsys.com.tw/Point-UAT/v1/QueryPoint&quot;</span>); <span class="hljs-comment">// 仿造 @Value</span><br>	ReflectionTestUtils.setField(mainService_mock, <span class="hljs-string">&quot;apiKey&quot;</span>, <span class="hljs-string">&quot;xyz123&quot;</span>); <span class="hljs-comment">// 仿造 @Value</span><br>	<span class="hljs-keyword">return</span> mainService_mock;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="MVCResult-測試-端對端測試"><a href="#MVCResult-測試-端對端測試" class="headerlink" title="MVCResult 測試 端對端測試"></a>MVCResult 測試 端對端測試</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">HttpHeaders</span> <span class="hljs-variable">httpHeaders</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpHeaders</span>();<br>httpHeaders.add(<span class="hljs-string">&quot;Content-Type&quot;</span>, <span class="hljs-string">&quot;application/json&quot;</span>);<br>httpHeaders.add(<span class="hljs-string">&quot;Version&quot;</span>, <span class="hljs-string">&quot;1.0.1&quot;</span>);<br>httpHeaders.add(<span class="hljs-string">&quot;ClientIp&quot;</span>, <span class="hljs-string">&quot;1.1.1.1&quot;</span>);<br><br><span class="hljs-type">RequestBuilder</span> <span class="hljs-variable">requestBuilder</span> <span class="hljs-operator">=</span><br>        MockMvcRequestBuilders<br>                .get(<span class="hljs-string">&quot;/api/getPointExpectAmt&quot;</span>)<br>                .headers(httpHeaders)<br>                .param(<span class="hljs-string">&quot;pmslType&quot;</span>, <span class="hljs-string">&quot;AM&quot;</span>)<br>                .param(<span class="hljs-string">&quot;purchaseAmt&quot;</span>, <span class="hljs-string">&quot;10000&quot;</span>);<br><br><span class="hljs-type">MvcResult</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> mockMvc.perform(requestBuilder)<br>        .andDo(print())<br>        .andExpect(jsonPath(<span class="hljs-string">&quot;$.code&quot;</span>).value(<span class="hljs-string">&quot;0&quot;</span>))<br>        .andExpect(jsonPath(<span class="hljs-string">&quot;$.message&quot;</span>).value(<span class="hljs-string">&quot;SUCCESS&quot;</span>))<br>        .andReturn();<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Software/" class="category-chain-item">Software</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/SpringBoot/" class="print-no-link">#SpringBoot</a>
+      
+        <a href="/tags/Mockito/" class="print-no-link">#Mockito</a>
+      
+        <a href="/tags/UnitTest/" class="print-no-link">#UnitTest</a>
+      
+        <a href="/tags/IntegrationTest/" class="print-no-link">#IntegrationTest</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>對你的API進行測試吧 - Java Mockito API</div>
+      <div>https://clark1945.github.io/2024/03/02/對你的API進行測試吧-Java-Mockito-API/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 2, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/19/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%B7%B1%E7%9A%84Github%E9%83%A8%E8%90%BD%E6%A0%BC-%E4%BD%BF%E7%94%A8Hexo-Github-Page/" title="如何建立自己的Github部落格 使用Hexo+Github Page">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">如何建立自己的Github部落格 使用Hexo+Github Page</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/12/JDBC-to-Hibernate-to-JPA/" title="JDBC to Hibernate to JPA">
+                        <span class="hidden-mobile">JDBC to Hibernate to JPA</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2024/03/02/%E5%B0%8D%E4%BD%A0%E7%9A%84API%E9%80%B2%E8%A1%8C%E6%B8%AC%E8%A9%A6%E5%90%A7-Java-Mockito-API/';
+          this.page.identifier = '/2024/03/02/%E5%B0%8D%E4%BD%A0%E7%9A%84API%E9%80%B2%E8%A1%8C%E6%B8%AC%E8%A9%A6%E5%90%A7-Java-Mockito-API/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Access 
+        <span id="busuanzi_value_site_pv"></span>
+         time
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        User Amount 
+        <span id="busuanzi_value_site_uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
