@@ -1,8 +1,9 @@
 ---
 title: SpringBoot的三層式架構
+category: Development
 date: 2024-10-08 20:26:06
 index_img: /img/Java_logo.png
-category: Software
+ 
 tags: 
   - Java
   - SpringBoot

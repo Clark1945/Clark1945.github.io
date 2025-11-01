@@ -1,7 +1,8 @@
 ---
 title: 說明Java @Functionalinterface 的功用
+category: Development
 date: 2025-02-02 10:02:32
-category: Software
+ 
 tags:
   - Java
   - Functional Programming

@@ -1,7 +1,7 @@
 ---
 title: 隔離層級測試紀錄-使用Grails
+category: Development
 date: 2025-01-11 10:13:27
-category: Software
 tags:
   - Grails
   - Isolation Level

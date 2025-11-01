@@ -1,7 +1,8 @@
 ---
 title: Spring Reflection
+category: Development
 date: 2024-10-20 21:46:52
-category: Software
+ 
 tags:
   - SpringBoot
   - Reflection

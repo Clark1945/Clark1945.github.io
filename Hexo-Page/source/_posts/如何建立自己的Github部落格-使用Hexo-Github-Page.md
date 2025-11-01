@@ -1,7 +1,7 @@
 ---
 title: 如何建立自己的Github部落格 使用Hexo+Github Page
+category: Development
 date: 2024-04-19 11:31:16
-categories: 其他
 tags: 工具
 ---
 

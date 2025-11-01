@@ -1,8 +1,8 @@
 ---
 title: '[2024鐵人賽]02-Call By Value？、Call By Reference？ =與==與equals()關聯'
+category: Development
 date: 2024-10-02 18:59:35
 index_img: /img/Java_logo.png
-category: Software
 tags:
   - Java
 ---

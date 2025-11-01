@@ -1,8 +1,9 @@
 ---
 title: Spring IOC 與 DI
+category: Development
 date: 2024-10-19 20:44:51
 index_img: /img/Java_logo.png
-category: Software
+ 
 tags:
   - SpringBoot
   - Inversion Of Control

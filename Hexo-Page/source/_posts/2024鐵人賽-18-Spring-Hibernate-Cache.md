@@ -1,8 +1,8 @@
 ---
 title: '[2024鐵人賽]18-Spring Hibernate Cache'
+category: Development
 date: 2024-10-18 20:31:26
 index_img: /img/Java_logo.png
-category: Software
 tags:
   - Java
 ---

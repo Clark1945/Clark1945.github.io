@@ -1,7 +1,7 @@
 ---
 title: 【熊本弁】學習 Girl Band Cry 1 話出現的方言
+category: Japanese
 date: 2024-05-19 14:18:26
-categories: 日文
 tags: 
  - 熊本弁
  - ガールズバンドクライ

@@ -1,7 +1,8 @@
 ---
 title: 一些零碎的SpringBoot小知識
+category: Development
 date: 2025-01-05 12:05:00
-category: Software
+ 
 index_img: /img/SpringBoot_logo.png
 tags:
   - SpringBoot

@@ -1,8 +1,8 @@
 ---
 title: 日本軟銀金流API筆記
+category: Development
 date: 2024-06-21 11:20:00
 index_img: /img/softbank.png
-category: Finance
 tags: 
   - SoftBank
   - Payment

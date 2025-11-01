@@ -1,7 +1,7 @@
 ---
 title: Java Stream用法、MapStruct、Lombok語法
+category: Development
 date: 2024-05-01 14:16:37
-categories: Coding
 tags: Java
 ---
 

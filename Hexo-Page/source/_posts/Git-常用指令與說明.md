@@ -1,9 +1,8 @@
 ---
 title: Git 常用指令與說明
+category: Development
 date: 2024-12-24 22:01:08
 index_img: /img/git.jpg
-categories:
-  - Software
 tags:
   - Git
 ---

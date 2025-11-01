@@ -1,8 +1,9 @@
 ---
 title: SpringBoot ControllerAdvice
+category: Development
 date: 2024-10-14 21:03:52
 index_img: /img/Java_logo.png
-category: Software
+ 
 tags:
   - Java
   - SpringBoot

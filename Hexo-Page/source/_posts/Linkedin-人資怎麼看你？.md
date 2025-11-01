@@ -1,8 +1,8 @@
 ---
 title: Linkedin-人資怎麼看你？
+category: Insights
 date: 2024-12-30 21:29:51
 index_img: /img/linkedin_logo.jpg
-category: Self-Value
 tags:
   - Linkedin
   - Head Hunter

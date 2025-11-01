@@ -1,8 +1,9 @@
 ---
 title: SpringBoot Test
+category: Development
 date: 2025-01-08 22:24:44
 index_img: img/Java_logo.png
-category: Software
+ 
 tags:
   - SpringBoot
   - Test

@@ -1,7 +1,8 @@
 ---
 title: Spring Security探秘
+category: Development
 date: 2025-01-05 18:56:10
-category: Software
+ 
 index_img: /img/SpringBoot_logo.png
 tags:
   - Java

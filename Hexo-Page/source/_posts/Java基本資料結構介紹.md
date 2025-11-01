@@ -1,8 +1,9 @@
 ---
 title: Java基本資料結構介紹
+category: Development
 date: 2024-07-27 09:24:22
 index_img: /img/Java_logo.png
-category: Software
+ 
 tags: 
   - Data Structure
   - Java

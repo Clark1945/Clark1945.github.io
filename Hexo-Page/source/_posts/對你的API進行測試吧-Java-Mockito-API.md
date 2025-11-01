@@ -1,7 +1,8 @@
 ---
 title: 對你的API進行測試吧 - Java Mockito API
+category: Development
 date: 2024-03-02 21:01:01
-category: Software
+ 
 index_img: /img/code.jpg
 tags: 
   - SpringBoot

@@ -1,8 +1,8 @@
 ---
 title: Java hashcode()解說
+category: Development
 date: 2024-10-05 20:19:36
 index_img: /img/Java_logo.png
-category: Software
 tags: 
   - Java
 

@@ -1,5 +1,6 @@
 ---
 title: JDBC to Hibernate to JPA
+category: Development
 date: 2022-10-12 20:58:10
 index_img: /img/Java_logo.png
 tags:

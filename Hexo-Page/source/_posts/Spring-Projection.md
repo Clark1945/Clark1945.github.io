@@ -1,8 +1,9 @@
 ---
 title: Spring Projection
+category: Development
 date: 2024-10-19 21:16:02
 index_img: /img/Java_logo.png
-category: Software
+ 
 tags:
   - Java
   - SpringBoot

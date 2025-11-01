@@ -1,8 +1,9 @@
 ---
 title: Spring Bean延遲初始化
+category: Development
 date: 2024-10-17 21:13:59
 index_img: img/Java_logo.png
-category: Software
+ 
 tags:
   - SpringBoot
   - Bean

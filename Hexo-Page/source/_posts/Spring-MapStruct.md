@@ -1,8 +1,9 @@
 ---
 title: Spring MapStruct
+category: Development
 date: 2024-10-21 21:50:57
 index_img: img/Java_logo.png
-category: Software
+ 
 tags:
   - MapStruct
   - Java

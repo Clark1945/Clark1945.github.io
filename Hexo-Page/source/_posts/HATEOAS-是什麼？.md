@@ -1,8 +1,8 @@
 ---
 title: HATEOAS 是什麼？
+category: Development
 date: 2025-01-25 20:53:40
 index_img: img/Java_logo.png
-category: Software
 tags:
  - HATEOAS
  - REST

@@ -1,9 +1,8 @@
 ---
 title: Clean Code 筆記(1)
+category: Development
 date: 2024-12-26 20:59:45
 index_img: /img/clean_code.jpg
-categories:
-  - Software
 tags:
   - Clean Code
   - Java

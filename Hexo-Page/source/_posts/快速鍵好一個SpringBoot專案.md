@@ -1,8 +1,9 @@
 ---
 title: 快速鍵好一個SpringBoot專案
+category: Development
 date: 2024-10-07 20:24:15
 index_img: /img/Java_logo.png
-category: Software
+ 
 tags: 
   - Java
   - SpringBoot

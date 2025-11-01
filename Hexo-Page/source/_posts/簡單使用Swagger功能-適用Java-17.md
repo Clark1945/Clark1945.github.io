@@ -1,7 +1,7 @@
 ---
 title: 使用Swagger撰寫你的 Rest API document 吧!(適用Java 17)
+category: Development
 date: 2024-04-22 11:20:19
-categories: Coding
 tags: Spring
 ---
 

@@ -1,8 +1,9 @@
 ---
 title: SpringBoot Spring Validation介紹
+category: Development
 date: 2025-01-07 20:47:16
 index_img: img/Java_logo.png
-category: Software
+ 
 tags:
   - Java
   - Hibernate

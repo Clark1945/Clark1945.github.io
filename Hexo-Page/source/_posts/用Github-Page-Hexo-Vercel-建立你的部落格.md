@@ -1,8 +1,7 @@
 ---
 title: 用Github Page + Hexo + Vercel 建立你的部落格
+category: Development
 date: 2024-12-22 23:34:44
-categories:
-  - Software
 tags: 
   - Git 
   - GithubPage 
