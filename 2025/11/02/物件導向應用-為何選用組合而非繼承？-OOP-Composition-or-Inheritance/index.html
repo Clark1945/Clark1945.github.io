@@ -19,28 +19,25 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="Programming">
   
-    <meta name="description" content="Java是現今企業常用的程式語言，可以被用來開發網頁、APP等等，主要特色包含：  跨平台──「一次編寫，到處運行」 強型別語言──強大的物件導向（OOP）與設計模式支援 自動記憶體管理 穩定的生態與企業級支援 支援高效能與併發能力等等…不一一列出。  看不懂？沒關係，我一一慢慢講給你聽 跨平台──「一次編寫，到處運行」 跨平台，你可能以為是手機與網站都可以用就叫做跨平台，但Java的跨平台的意思">
+    <meta name="description" content="之前曾經聽過一些人在針對OOP關係依賴時，對於使用繼承頗有微詞，這一派人會主張應該使用組合而非繼承，今天我就來分享組合以及繼承。 Composition Over Inheritance (組合優於繼承)為甚麼不推薦使用繼承？ 確實，繼承解決了重複程式碼的問題。但繼承層次過深、過複雜，也會影響程式碼的可維護性。  假設我們要設計一個關於鳥的類別，我們知道大多數的鳥都會飛，所以我們一開始會這樣寫 1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="連驢子都看得懂的Java教學-01 甚麼是Java?">
-<meta property="og:url" content="https://clark1945.github.io/2025/11/01/%E9%80%A3%E9%A9%A2%E5%AD%90%E9%83%BD%E7%9C%8B%E5%BE%97%E6%87%82%E7%9A%84Java%E6%95%99%E5%AD%B8-01-%E7%94%9A%E9%BA%BC%E6%98%AFJava/index.html">
+<meta property="og:title" content="物件導向應用-為何選用組合而非繼承？(OOP Composition or Inheritance?)">
+<meta property="og:url" content="https://clark1945.github.io/2025/11/02/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E6%87%89%E7%94%A8-%E7%82%BA%E4%BD%95%E9%81%B8%E7%94%A8%E7%B5%84%E5%90%88%E8%80%8C%E9%9D%9E%E7%B9%BC%E6%89%BF%EF%BC%9F-OOP-Composition-or-Inheritance/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="Java是現今企業常用的程式語言，可以被用來開發網頁、APP等等，主要特色包含：  跨平台──「一次編寫，到處運行」 強型別語言──強大的物件導向（OOP）與設計模式支援 自動記憶體管理 穩定的生態與企業級支援 支援高效能與併發能力等等…不一一列出。  看不懂？沒關係，我一一慢慢講給你聽 跨平台──「一次編寫，到處運行」 跨平台，你可能以為是手機與網站都可以用就叫做跨平台，但Java的跨平台的意思">
+<meta property="og:description" content="之前曾經聽過一些人在針對OOP關係依賴時，對於使用繼承頗有微詞，這一派人會主張應該使用組合而非繼承，今天我就來分享組合以及繼承。 Composition Over Inheritance (組合優於繼承)為甚麼不推薦使用繼承？ 確實，繼承解決了重複程式碼的問題。但繼承層次過深、過複雜，也會影響程式碼的可維護性。  假設我們要設計一個關於鳥的類別，我們知道大多數的鳥都會飛，所以我們一開始會這樣寫 1">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://clark1945.github.io/img/java_t1.png">
-<meta property="og:image" content="https://clark1945.github.io/img/java_t2.png">
-<meta property="og:image" content="https://clark1945.github.io/img/java_t3.png">
-<meta property="article:published_time" content="2025-11-01T13:19:54.000Z">
-<meta property="article:modified_time" content="2025-11-02T00:48:48.679Z">
+<meta property="article:published_time" content="2025-11-02T11:48:33.000Z">
+<meta property="article:modified_time" content="2025-11-02T12:21:50.758Z">
 <meta property="article:author" content="Clark Liu">
-<meta property="article:tag" content="JavaTutorial">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="OOP">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://clark1945.github.io/img/java_t1.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>連驢子都看得懂的Java教學-01 甚麼是Java? - Clark&#39;s Blog</title>
+  <title>物件導向應用-為何選用組合而非繼承？(OOP Composition or Inheritance?) - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -233,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="連驢子都看得懂的Java教學-01 甚麼是Java?"></span>
+            <span id="subtitle" data-typed-text="物件導向應用-為何選用組合而非繼承？(OOP Composition or Inheritance?)"></span>
           
         </div>
 
@@ -244,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-11-01 21:19" pubdate>
-          November 1, 2025 pm
+        <time datetime="2025-11-02 19:48" pubdate>
+          November 2, 2025 pm
         </time>
       </span>
     
@@ -256,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k words
+          837 words
         
       </span>
     
@@ -267,7 +264,7 @@
         
         
         
-          15 mins
+          7 mins
         
       </span>
     
@@ -313,94 +310,45 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">連驢子都看得懂的Java教學-01 甚麼是Java?</h1>
+            <h1 id="seo-header">物件導向應用-為何選用組合而非繼承？(OOP Composition or Inheritance?)</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Java是現今企業常用的程式語言，可以被用來開發網頁、APP等等，主要特色包含：</p>
-<ul>
-<li>跨平台──「一次編寫，到處運行」</li>
-<li>強型別語言──強大的物件導向（OOP）與設計模式支援</li>
-<li>自動記憶體管理</li>
-<li>穩定的生態與企業級支援</li>
-<li>支援高效能與併發能力<br>等等…不一一列出。</li>
+                <p>之前曾經聽過一些人在針對OOP關係依賴時，對於使用繼承頗有微詞，這一派人會主張應該使用組合而非繼承，今天我就來分享組合以及繼承。</p>
+<h3 id="Composition-Over-Inheritance-組合優於繼承"><a href="#Composition-Over-Inheritance-組合優於繼承" class="headerlink" title="Composition Over Inheritance (組合優於繼承)"></a>Composition Over Inheritance (組合優於繼承)</h3><h3 id="為甚麼不推薦使用繼承？"><a href="#為甚麼不推薦使用繼承？" class="headerlink" title="為甚麼不推薦使用繼承？"></a>為甚麼不推薦使用繼承？</h3><ul>
+<li>確實，繼承解決了重複程式碼的問題。但繼承層次過深、過複雜，也會影響程式碼的可維護性。</li>
 </ul>
-<p>看不懂？沒關係，我一一慢慢講給你聽</p>
-<h3 id="跨平台──「一次編寫，到處運行」"><a href="#跨平台──「一次編寫，到處運行」" class="headerlink" title="跨平台──「一次編寫，到處運行」"></a>跨平台──「一次編寫，到處運行」</h3><hr>
-<p>跨平台，你可能以為是手機與網站都可以用就叫做跨平台，但Java的跨平台的意思遠遠不只如此。為了更好地說明Java的跨平台特性，我會先使用C++作為舉例，來讓你更好地理解跨平台的特性。你不必熟悉C++，但還是需要你有一點想像力。</p>
-<p>一個C++的程式碼執行流程是這樣的：</p>
-<p><strong>預處理(Preprocessing)</strong> &gt;&gt; <strong>編譯(Compilation)</strong> &gt;&gt; <strong>組譯(Assembly)</strong> &gt;&gt; <strong>連結(Linking)</strong> &gt;&gt; <strong>載入與執行（Loading &amp; Execution）</strong></p>
-<p>在編譯階段，C++程式碼會被轉換成組合語言(Assembly)，接著在組譯階段轉換成目標碼(Object Code)。而所謂的目標碼就是根據你的使用平台不同(PC、APP…etc)而最佳化的低階語言程式碼，他比組合語言更接近機器語言，所謂的平台差別由此誕生。這麼做的好處是，最後的執行程式會是針對原生平台來說執行效率最好的程式碼、缺點就是，為確保最佳化，每當一個平台不同都要重新編譯過一次。<br>那Java也是這樣運作嗎？ 不，並沒有。<br>一個Java的程式碼執行流程是這樣的：<br>Java程式碼被編譯成位元檔(bytecode)，然後透過JVM(Java Virtual Machine)在不同平台上執行。這代表即使換到了另一個平台，程式碼可以不需要重新編譯，就能正常運作。這就是跨平台的意思。</p>
-<h3 id="強型別語言"><a href="#強型別語言" class="headerlink" title="強型別語言"></a>強型別語言</h3><hr>
-<p>這個特色我使用JS來舉例，這樣比較好理解。Javascript是一個弱型別的語言，比方說JS可以做到：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> num = <span class="hljs-number">95</span>;<br>num = <span class="hljs-number">96</span>;<br>num = <span class="hljs-string">&quot;97&quot;</span>; <span class="hljs-comment">// 這裡被轉成字串了</span><br></code></pre></td></tr></table></figure>
+<p>假設我們要設計一個關於鳥的類別，我們知道大多數的鳥都會飛，所以我們一開始會這樣寫</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs jsx">public <span class="hljs-keyword">class</span> <span class="hljs-title class_">AbstractBird</span> &#123;<br>    public <span class="hljs-keyword">void</span> <span class="hljs-title function_">fly</span>(<span class="hljs-params"></span>) &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>而Java做不到這件事，延伸第一點我們討論的Java執行流程，Java在編譯階段就已經先確定好每一個變數的型別，也就是說，如果我們後續想要把Java原先定義為數值型別的資料型態改為字串型態，就會直接爆出型別轉換錯誤，這一方面幫助了我們提早發現程式碼可能存在的問題。此外，Java的型別一開始就會先定義好。如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">str</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;ABC&quot;</span>;<br></code></pre></td></tr></table></figure>
+<p>但鴕鳥呢？鴕鳥可不會飛啊，但鴕鳥也是鳥，除非你這樣寫</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs jsx">public <span class="hljs-keyword">class</span> <span class="hljs-title class_">Ostrich</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">AbstractBird</span> &#123;<br>    public <span class="hljs-keyword">void</span> <span class="hljs-title function_">fly</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UnsupportMethodException</span>(<span class="hljs-string">&quot;I can not fly&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-
-<h3 id="自動記憶體管理"><a href="#自動記憶體管理" class="headerlink" title="自動記憶體管理"></a>自動記憶體管理</h3><h3 id="支援高效能與併發能力"><a href="#支援高效能與併發能力" class="headerlink" title="支援高效能與併發能力"></a>支援高效能與併發能力</h3><p>這個我們之後再提，第一章就講這個太過分了。</p>
+<p>這可以解決問題，但不優雅，因為不會飛的鳥其實不少，比如企鵝。對於所有不會飛的鳥去全部重寫<code>fly()</code>方法毫無疑問地屬於<em>重複程式碼</em>。</p>
+<p>你可以拆出<code>AbstractFlyableBird與AbstractUnflyableBird</code>，但其他行為呢，生殖呢？下蛋呢？你會寫出無數用來繼承的父類別，而這些程式碼將會難以維護，雖然不重複，但所有實現的程式碼都分散在各個父類別中。</p>
+<p><strong>繼承最大的問題就是，繼承層次過深，導致影響了程式碼的可讀性與可維護性</strong></p>
 <hr>
-<br>
+<h3 id="組合-Composition"><a href="#組合-Composition" class="headerlink" title="組合(Composition)"></a>組合(Composition)</h3><ul>
+<li>把功能拆開，改用介面去套用。</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs jsx">public interface <span class="hljs-title class_">Flyable</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">fly</span>();<br>&#125;<br>public interface <span class="hljs-title class_">Tweetable</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">tweet</span>();<br>&#125;<br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">Ostrich</span> implements <span class="hljs-title class_">Tweetable</span>,<span class="hljs-title class_">Flyable</span> &#123;<br><span class="hljs-comment">//透過一個個小介面去組合功能，內容實作還是維持在此類別中。</span><br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>最後我們來開始一個我們的最簡單的Java程式碼來讓新手入門。首先你需要的很簡單，下載Intellij[“<a target="_blank" rel="noopener" href="https://www.jetbrains.com/idea/%22]">https://www.jetbrains.com/idea/&quot;]</a></p>
-<p>Intellij IDEA是Java開發時經常會使用到的工具，相當值得學習，且有提供多種Plugin讓整體操作、使用者體驗都更好。</p>
-<p>我這邊不展示教學了，因為其實一個個點選就會安裝完成，幾乎沒有甚麼特別需要留意的事物。</p>
-<p>打開之後你會看到這樣的介面，點選「New Project」來開啟你的一個新專案。</p>
-<p><img src="/img/java_t1.png" srcset="/img/loading.gif" lazyload alt="Picture1"></p>
-<p><img src="/img/java_t2.png" srcset="/img/loading.gif" lazyload alt="Picture2"></p>
-<p>接著在左側清單選擇Java做為開發專案模板，右側的Name代表你的專案名稱。然後值得留意的是下方有Build工具的選擇，主要分為Maven與Gradle，現在你只需要知道他是套件管理工具就好，可以先跳過。</p>
-<p>再來是相當重要的JDK，JDK的全名是Java Software Development Kit(有人稱 Java SDK)，他像是一個工具包，裡面包含了多種功能。還記得前面提到的Java程式碼的執行過程嗎？ Java程式碼會透過Java編譯器(javac)編譯成bytecode，再交給JVM去執行，而這兩個工具都包含在JDK當中。</p>
-<p>JDK裡面包含：</p>
-<ul>
-<li><p>JRE（Java Runtime Environment） JDK 中包含 JRE，是 Java 程式的執行環境，包括：</p>
-<ul>
-<li>JVM（Java Virtual Machine）：負責將 .class 字節碼轉換為平台相關的機器指令。</li>
-<li>核心類庫（Core Libraries）：如 java.lang、java.util、java.io 等，提供基本 API 支援。</li>
+<p>這個做法，相比使用多個父類別來說，程式碼可以集中在同一個類別中，相形之下比較好維護。但其他非鴕鳥的鳥卻還是必須得重新寫一次實作方法，這不是<code>interface</code>的問題，他已經做得很好了。追根究底，因為java沒有辦法<em>支援多重繼承</em>，所以必須要花更多心力去確保程式碼的品質，盡力確保消除程式碼重複。</p>
+<hr>
+<h3 id="委託-Delegation"><a href="#委託-Delegation" class="headerlink" title="委託(Delegation)"></a>委託(Delegation)</h3><ul>
+<li>延續上方的組合，但是實作每一個元件(interface)的內容，並放在要主要使用的類別中。</li>
 </ul>
-</li>
-<li><p>支援檔案與動態連結庫：如 .jar、.dll 或 .so 檔案。</p>
-</li>
-<li><p>Java 編譯器（javac） 將 .java 原始碼編譯成 .class 字節碼。</p>
-</li>
-<li><p>Java 解譯器（java） 執行 .class 檔案，透過 JVM 解譯成機器碼。</p>
-</li>
-<li><p>除錯工具（jdb） 用於偵錯 Java 程式，支援斷點、變數觀察等功能。</p>
-</li>
-<li><p>文件產生工具（javadoc） 根據原始碼中的註解產生 HTML 格式的 API 文件。</p>
-</li>
-<li><p>打包工具（jar） 將多個 .class 檔案與資源打包成 .jar 檔案，便於部署與分發。</p>
-</li>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs jsx">public interface <span class="hljs-title class_">Flyable</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">fly</span>();<br>&#125;<br>public <span class="hljs-title class_">FlyAbility</span> implements <span class="hljs-title class_">Flyable</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">fly</span>(<span class="hljs-params"></span>) &#123; <span class="hljs-comment">//省略實作</span><br>    &#125;<br>&#125;<br>public interface <span class="hljs-title class_">Tweetable</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">tweet</span>();<br>&#125;<br>public <span class="hljs-title class_">TweetAbility</span> implements <span class="hljs-title class_">Tweetable</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">tweet</span>(<span class="hljs-params"></span>) &#123; <span class="hljs-comment">//省略實作</span><br>    &#125;<br>&#125;<br>public <span class="hljs-keyword">class</span> <span class="hljs-title class_">Ostrich</span> implements <span class="hljs-title class_">Tweetable</span>,<span class="hljs-title class_">Flyable</span> &#123;<br>private <span class="hljs-title class_">TweetAbility</span> tweetAbility = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TweetAbility</span>();<br>private <span class="hljs-title class_">FlyAbility</span> flyAbility = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FlyAbility</span>();<br><br>public <span class="hljs-keyword">void</span> <span class="hljs-title function_">fly</span>(<span class="hljs-params"></span>) &#123;<br>    flyAbility.<span class="hljs-title function_">fly</span>();<br>&#125;<br>public <span class="hljs-keyword">void</span> <span class="hljs-title function_">tweet</span>(<span class="hljs-params"></span>) &#123;<br>    tweetAbility.<span class="hljs-title function_">tweet</span>();<br>&#125;<br><br>&#125;<br><br><span class="hljs-comment">// 或是使用Java 11的interface default</span><br>public interface <span class="hljs-title class_">Flyable</span> &#123;<br>  <span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">fly</span>(<span class="hljs-params"></span>) &#123; <span class="hljs-comment">//預設實現方法</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>透過這個方法，你就可以實現DRY原則。程式碼不重複且很好利用，唯一的缺點是感覺有點雞肋。那麼最後我們來提一提──</p>
+<h3 id="何時使用繼承、何時使用組合？"><a href="#何時使用繼承、何時使用組合？" class="headerlink" title="何時使用繼承、何時使用組合？"></a>何時使用繼承、何時使用組合？</h3><ul>
+<li>如果類別之間的繼承關係結構穩定，不會輕易改變，就用繼承就好。</li>
+<li>繼承層級比較淺，比如最多繼承兩層，繼承關係不複雜，就用繼承就好。</li>
+<li>如果系統越不穩定，繼承層次很深，繼承關係複雜，就建議使用組合。</li>
 </ul>
-<p>其他工具</p>
-<ul>
-<li><p>javap：反編譯 .class 檔案，查看 bytecode。</p>
-</li>
-<li><p>jstat、jconsole：監控 JVM 執行狀況。</p>
-</li>
-<li><p>jshell：互動式 Java Shell，支援即時執行 Java 程式碼。</p>
-</li>
-</ul>
-<p>這些你不必都知道，你只要先知道java JDK裡面包含很多功能，而你只需要JDK就可以運行程式碼，先知道這樣就好了。</p>
-<p>一開始你可能會沒有JDK，但別緊張，下拉選單可以選擇Download JDK來下載JDK，至於版本我建議直接先用最新的版本，各版本會有些差異，但是學習最新的對你不會有壞處。然後我們按下「Create」建立專案。</p>
-<p><img src="/img/java_t3.png" srcset="/img/loading.gif" lazyload alt="Picture3"></p>
-<p>你完成了，這就是一個基本的Java程式碼。主要Main.java檔案中包含了。</p>
-<ul>
-<li>名為Main的類別，雖然這個名稱可以自定義，但他只是要告訴你這是主程式所以叫做Main</li>
-<li>名為main()的方法，這部分是寫死的。</li>
-</ul>
-<p>關於類別與方法之後會在描述，現在我只專注於告訴你這幾行做了什麼事。</p>
-<p>System.out.printf、System.out.println 代表說使用了System套件的printf方法，功能是印入你輸入的這些字串。<br>for (int i &#x3D; 1; i &lt;&#x3D; 5; i++) 則是跑了一個迴圈(loop)，簡單來說就是把大括號裡面的程式碼執行五次，每一次i就會加1，所以底下會印出 i&#x3D;1 i&#x3D;2 i&#x3D;3 i&#x3D;4 i&#x3D;5</p>
-<p>到此第一個教學結束，在這個教學中你理解了</p>
-<ul>
-<li>Java是什麼、他有什麼特色。</li>
-<li>怎麼下載，安裝Java</li>
-<li>JDK是什麼、包含了哪些功能。</li>
-<li>怎麼建立一個專案。</li>
-<li>怎麼運行一個專案。</li>
-</ul>
-<p>相信內容是很豐富的，那麼之後我會不定期更新，我們下次面吧</p>
+<p><strong>💡繼承可以使用的時機，來自在同一個流程中，對繼承同一個父類別的不同類別做一樣的事。(使用多態性)</strong></p>
+<p>以上就是我的學習與一些整理，希望這段內容可以幫到與我有相同困惑的學習者。</p>
 
                 
               </div>
@@ -434,7 +382,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/JavaTutorial/" class="print-no-link">#JavaTutorial</a>
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+        <a href="/tags/OOP/" class="print-no-link">#OOP</a>
       
     </div>
   
@@ -446,8 +396,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>連驢子都看得懂的Java教學-01 甚麼是Java?</div>
-      <div>https://clark1945.github.io/2025/11/01/連驢子都看得懂的Java教學-01-甚麼是Java/</div>
+      <div>物件導向應用-為何選用組合而非繼承？(OOP Composition or Inheritance?)</div>
+      <div>https://clark1945.github.io/2025/11/02/物件導向應用-為何選用組合而非繼承？-OOP-Composition-or-Inheritance/</div>
     </div>
     <div class="license-meta">
       
@@ -459,7 +409,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>November 1, 2025</div>
+          <div>November 2, 2025</div>
         </div>
       
       
@@ -491,18 +441,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/11/02/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E6%87%89%E7%94%A8-%E7%82%BA%E4%BD%95%E9%81%B8%E7%94%A8%E7%B5%84%E5%90%88%E8%80%8C%E9%9D%9E%E7%B9%BC%E6%89%BF%EF%BC%9F-OOP-Composition-or-Inheritance/" title="物件導向應用-為何選用組合而非繼承？(OOP Composition or Inheritance?)">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">物件導向應用-為何選用組合而非繼承？(OOP Composition or Inheritance?)</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/11/01/%E6%89%BE%E5%B7%A5%E4%BD%9C%E8%A9%B2%E4%B8%8D%E8%A9%B2%E7%94%A8%E7%8D%B5%E9%A0%AD/" title="找工作該不該用獵頭">
-                        <span class="hidden-mobile">找工作該不該用獵頭</span>
+                      <a href="/2025/11/01/%E9%80%A3%E9%A9%A2%E5%AD%90%E9%83%BD%E7%9C%8B%E5%BE%97%E6%87%82%E7%9A%84Java%E6%95%99%E5%AD%B8-01-%E7%94%9A%E9%BA%BC%E6%98%AFJava/" title="連驢子都看得懂的Java教學-01 甚麼是Java?">
+                        <span class="hidden-mobile">連驢子都看得懂的Java教學-01 甚麼是Java?</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -522,8 +466,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'https://clark1945.github.io/2025/11/01/%E9%80%A3%E9%A9%A2%E5%AD%90%E9%83%BD%E7%9C%8B%E5%BE%97%E6%87%82%E7%9A%84Java%E6%95%99%E5%AD%B8-01-%E7%94%9A%E9%BA%BC%E6%98%AFJava/';
-          this.page.identifier = '/2025/11/01/%E9%80%A3%E9%A9%A2%E5%AD%90%E9%83%BD%E7%9C%8B%E5%BE%97%E6%87%82%E7%9A%84Java%E6%95%99%E5%AD%B8-01-%E7%94%9A%E9%BA%BC%E6%98%AFJava/';
+          this.page.url = 'https://clark1945.github.io/2025/11/02/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E6%87%89%E7%94%A8-%E7%82%BA%E4%BD%95%E9%81%B8%E7%94%A8%E7%B5%84%E5%90%88%E8%80%8C%E9%9D%9E%E7%B9%BC%E6%89%BF%EF%BC%9F-OOP-Composition-or-Inheritance/';
+          this.page.identifier = '/2025/11/02/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E6%87%89%E7%94%A8-%E7%82%BA%E4%BD%95%E9%81%B8%E7%94%A8%E7%B5%84%E5%90%88%E8%80%8C%E9%9D%9E%E7%B9%BC%E6%89%BF%EF%BC%9F-OOP-Composition-or-Inheritance/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');
