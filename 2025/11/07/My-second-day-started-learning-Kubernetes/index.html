@@ -19,34 +19,30 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="Programming">
   
-    <meta name="description" content="比較單體式架構與微服務特色單體式架構(Monolithic)利用單一個元件建構，以一個單一元件部署。 微服務(Microservice)是一個服務導向架構(Service-Orient architecture)的變形，將服務解構為一個個鬆耦合的應用程式元件。在微服務架構中，服務應該是輕量化且可獨立部署的。此外還有以下特色:  單個元件擁有單一職責，權責分明 獨立擴展，不需耦合其他元件 可由不同T">
+    <meta name="description" content="Kubernetes又稱k8s由Google建立，發表於2015年，後續被捐獻給了Cloud Native Computing Foundation(CNCF)。 K8s是容器調度工具(Container Orchestration Tool)，被設計成一個鬆耦合的元件集合，提供了包含部署、維護、擴展的工作負載功能。 What K8s can do Service discovery and lo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="My first day started learning Kubernetes">
-<meta property="og:url" content="https://clark1945.github.io/2025/11/06/My-first-day-started-learning-Kubernetes/index.html">
+<meta property="og:title" content="My second day started learning Kubernetes">
+<meta property="og:url" content="https://clark1945.github.io/2025/11/07/My-second-day-started-learning-Kubernetes/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="比較單體式架構與微服務特色單體式架構(Monolithic)利用單一個元件建構，以一個單一元件部署。 微服務(Microservice)是一個服務導向架構(Service-Orient architecture)的變形，將服務解構為一個個鬆耦合的應用程式元件。在微服務架構中，服務應該是輕量化且可獨立部署的。此外還有以下特色:  單個元件擁有單一職責，權責分明 獨立擴展，不需耦合其他元件 可由不同T">
+<meta property="og:description" content="Kubernetes又稱k8s由Google建立，發表於2015年，後續被捐獻給了Cloud Native Computing Foundation(CNCF)。 K8s是容器調度工具(Container Orchestration Tool)，被設計成一個鬆耦合的元件集合，提供了包含部署、維護、擴展的工作負載功能。 What K8s can do Service discovery and lo">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://clark1945.github.io/img/image-1.png">
-<meta property="og:image" content="https://clark1945.github.io/img/image-2.png">
-<meta property="og:image" content="https://clark1945.github.io/img/image-3.png">
-<meta property="og:image" content="https://clark1945.github.io/img/image-4.png">
-<meta property="og:image" content="https://clark1945.github.io/img/image-5.png">
-<meta property="og:image" content="https://clark1945.github.io/img/image-6.png">
-<meta property="og:image" content="https://clark1945.github.io/img/image-7.png">
-<meta property="og:image" content="https://clark1945.github.io/img/image-8.png">
-<meta property="og:image" content="https://clark1945.github.io/img/image-9.png">
-<meta property="article:published_time" content="2025-11-06T00:42:23.000Z">
-<meta property="article:modified_time" content="2025-11-06T15:59:08.291Z">
+<meta property="og:image" content="https://clark1945.github.io/img/kubernetes-architecture.png">
+<meta property="og:image" content="https://clark1945.github.io/img/k8s-architecure-node.png">
+<meta property="og:image" content="https://clark1945.github.io/img/k8s-architecture-pods.png">
+<meta property="og:image" content="https://clark1945.github.io/img/pod-creation.png">
+<meta property="og:image" content="https://clark1945.github.io/img/pod-deletion.png">
+<meta property="article:published_time" content="2025-11-07T01:05:23.000Z">
+<meta property="article:modified_time" content="2025-11-08T06:39:04.779Z">
 <meta property="article:author" content="Clark Liu">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://clark1945.github.io/img/image-1.png">
+<meta name="twitter:image" content="https://clark1945.github.io/img/kubernetes-architecture.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>My first day started learning Kubernetes - Clark&#39;s Blog</title>
+  <title>My second day started learning Kubernetes - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -239,7 +235,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="My first day started learning Kubernetes"></span>
+            <span id="subtitle" data-typed-text="My second day started learning Kubernetes"></span>
           
         </div>
 
@@ -250,8 +246,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-11-06 08:42" pubdate>
-          November 6, 2025 am
+        <time datetime="2025-11-07 09:05" pubdate>
+          November 7, 2025 am
         </time>
       </span>
     
@@ -262,7 +258,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          500 words
+          896 words
         
       </span>
     
@@ -273,7 +269,7 @@
         
         
         
-          5 mins
+          8 mins
         
       </span>
     
@@ -319,54 +315,78 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">My first day started learning Kubernetes</h1>
+            <h1 id="seo-header">My second day started learning Kubernetes</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="比較單體式架構與微服務特色"><a href="#比較單體式架構與微服務特色" class="headerlink" title="比較單體式架構與微服務特色"></a>比較單體式架構與微服務特色</h3><p><code>單體式架構(Monolithic)</code>利用單一個元件建構，以一個單一元件部署。</p>
-<p><code>微服務(Microservice)</code>是一個<code>服務導向架構(Service-Orient architecture)</code>的變形，將服務解構為一個個<strong>鬆耦合</strong>的應用程式元件。在微服務架構中，服務應該是<strong>輕量化</strong>且<strong>可獨立部署</strong>的。<br>此外還有以下特色:</p>
+                <p><code>Kubernetes</code>又稱<code>k8s</code>由<code>Google</code>建立，發表於2015年，後續被捐獻給了Cloud Native Computing Foundation(CNCF)。 K8s是容器調度工具(Container Orchestration Tool)，被設計成一個鬆耦合的元件集合，提供了包含部署、維護、擴展的工作負載功能。</p>
+<h3 id="What-K8s-can-do"><a href="#What-K8s-can-do" class="headerlink" title="What K8s can do"></a>What K8s can do</h3><ul>
+<li><strong>Service discovery</strong> and <strong>load balancing</strong></li>
+<li>Storage orchestration (Local&amp;Cloud based)</li>
+<li><em>Automated</em> <strong>rollouts</strong> and <strong>rollbacks</strong></li>
+<li>Self-healing</li>
+<li>Secret and configuration management</li>
+<li>Use the same API across on-premise and every cloud providers.</li>
+</ul>
+<p>首先我們來看Kubernetes的架構圖。<br><img src="/img/kubernetes-architecture.png" srcset="/img/loading.gif" lazyload alt="Architecture from Official Website"></p>
+<h4 id="Kubernetes-Master"><a href="#Kubernetes-Master" class="headerlink" title="Kubernetes Master"></a>Kubernetes Master</h4><p>負責管理、調度、監控與協調所有Node的運作。<br>主要元件如下：</p>
+<p>1️⃣ <code>kube-apiserver</code> 是所有組件之間的中樞溝通中心。<br>所有請求（CLI、UI、或控制器）都要透過它。<br>它負責驗證、授權、更新 <strong>etcd</strong> 中的狀態資料。<br>就像 Kubernetes 的「入口 API Gateway」。</p>
+<p>2️⃣ <code>etcd</code> 是一個分散式 <strong>Key-Value</strong> 資料庫。<br>儲存整個叢集的狀態（例如 <strong>Pod</strong>、<strong>Service</strong>、<strong>ConfigMap</strong> 等資訊）。<strong>kube-apiserver</strong> 與它同步資料，確保狀態一致性。</p>
+<p>3️⃣ <code>kube-scheduler</code> 決定「<strong>Pod 應該跑在哪個 Node 上</strong>」。根據資源可用性（CPU、Memory、Affinity、Taints&#x2F;Tolerations 等）分配 Pod。</p>
+<p>4️⃣ <code>kube-controller-manager</code>內含多種控制器（如 ReplicaSetController、NodeController、EndpointController）。<br>每個控制器都負責維持某個「期望狀態」（例如 Pod 數量、節點健康狀態）。</p>
+<p>5️⃣ <code>cloud-controller-manager</code><br>這是針對雲端平台（AWS、GCP、Azure）設計的控制器。<br>它會和雲服務 API 溝通（如建立 Load Balancer、掛載雲端磁碟、更新 Node 狀態）。</p>
+<p>圖上紅色箭頭指的部分，就是它與「Cloud Provider」互動的路徑。</p>
+<h4 id="Kubernetes-Nodes（工作節點）"><a href="#Kubernetes-Nodes（工作節點）" class="headerlink" title="Kubernetes Nodes（工作節點）"></a>Kubernetes Nodes（工作節點）</h4><p>每個 Node 都是實際執行應用容器（Pods）的主機。</p>
+<p>主要元件如下：</p>
+<p>1️⃣ <code>kubelet</code>Node 上的代理程式。<br>負責接收 API Server 下發的 Pod Spec，並確保容器依照定義執行。<br>持續上報 Node 狀態（例如資源使用量、健康狀況）。</p>
+<p>2️⃣ <code>kube-proxy</code>管理 Node 上的網路。<br>負責 Service 的虛擬 IP（ClusterIP）與 Pod 之間的流量轉送。<br>讓不同 Node 上的 Pod 能互相通訊。</p>
+<p>3️⃣ <code>Container Runtime</code>雖然圖上沒畫，但實際上每個 Node 都需要一個容器運行環境（例如 containerd、CRI-O）。<br>kubelet 會呼叫 runtime 來建立、停止容器。</p>
+<h3 id="名詞解釋"><a href="#名詞解釋" class="headerlink" title="名詞解釋"></a>名詞解釋</h3><ul>
+<li><code>Container</code>在<code>Pod</code>中被運行，<code>Pod</code>在<code>Node</code>中被運行，所有<code>Node</code>來自一個<code>Cluster</code>。</li>
+<li><code>K8s Context</code>是一組設定，包含<strong>要連線的Kubernetes Cluster</strong>、<strong>使用者身份與憑證</strong>、<strong>預設命名空間</strong>。</li>
+</ul>
+<h3 id="Namespaces"><a href="#Namespaces" class="headerlink" title="Namespaces"></a>Namespaces</h3><p>Namespace 是 Kubernetes 用來邏輯分隔資源的機制。它的主要用途是：</p>
 <ul>
-<li>單個元件擁有單一職責，權責分明</li>
-<li>獨立擴展，不需耦合其他元件</li>
-<li>可由不同Teams, 開發語言, 不同平台部署來部署，非常自由</li>
-<li>一個微服務可以擁有自己的資料庫</li>
+<li><strong>資源隔離</strong>：不同團隊、專案或環境（如 dev、staging、prod）可以使用不同的 Namespace，互不干擾。</li>
+<li><strong>權限控制</strong>：搭配 RBAC（Role-Based Access Control）可以設定誰能操作哪些 Namespace。</li>
+<li><strong>資源配額</strong>：可以對每個 Namespace 設定 CPU、記憶體等使用上限。</li>
+<li><strong>組織管理</strong>：讓集群中的資源（Pod、Service、Deployment 等）更有結構地分類。</li>
 </ul>
-<h3 id="甚麼是Container"><a href="#甚麼是Container" class="headerlink" title="甚麼是Container?"></a>甚麼是Container?</h3><p>Container是一個軟體單元包含了程式碼、執行環境(Runtime)、System Tools、System Library。<br>一個container包含許多layer，如果使用同樣layer則可以共用不用重新下載&#x2F;運行，提升了執行的效率。</p>
-<h3 id="甚麼是Docker"><a href="#甚麼是Docker" class="headerlink" title="甚麼是Docker?"></a>甚麼是Docker?</h3><p><code>Docker</code>是一個開源的<code>Container</code>執行環境，支援Mac, Windows與Linux，可以用Command Line Tool去控制。應用程式會透過<code>Dockerfile</code>去建構Container Image，透過Container使你的程式碼可以跨環境地執行。</p>
-<h3 id="Docker-Compose-Concept"><a href="#Docker-Compose-Concept" class="headerlink" title="Docker Compose Concept"></a>Docker Compose Concept</h3><ul>
-<li>Define using YAML files</li>
-<li>Define and run multi-containers applications</li>
-<li>Run using the docker CLI with the compose plugin</li>
-</ul>
-<p>See Docker compose yaml<br><img src="/img/image-1.png" srcset="/img/loading.gif" lazyload alt="yaml"></p>
-<p>Use cases:</p>
-<ol>
-<li>Workloads that don’t require a full orchestrator.</li>
-<li>Development and tests.</li>
-<li>Use of a service that can run Docker Compose files<ul>
-<li>Azure App Service</li>
-<li>AWS ECS</li>
-<li>Virtual Machine</li>
+<h3 id="Nodes"><a href="#Nodes" class="headerlink" title="Nodes"></a>Nodes</h3><ul>
+<li>A node pool is a group virtual machines, all with the same size.</li>
+<li>A cluster can have multple node pools<ul>
+<li>These pools can host different sizes of VMs</li>
+<li>Each pool can be autoscaled independently from the other pools</li>
 </ul>
 </li>
-</ol>
-<h3 id="yaml"><a href="#yaml" class="headerlink" title="yaml"></a>yaml</h3><p>Limit the resource of a service<br><img src="/img/image-2.png" srcset="/img/loading.gif" lazyload alt="redis resource limits"></p>
-<p>Use env variable in yaml and override it while using CLI tools.<br><img src="/img/image-3.png" srcset="/img/loading.gif" lazyload alt="env variable1"></p>
-<p>Set env variable to enforce input from outside.<br><img src="/img/image-4.png" srcset="/img/loading.gif" lazyload alt="env variable2"></p>
-<p>The port <code>outside</code> and the port only available within <code>network</code><br><img src="/img/image-5.png" srcset="/img/loading.gif" lazyload alt="Networking1"></p>
-<p>The public network and private network<br><img src="/img/image-6.png" srcset="/img/loading.gif" lazyload alt="Networking2"></p>
-<p>Use <code>Depends</code> to ensure the service is loaded after another service loaded complete.<br><img src="/img/image-7.png" srcset="/img/loading.gif" lazyload alt="Load Process"></p>
-<p>You can create a volume and set mount it to a service.<br><img src="/img/image-8.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
-<p>Restart Policy 重啟策略</p>
-<p>🧠 補充建議</p>
-<ul>
-<li>開發環境：通常用 no 或 on-failure，避免無限重啟造成混亂。</li>
-<li>生產環境：建議使用 always 或 unless-stopped，確保服務穩定運行。</li>
-<li>若搭配 健康檢查（healthcheck） 使用，可以更精準控制重啟時機。</li>
 </ul>
-<p><img src="/img/image-9.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
-<h3 id="常見Docker-指令"><a href="#常見Docker-指令" class="headerlink" title="常見Docker 指令"></a>常見Docker 指令</h3><hr>
+<p><img src="/img/k8s-architecure-node.png" srcset="/img/loading.gif" lazyload alt="k8s-architecure-node"></p>
+<h3 id="Pods"><a href="#Pods" class="headerlink" title="Pods"></a>Pods</h3><ul>
+<li>K8s中最小的部署單位</li>
+<li>封裝了應用程式容器，一個<em>Pod</em>可包含一個或多個<em>container</em></li>
+<li><em>Pod</em>中的<em>Container</em>共享<strong>ip address</strong>, <strong>mounted volumes</strong></li>
+<li><em>Pod</em>中的<em>Container</em>使用localhost溝通</li>
+</ul>
+<p><img src="/img/k8s-architecture-pods.png" srcset="/img/loading.gif" lazyload alt="K8s Architecture Pods"></p>
+<p>一個K8s的執行週期會像是這樣。<br><img src="/img/pod-creation.png" srcset="/img/loading.gif" lazyload alt="K8s pod creation"></p>
+<p>或是這樣<br><img src="/img/pod-deletion.png" srcset="/img/loading.gif" lazyload alt="K8s pod deletion"></p>
+<h4 id="Pod-state"><a href="#Pod-state" class="headerlink" title="Pod state"></a>Pod state</h4><ul>
+<li><strong>Pending</strong> - Accepted but not yet created</li>
+<li><strong>Running</strong> - Bound to a node</li>
+<li><strong>Succeeded</strong> - Exited with status 0</li>
+<li><strong>Failed</strong> - All containers exit and at least one exited with nono-zero status.</li>
+<li><strong>Unknown</strong> - Communication issues with the pod</li>
+<li><strong>CrashLoopBackOff</strong> - Started, crashed, started again, and then crashed again.</li>
+</ul>
+<h4 id="Define-and-run-a-pod"><a href="#Define-and-run-a-pod" class="headerlink" title="Define and run a pod"></a>Define and run a pod</h4><p>See yaml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span> <span class="hljs-comment"># Specify the type of resource you want to create</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">myapp-pod</span><br>  <span class="hljs-attr">labels:</span> <span class="hljs-comment"># Used to identify, describe and group related sets of objects or resources.</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">myapp</span><br>    <span class="hljs-attr">type:</span> <span class="hljs-string">front-end</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">containers:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">nginx-container</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">nginx</span> <span class="hljs-comment"># image (pull from docker Hub)</span><br>    <span class="hljs-attr">resources:</span><br>      <span class="hljs-attr">requests:</span><br>        <span class="hljs-attr">cpu:</span> <span class="hljs-string">100m</span><br>        <span class="hljs-attr">memory:</span> <span class="hljs-string">128Mi</span><br>      <span class="hljs-attr">limits:</span><br>        <span class="hljs-attr">cpu:</span> <span class="hljs-string">250m</span><br>        <span class="hljs-attr">memory:</span> <span class="hljs-string">256Mi</span>    <br>    <span class="hljs-attr">ports:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">80</span> <span class="hljs-comment"># port listening</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">http</span><br>      <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span><br>    <span class="hljs-attr">env:</span> <span class="hljs-comment"># Environment variables</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">DBCON</span><br>      <span class="hljs-attr">value:</span> <span class="hljs-string">myconnectionstring</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="有時我們想要在Pod啟動之前先初始化另外一些Pod"><a href="#有時我們想要在Pod啟動之前先初始化另外一些Pod" class="headerlink" title="有時我們想要在Pod啟動之前先初始化另外一些Pod"></a>有時我們想要在Pod啟動之前先初始化另外一些Pod</h4><ul>
+<li>使用<strong>init Container</strong>，<strong>Init Container</strong>可包含多個，任一失敗就不會運行下一個。</li>
+<li>如果<strong>Init Container</strong>失敗，<strong>kubelet</strong>會重啟它直到成功為止。或者使用<strong>restartPolicy</strong>設定調整成<em>Never</em></li>
+</ul>
+<h3 id="常見Kubernetes-指令"><a href="#常見Kubernetes-指令" class="headerlink" title="常見Kubernetes 指令"></a>常見Kubernetes 指令</h3><hr>
 <table>
 <thead>
 <tr>
@@ -377,246 +397,150 @@
 </thead>
 <tbody><tr>
 <td>1</td>
-<td><code>docker info</code></td>
-<td>Display System Information</td>
+<td><code>kubectl config current-context</code></td>
+<td>Get the current context</td>
 </tr>
 <tr>
 <td>2</td>
-<td><code>docker version</code></td>
-<td>Display the system version</td>
+<td><code>kubectl config get-contexts</code></td>
+<td>List all context</td>
 </tr>
 <tr>
 <td>3</td>
-<td><code>docker login</code></td>
-<td>Log in to a Docker registry</td>
+<td><code>kubectl config use-context [contextName]</code></td>
+<td>Set the current context</td>
 </tr>
 <tr>
 <td>4</td>
-<td><code>docker pull [image name]</code></td>
-<td>Pull an image from a registry</td>
+<td><code>kubectl ctx [contextName]</code></td>
+<td>shortcut</td>
 </tr>
 <tr>
 <td>5</td>
-<td><code>docker run [image name]</code></td>
-<td>Run container</td>
+<td><code>kubectl config delete-context [contextName]</code></td>
+<td>Delete a context from the config file</td>
 </tr>
 <tr>
 <td>6</td>
-<td><code>docker run -d [image name]</code></td>
-<td>Run container in detached mode</td>
+<td><code>kubectl create -f deploy.yaml</code></td>
+<td>Create deployment with yaml</td>
 </tr>
 <tr>
 <td>7</td>
-<td><code>docker start [container name]</code></td>
-<td>Start stopped containers</td>
+<td><code>kubectl delete deployment [deploymentName]</code></td>
+<td>Delete the deployment</td>
 </tr>
 <tr>
 <td>8</td>
-<td><code>docker ps</code></td>
-<td>List running container</td>
-</tr>
-<tr>
-<td>9</td>
-<td><code>docker ps -a</code></td>
-<td>List running&amp;stopped container</td>
-</tr>
-<tr>
-<td>10</td>
-<td><code>docker stop [container name]</code></td>
-<td>stop container</td>
-</tr>
-<tr>
-<td>11</td>
-<td><code>docker kill [container name]</code></td>
-<td>Kill container</td>
-</tr>
-<tr>
-<td>12</td>
-<td><code>docker image inspect [imageName]</code></td>
-<td>get image info</td>
-</tr>
-<tr>
-<td>13</td>
-<td><code>docker run --memory=&quot;256m&quot; [imageName]</code></td>
-<td>Run container with Max memory</td>
-</tr>
-<tr>
-<td>14</td>
-<td><code>docker run --cpus=&quot;.5&quot; [imageName]</code></td>
-<td>Run container with Max CPU</td>
-</tr>
-<tr>
-<td>15</td>
-<td><code>docker rm [container name]</code></td>
-<td>Delete the container</td>
-</tr>
-<tr>
-<td>16</td>
-<td><code>docker run --publish [outer port]:[inner port] --name [container name] [container image in the docker registry or nginx]</code></td>
-<td>Mostly used pattern</td>
+<td><code>kubectl get deployment</code></td>
+<td>List all deployments</td>
 </tr>
 <tr>
 <td></td>
-<td><strong>Docker cli - Attach shell</strong></td>
+<td><strong>NameSpace</strong></td>
 <td></td>
 </tr>
 <tr>
 <td>1</td>
-<td><code>docker run -it [imageName] -- /bin/bash</code></td>
-<td>Attach shell</td>
+<td><code>kubectl get namespace</code></td>
+<td>List all namespaces</td>
 </tr>
 <tr>
 <td>2</td>
-<td><code>docker container exec -it [container name] -- bash</code></td>
-<td>Attach to a running container shell</td>
-</tr>
-<tr>
-<td></td>
-<td><strong>Docker cli - Clean up&amp;Build</strong></td>
-<td></td>
-</tr>
-<tr>
-<td>1</td>
-<td><code>docker rm  $(docker ps -a -q)</code></td>
-<td>Remove all stopped container</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>docker images</code></td>
-<td>List images</td>
+<td><code>kubectl get ns</code></td>
+<td>shortcut</td>
 </tr>
 <tr>
 <td>3</td>
-<td><code>docker rmi</code></td>
-<td>Delete image</td>
+<td><code>kubectl config set-context --current --namespace=[namespaceName]</code></td>
+<td>Set the current context to tuse a namespace</td>
 </tr>
 <tr>
 <td>4</td>
-<td><code>docker system prune -a</code></td>
-<td>Removes all images not in use by any containers</td>
+<td><code>kubectl create ns [namespaceName]</code></td>
+<td>Create a namespaces</td>
 </tr>
 <tr>
 <td>5</td>
-<td><code>docker build -t [name:tag] .</code></td>
-<td>Build and image using a Dockerfile localted in the same folder</td>
+<td><code>kubectl delete ns [namespaceName]</code></td>
+<td>Delete a namespaces</td>
 </tr>
 <tr>
 <td>6</td>
-<td><code>docker build -t [name:tag] -f [filename]</code></td>
-<td>Build an image using a Dockerfile located in specified folder</td>
-</tr>
-<tr>
-<td></td>
-<td><strong>Docker volume cheatsheet</strong></td>
-<td></td>
-</tr>
-<tr>
-<td>1</td>
-<td><code>docker create volume [volumeName]</code></td>
-<td>Create a new volume</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>docker volume ls</code></td>
-<td>List all volume</td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>docker volume inspect [volumeName]</code></td>
-<td>Display the volume info</td>
-</tr>
-<tr>
-<td>4</td>
-<td><code>docker volume rm [volumeName]</code></td>
-<td>Remove volume</td>
-</tr>
-<tr>
-<td>5</td>
-<td><code>docker volume prune</code></td>
-<td>Remove all volumes not mounted</td>
-</tr>
-<tr>
-<td>6</td>
-<td><code>docker run -d --name devtest -v myvol:/app nginx:latest</code></td>
-<td>Run docker container with Volume</td>
-</tr>
-<tr>
-<td></td>
-<td><strong>Docker compose cheat sheet</strong></td>
-<td></td>
-</tr>
-<tr>
-<td>1</td>
-<td><code>docker compose build</code></td>
-<td>Build the images</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>docker compose start</code></td>
-<td>Start the containers</td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>docker compose stop</code></td>
-<td>Stop the containers</td>
-</tr>
-<tr>
-<td>4</td>
-<td><code>docker compose up -d</code></td>
-<td>Build and start</td>
-</tr>
-<tr>
-<td>5</td>
-<td><code>docker compose ps</code></td>
-<td>List what’s running</td>
-</tr>
-<tr>
-<td>6</td>
-<td><code>docker compose rm</code></td>
-<td>Remove from memory</td>
+<td><code>kubectl get pods --all-namespace</code></td>
+<td>List all pods in all namespaces</td>
 </tr>
 <tr>
 <td>7</td>
-<td><code>docker compose down</code></td>
-<td>Stop and remove</td>
+<td><code>kubectl config set-context --current --namespace=[namespaceName]</code></td>
+<td>Change the namespaces to the docker one and get the pods list</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Nodes</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>kubectl get nodes</code></td>
+<td>list all nodes</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl describe node</code></td>
+<td>Get info about the node</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Pods</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>kubectl create -f [*.yml]</code></td>
+<td>Create a pod</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl run [podName] --image=[imageName] -- /bin/sh -c &quot;sleep 3600&quot;</code></td>
+<td>Run a pod</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>kubectl get pods</code></td>
+<td>list all running pods</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>kubectl get pods -o wide</code></td>
+<td>same but with more info</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>kubectl describe pod [podName]</code></td>
+<td>show pod info</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>kubectl get pods [podName] -o yaml </code></td>
+<td>Extract the pod definition in YAML and save it to a file</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>kubectl exec -it [podName] -- sh</code></td>
+<td>Enter into interactive mode</td>
 </tr>
 <tr>
 <td>8</td>
-<td><code>docker compose logs</code></td>
-<td>Get the logs</td>
+<td><code>kubectl delete -f [pod-definition.yml]</code></td>
+<td>Delete a pod</td>
 </tr>
 <tr>
 <td>9</td>
-<td><code>docker compose exec [container] bash</code></td>
-<td>Run a command in a container</td>
-</tr>
-<tr>
-<td>10</td>
-<td><code>docker compose --project-name [projectName] up -d</code></td>
-<td>Run an instance as a project</td>
-</tr>
-<tr>
-<td>11</td>
-<td><code>docker compose -p [projectName] up -d</code></td>
-<td>Shortcut</td>
-</tr>
-<tr>
-<td>12</td>
-<td><code>docker compose ls</code></td>
-<td>List running projects</td>
-</tr>
-<tr>
-<td>13</td>
-<td><code>docker compose cp [containerID]:[src_path] [dest_path]</code></td>
-<td>Copy files from the container</td>
-</tr>
-<tr>
-<td>14</td>
-<td><code>docker compose exec [src_path] [containerID]:[dest_path]</code></td>
-<td>Copy files to the container</td>
+<td><code>kubectl delete pod [podName]</code></td>
+<td>Delete a pod</td>
 </tr>
 </tbody></table>
-<p>東西比較多，因為大多數都在學習Docker，估計下次才會正式進入Kubernetes</p>
 <h3 id="學習資源"><a href="#學習資源" class="headerlink" title="學習資源"></a>學習資源</h3><ol>
 <li>(<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kTp5xUtcalw">https://www.youtube.com/watch?v=kTp5xUtcalw</a>)</li>
 </ol>
@@ -665,8 +589,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>My first day started learning Kubernetes</div>
-      <div>https://clark1945.github.io/2025/11/06/My-first-day-started-learning-Kubernetes/</div>
+      <div>My second day started learning Kubernetes</div>
+      <div>https://clark1945.github.io/2025/11/07/My-second-day-started-learning-Kubernetes/</div>
     </div>
     <div class="license-meta">
       
@@ -678,7 +602,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>November 6, 2025</div>
+          <div>November 7, 2025</div>
         </div>
       
       
@@ -710,18 +634,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/11/07/My-second-day-started-learning-Kubernetes/" title="My second day started learning Kubernetes">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">My second day started learning Kubernetes</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/11/02/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E6%87%89%E7%94%A8-%E7%82%BA%E4%BD%95%E9%81%B8%E7%94%A8%E7%B5%84%E5%90%88%E8%80%8C%E9%9D%9E%E7%B9%BC%E6%89%BF%EF%BC%9F-OOP-Composition-or-Inheritance/" title="物件導向應用-為何選用組合而非繼承？(OOP Composition or Inheritance?)">
-                        <span class="hidden-mobile">物件導向應用-為何選用組合而非繼承？(OOP Composition or Inheritance?)</span>
+                      <a href="/2025/11/06/My-first-day-started-learning-Kubernetes/" title="My first day started learning Kubernetes">
+                        <span class="hidden-mobile">My first day started learning Kubernetes</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -741,8 +659,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'https://clark1945.github.io/2025/11/06/My-first-day-started-learning-Kubernetes/';
-          this.page.identifier = '/2025/11/06/My-first-day-started-learning-Kubernetes/';
+          this.page.url = 'https://clark1945.github.io/2025/11/07/My-second-day-started-learning-Kubernetes/';
+          this.page.identifier = '/2025/11/07/My-second-day-started-learning-Kubernetes/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');
