@@ -1,0 +1,1130 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Clark Liu">
+  <meta name="keywords" content="Programming">
+  
+    <meta name="description" content="Job Short lived tasks 建立一個或多個Pod並確保他們成功結束 Job是一個一個建立的，想要同時建立多個Job，加入平行化功能。  Job yaml CronJob An extension of the Job Provides a method of executing jobs on a cron-like schedule UTC only  CronJob yaml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="My forth day started learning Kubernetes">
+<meta property="og:url" content="https://clark1945.github.io/2025/11/09/My-forth-day-started-learning-Kubernetes/index.html">
+<meta property="og:site_name" content="Clark&#39;s Blog">
+<meta property="og:description" content="Job Short lived tasks 建立一個或多個Pod並確保他們成功結束 Job是一個一個建立的，想要同時建立多個Job，加入平行化功能。  Job yaml CronJob An extension of the Job Provides a method of executing jobs on a cron-like schedule UTC only  CronJob yaml">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://clark1945.github.io/image.png">
+<meta property="og:image" content="https://clark1945.github.io/image-1.png">
+<meta property="og:image" content="https://clark1945.github.io/image-2.png">
+<meta property="og:image" content="https://clark1945.github.io/image-3.png">
+<meta property="og:image" content="https://clark1945.github.io/image-4.png">
+<meta property="og:image" content="https://clark1945.github.io/image-5.png">
+<meta property="og:image" content="https://clark1945.github.io/image-6.png">
+<meta property="og:image" content="https://clark1945.github.io/image-7.png">
+<meta property="og:image" content="https://clark1945.github.io/image-8.png">
+<meta property="og:image" content="https://clark1945.github.io/image-9.png">
+<meta property="og:image" content="https://clark1945.github.io/image-10.png">
+<meta property="og:image" content="https://clark1945.github.io/image-11.png">
+<meta property="og:image" content="https://clark1945.github.io/image-12.png">
+<meta property="og:image" content="https://clark1945.github.io/image-13.png">
+<meta property="og:image" content="https://clark1945.github.io/image-14.png">
+<meta property="og:image" content="https://clark1945.github.io/image-15.png">
+<meta property="og:image" content="https://clark1945.github.io/image-16.png">
+<meta property="og:image" content="https://clark1945.github.io/image-17.png">
+<meta property="og:image" content="https://clark1945.github.io/image-18.png">
+<meta property="og:image" content="https://clark1945.github.io/image-19.png">
+<meta property="og:image" content="https://clark1945.github.io/image-20.png">
+<meta property="og:image" content="https://clark1945.github.io/image-21.png">
+<meta property="og:image" content="https://clark1945.github.io/image-22.png">
+<meta property="og:image" content="https://clark1945.github.io/image-23.png">
+<meta property="og:image" content="https://clark1945.github.io/image-24.png">
+<meta property="og:image" content="https://clark1945.github.io/image-25.png">
+<meta property="article:published_time" content="2025-11-08T23:01:39.000Z">
+<meta property="article:modified_time" content="2025-11-09T08:05:26.498Z">
+<meta property="article:author" content="Clark Liu">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://clark1945.github.io/image.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>My forth day started learning Kubernetes - Clark&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"clark1945.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-NQSLDWP5XG"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"hohbBnt7BfIaMQ3kG9FlZaC8-MdYXbMMI","app_key":"6OmrWx5EyCVhteZAUrXarIpA","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-NQSLDWP5XG", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-NQSLDWP5XG');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Clark&#39;s endless journey</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="My forth day started learning Kubernetes"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-09 07:01" pubdate>
+          November 9, 2025 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          704 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          6 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">My forth day started learning Kubernetes</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="Job"><a href="#Job" class="headerlink" title="Job"></a>Job</h3><ul>
+<li>Short lived tasks</li>
+<li>建立一個或多個Pod並確保他們成功結束</li>
+<li>Job是一個一個建立的，想要同時建立多個Job，加入平行化功能。</li>
+</ul>
+<h4 id="Job-yaml"><a href="#Job-yaml" class="headerlink" title="Job yaml"></a>Job yaml</h4><p><img src="/image.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="CronJob"><a href="#CronJob" class="headerlink" title="CronJob"></a>CronJob</h3><ul>
+<li>An extension of the Job</li>
+<li>Provides a method of executing jobs on a cron-like schedule</li>
+<li>UTC only</li>
+</ul>
+<h4 id="CronJob-yaml"><a href="#CronJob-yaml" class="headerlink" title="CronJob yaml"></a>CronJob yaml</h4><p><img src="/image-1.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h4 id="確認CrobJob是否成功"><a href="#確認CrobJob是否成功" class="headerlink" title="確認CrobJob是否成功"></a>確認CrobJob是否成功</h4><ul>
+<li>查看History<ul>
+<li>最後三個成功的Job會被留存</li>
+<li>最後一個失敗的Job會被保留</li>
+<li><code>sucessfultJobsHistoryLimit</code>可以讓你不保留成功的History (set to zero)</li>
+</ul>
+</li>
+</ul>
+<h3 id="Rolling-Updates"><a href="#Rolling-Updates" class="headerlink" title="Rolling Updates"></a>Rolling Updates</h3><ul>
+<li>maxSurge 在更新途中，可以多建立幾個Pod用來更新。</li>
+<li>maxUnavailable 在更新途中，可以允許幾個Pod是不可用的。</li>
+</ul>
+<h4 id="Blue-Green-Deployment"><a href="#Blue-Green-Deployment" class="headerlink" title="Blue-Green Deployment"></a>Blue-Green Deployment</h4><p><img src="/image-2.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p>Challenge</p>
+<ul>
+<li>Does not solve thenew database schema problem entirely</li>
+<li>You have  to over provision the cluster size</li>
+</ul>
+<h3 id="Services"><a href="#Services" class="headerlink" title="Services"></a>Services</h3><ul>
+<li>IP是隨機的，當Pod被Replace之後還能正常連接其他Pod，需要依賴Service</li>
+<li>使用static IP, static DNS name, [servicename].[namespace].svc.cluster.local</li>
+</ul>
+<p>Service 用 Selector 配對Pod<br><img src="/image-3.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p>透過Service訪問指令Pod，Service還提供了Load Balance的功能。<br><img src="/image-4.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p>Service分為三種類型: ClusterIP(Default), NodePort, LoadBalancer</p>
+<h4 id="ClusterIP"><a href="#ClusterIP" class="headerlink" title="ClusterIP"></a>ClusterIP</h4><ul>
+<li>Default service that with Cluster internal visibility.</li>
+<li><strong>port</strong> 是Service可以被外部連線的路徑，<strong>TargetPort</strong>是Pod內部可以被連線的路徑。</li>
+<li>使用Round Robin演算法做Load Balanced ，可以設定Session affinity(黏性對話)。</li>
+<li>用途是提供一個持久化的方法給同Cluster內的其他Pod呼叫使用。</li>
+</ul>
+<p><strong>ClusterIP yaml</strong><br><img src="/image-5.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h4 id="NodePort"><a href="#NodePort" class="headerlink" title="NodePort"></a>NodePort</h4><ul>
+<li>extend the ClusterIP service with internal and external visibility.</li>
+<li>如果不指定對外port(30000~32767), k8s會自己幫你指定一個。</li>
+<li>Node必須要有公開的IP address，使用Node IP + nodePort 連接到你的 service</li>
+</ul>
+<p><strong>圖示</strong><br><img src="/image-6.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h4 id="LoadBalancer-L4-Ingress-L7"><a href="#LoadBalancer-L4-Ingress-L7" class="headerlink" title="LoadBalancer L4 &amp; Ingress L7"></a>LoadBalancer L4 &amp; Ingress L7</h4><ul>
+<li>Make you expose your applications outside of the cluster</li>
+<li>LoadlBalancer是給Cloud Provider，Cloud Provider會提供一組IP，連接到你的<code>port</code></li>
+</ul>
+<p>🧱 Docker Desktop 的特例<br>Docker Desktop 沒有真實的 Load Balancer，也沒有外部 Node IP。為了讓開發體驗簡化，它模擬 LoadBalancer 行為：<br>當你建立一個：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">type:</span> <span class="hljs-string">LoadBalancer</span><br><span class="hljs-attr">ports:</span><br><span class="hljs-bullet">-</span> <span class="hljs-attr">port:</span> <span class="hljs-number">8080</span><br>  <span class="hljs-attr">targetPort:</span> <span class="hljs-number">80</span><br></code></pre></td></tr></table></figure>
+<p>Docker Desktop 檢測到後，會建立一個轉發規則：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">localhost:<span class="hljs-tag">&lt;<span class="hljs-name">port</span>&gt;</span> → ClusterIP:<span class="hljs-tag">&lt;<span class="hljs-name">port</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>也就是說：<br>在 Docker Desktop 環境裡，「Cluster 內部的 port（8080）」被綁定到了本機 localhost:8080。<br>所以你打 localhost:8080，其實等於從外部直接連進 ClusterIP:8080。</p>
+<h3 id="Storage-Persistence"><a href="#Storage-Persistence" class="headerlink" title="Storage &amp; Persistence"></a>Storage &amp; Persistence</h3><ul>
+<li>Persistent Volume(PV) <ul>
+<li>Cluster wide &amp; managed by administrator</li>
+</ul>
+</li>
+<li>Persistent Volume Claims(PVC)<ul>
+<li>One to one mapping to a persistent volume</li>
+<li>PVC can mount one or more pod on it.</li>
+<li>All conctainers within the pod share the same value.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/image-7.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p>Persistent Volume &amp; Persistent Volume Claims<br><img src="/image-8.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p>Recliam Policy</p>
+<ul>
+<li>Delete the data upon pod deleton.</li>
+<li>You can set the retain policy to keep your data.</li>
+</ul>
+<p>Access Mode</p>
+<ul>
+<li><code>ReadWriteMany</code> The volume can be mounted as read-write by many pods</li>
+<li><code>ReadOnlyMany</code> The volume can be mounted read-only by many pods</li>
+<li><code>ReadWriteOnce</code> The volume can be mounted as read-write by a single pod, and the other pods are in read-only mode. The first one have the authoriy to implement write.</li>
+</ul>
+<p>圖示<br><img src="/image-9.png" srcset="/img/loading.gif" lazyload alt="alt text"><br><img src="/image-10.png" srcset="/img/loading.gif" lazyload alt="alt text"><br><img src="/image-11.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p>Persistent Volume state</p>
+<ul>
+<li><code>Available</code> A free resource that is not yet bound to a claim.</li>
+<li><code>Bound</code> The volume is bound to a claim</li>
+<li><code>Released</code> The claim has been deleted, but the resource is not yet reclaimed by the cluster.</li>
+<li><code>Failed</code> The volume has failed it automatic reclamation.</li>
+</ul>
+<h4 id="StorageClass"><a href="#StorageClass" class="headerlink" title="StorageClass"></a>StorageClass</h4><ul>
+<li>represent a <strong>class storage</strong> <strong>offered by the admin</strong></li>
+<li>A <em>abstraction</em> on top of an external storage resource.</li>
+<li>No need to set a capacity</li>
+<li>Eliminates the need for the admin to pre-provision a persistent volume.</li>
+</ul>
+<p><img src="/image-12.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h4 id="StorageClass-yaml"><a href="#StorageClass-yaml" class="headerlink" title="StorageClass yaml"></a>StorageClass yaml</h4><p><img src="/image-13.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p><img src="/image-14.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="Application-Settings"><a href="#Application-Settings" class="headerlink" title="Application Settings"></a>Application Settings</h3><h4 id="ConfigMap"><a href="#ConfigMap" class="headerlink" title="ConfigMap"></a>ConfigMap</h4><ul>
+<li>Decouple and externalize configuration.</li>
+<li>static meaning that if you change values, the container will have to be restarted to get them.<br><img src="/image-15.png" srcset="/img/loading.gif" lazyload alt="alt text"></li>
+</ul>
+<p>To solve the static problem, using Volume instead<br><img src="/image-16.png" srcset="/img/loading.gif" lazyload alt="alt text"><br><img src="/image-17.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h4 id="Secret"><a href="#Secret" class="headerlink" title="Secret"></a>Secret</h4><ul>
+<li>Stored as base64 encoded string</li>
+<li>Not secure</li>
+<li>To upgrade security, you should try to implement RBAC authorization Policy. or store secrets elsewhere</li>
+</ul>
+<p><img src="/image-18.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p><img src="/image-19.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="Observalibilty"><a href="#Observalibilty" class="headerlink" title="Observalibilty"></a>Observalibilty</h3><ul>
+<li>K8s會在<code>Pod</code>異常時重新建立一個<code>Pod</code>、但是如果是<code>Container</code>失敗他就不會做任何事。</li>
+<li><code>Readiness Probes</code>可以知道container啟動的時間，可以告訴<code>Kubernetes</code>先等待，才接受流量。</li>
+<li><code>Liveness Probes</code> 可以知道code是否正在運行，也可以重啟container</li>
+</ul>
+<ol>
+<li>StartupProbe 請 k8s 等待 10s後才對&#x2F;health 發出 HTTP calls.並最多嘗試三次。</li>
+<li>ReadinessProbe 請 k8s 在 5 秒後開始檢查是否準備好，每十秒使用 TCP socket 連線測試。失敗會停止接受 pod traffic</li>
+<li>LivenessProbe 請k8s在 15 秒後開始檢查是否活著，每二十秒使用 TCP socket 連線測試。 失敗會重啟pod</li>
+</ol>
+<p><img src="/image-20.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p><img src="/image-21.png" srcset="/img/loading.gif" lazyload alt="alt text"><br><img src="/image-22.png" srcset="/img/loading.gif" lazyload alt="alt text"><br><img src="/image-23.png" srcset="/img/loading.gif" lazyload alt="alt text"><br><img src="/image-24.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="Dashboards"><a href="#Dashboards" class="headerlink" title="Dashboards"></a>Dashboards</h3><ul>
+<li>Lens</li>
+<li>K9s</li>
+</ul>
+<h3 id="Scaling"><a href="#Scaling" class="headerlink" title="Scaling"></a>Scaling</h3><ul>
+<li><code>Horizontal Pod AutoScaling</code> use the <strong>K8s Metrics Server</strong></li>
+<li>Pods must have requests and limits defined</li>
+<li>The HPA checks the Metrics Server every 30s.</li>
+<li>Scale according to the min and max number or replicas defined</li>
+<li>Cooldown &#x2F; Delay<ul>
+<li>Prevent racing condition</li>
+<li>Once a change has been made, HPA waits</li>
+<li>By default, the delay on scale up events is 3 minutes, and the delay on scale down event is 5 minutes.</li>
+</ul>
+</li>
+</ul>
+<h4 id="yaml"><a href="#yaml" class="headerlink" title="yaml"></a>yaml</h4><p><img src="/image-25.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="常見Kubernetes-指令"><a href="#常見Kubernetes-指令" class="headerlink" title="常見Kubernetes 指令"></a>常見Kubernetes 指令</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>kubectl create job [jobName] --image=[imageName]</code></td>
+<td>The imperative way</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl get job</code></td>
+<td>List jobs</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>kubectl describe job [jobName]</code></td>
+<td>Get info</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>kubectl delete job [jobName]</code></td>
+<td>Delete a job</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>kubectl create cronjob [jobName] --imgage=[imageName] --schedule=&quot;*/ * * * *&quot; -- bin/sh -c &quot;date;&quot;</code></td>
+<td>The imperative way</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>kubectl get cf</code></td>
+<td>List CrobJobs</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>kubectl describe cf [jobName]</code></td>
+<td>Get info</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>kubectl delete cf [jobName]</code></td>
+<td>Delete a cronJob</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Rolling Update</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>kubectl rollout status</code></td>
+<td>Get the progress of the update</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl rollout history deployment [deployment]</code></td>
+<td>Get the history of the deployment</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>kubectl rollout undo [deploymentName]</code></td>
+<td>Rollback a deployment</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>kubectl rollout undo [deploymeny] --to-revision=[revision#]</code></td>
+<td>Rollback to a revision number</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Service</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>kubectl expose po [podname] --port=80 --target-port=8080 --name=frontend</code></td>
+<td>Create a service to expose a pod</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl expose deploy [deployName]</code></td>
+<td>Create a service to expose a deployment</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>kubectl get svc</code></td>
+<td>Get the service list</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>kubectl get svc -o wide</code></td>
+<td>Get extra info</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>kubectl describe svc [servicename]</code></td>
+<td>Describe the service</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>kubectl delete svc [servicename]</code></td>
+<td>Delete the service using it’s name</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>NodePort cheatsheet</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>kubectl expose po [podname] --port=80 --targetPort=8080 --type=NodePort</code></td>
+<td>Create a service to expose a pod(You can not set nodePort!!!)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl expose deploy [deplyName] --port=80 --targetPort=8080 --type=NodePort --name=frontend</code></td>
+<td>Create a service to expose a deployment</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>PV&amp;PVC cheatsheet</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>kubectl get pv </code></td>
+<td>Get the PV list</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl get pvc </code></td>
+<td>Get the PVC list</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>kubectl describe pv [pvname]</code></td>
+<td>Describe the PV</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>kubectl describe pvc [pvcname]</code></td>
+<td>Describe the PVC</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>kubectl delete pv [pvname]</code></td>
+<td>Delete the PV</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>kubectl delete pvc [pvcname]</code></td>
+<td>Delete the PVC</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>kubectl get sc </code></td>
+<td>List the StorageClass</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>kubectl describe sc [className]</code></td>
+<td>Describe the StorageClass</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>ApplicationSetting</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>kubectl create cm [name] --from-file=config.txt</code></td>
+<td>Create configMap from file</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl create cm [name] --from-file=config/</code></td>
+<td>Create configMap from folder</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>kubectl get cm</code></td>
+<td>List the ConfigMaps</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>kubectl get cm [name] -o YAML</code></td>
+<td>Save a ConfigMap in a YAML file</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>kubectl create secret generic [secretName] --from-literal=STATE=Michigan</code></td>
+<td>The imperative way</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>kubectl get secrets </code></td>
+<td>List the secrets</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>HPA</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>kubectl autoscale deploy [name] --cpu-percent=50 --min=3 --max=10</code></td>
+<td>The imperative way</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl get hpa</code></td>
+<td>Get the auto scaler status</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>kubectl delete hpa [name]</code></td>
+<td>The imperative way</td>
+</tr>
+</tbody></table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Development/" class="category-chain-item">Development</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Kubernetes/" class="print-no-link">#Kubernetes</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>My forth day started learning Kubernetes</div>
+      <div>https://clark1945.github.io/2025/11/09/My-forth-day-started-learning-Kubernetes/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Clark Liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>November 9, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/08/My-third-day-started-learning-Kubernetes/" title="My third day started learning Kubernetes">
+                        <span class="hidden-mobile">My third day started learning Kubernetes</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://clark1945.github.io/2025/11/09/My-forth-day-started-learning-Kubernetes/';
+          this.page.identifier = '/2025/11/09/My-forth-day-started-learning-Kubernetes/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        Access 
+        <span id="leancloud-site-pv"></span>
+         time
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        User Amount 
+        <span id="leancloud-site-uv"></span>
+         
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
