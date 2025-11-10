@@ -19,12 +19,12 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="Programming">
   
-    <meta name="description" content="Kubernetes又稱k8s由Google建立，發表於2015年，後續被捐獻給了Cloud Native Computing Foundation(CNCF)。 K8s是容器調度工具(Container Orchestration Tool)，被設計成一個鬆耦合的元件集合，提供了包含部署、維護、擴展的工作負載功能。 What K8s can do Service discovery and lo">
+    <meta name="description" content="Kubernetes 介紹Kubernetes又稱k8s由Google建立，發表於2015年，後續被捐獻給了Cloud Native Computing Foundation(CNCF)。 K8s是容器調度工具(Container Orchestration Tool)，被設計成一個鬆耦合的元件集合，提供了包含部署、維護、擴展的工作負載功能。 What K8s can do Service dis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="My second day started learning Kubernetes">
+<meta property="og:title" content="K8s快速實戰（二）">
 <meta property="og:url" content="https://clark1945.github.io/2025/11/07/My-second-day-started-learning-Kubernetes/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="Kubernetes又稱k8s由Google建立，發表於2015年，後續被捐獻給了Cloud Native Computing Foundation(CNCF)。 K8s是容器調度工具(Container Orchestration Tool)，被設計成一個鬆耦合的元件集合，提供了包含部署、維護、擴展的工作負載功能。 What K8s can do Service discovery and lo">
+<meta property="og:description" content="Kubernetes 介紹Kubernetes又稱k8s由Google建立，發表於2015年，後續被捐獻給了Cloud Native Computing Foundation(CNCF)。 K8s是容器調度工具(Container Orchestration Tool)，被設計成一個鬆耦合的元件集合，提供了包含部署、維護、擴展的工作負載功能。 What K8s can do Service dis">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://clark1945.github.io/img/kubernetes-architecture.png">
 <meta property="og:image" content="https://clark1945.github.io/img/k8s-architecure-node.png">
@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://clark1945.github.io/img/pod-creation.png">
 <meta property="og:image" content="https://clark1945.github.io/img/pod-deletion.png">
 <meta property="article:published_time" content="2025-11-07T01:05:23.000Z">
-<meta property="article:modified_time" content="2025-11-08T06:39:04.779Z">
+<meta property="article:modified_time" content="2025-11-10T08:52:35.315Z">
 <meta property="article:author" content="Clark Liu">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
@@ -42,7 +42,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>My second day started learning Kubernetes - Clark&#39;s Blog</title>
+  <title>K8s快速實戰（二） - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -235,7 +235,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="My second day started learning Kubernetes"></span>
+            <span id="subtitle" data-typed-text="K8s快速實戰（二）"></span>
           
         </div>
 
@@ -258,7 +258,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          896 words
+          898 words
         
       </span>
     
@@ -315,12 +315,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">My second day started learning Kubernetes</h1>
+            <h1 id="seo-header">K8s快速實戰（二）</h1>
             
             
               <div class="markdown-body">
                 
-                <p><code>Kubernetes</code>又稱<code>k8s</code>由<code>Google</code>建立，發表於2015年，後續被捐獻給了Cloud Native Computing Foundation(CNCF)。 K8s是容器調度工具(Container Orchestration Tool)，被設計成一個鬆耦合的元件集合，提供了包含部署、維護、擴展的工作負載功能。</p>
+                <h3 id="Kubernetes-介紹"><a href="#Kubernetes-介紹" class="headerlink" title="Kubernetes 介紹"></a>Kubernetes 介紹</h3><p><code>Kubernetes</code>又稱<code>k8s</code>由<code>Google</code>建立，發表於2015年，後續被捐獻給了Cloud Native Computing Foundation(CNCF)。 K8s是容器調度工具(Container Orchestration Tool)，被設計成一個鬆耦合的元件集合，提供了包含部署、維護、擴展的工作負載功能。</p>
 <h3 id="What-K8s-can-do"><a href="#What-K8s-can-do" class="headerlink" title="What K8s can do"></a>What K8s can do</h3><ul>
 <li><strong>Service discovery</strong> and <strong>load balancing</strong></li>
 <li>Storage orchestration (Local&amp;Cloud based)</li>
@@ -589,7 +589,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>My second day started learning Kubernetes</div>
+      <div>K8s快速實戰（二）</div>
       <div>https://clark1945.github.io/2025/11/07/My-second-day-started-learning-Kubernetes/</div>
     </div>
     <div class="license-meta">
@@ -644,8 +644,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/11/06/My-first-day-started-learning-Kubernetes/" title="K8s快速實戰(1)">
-                        <span class="hidden-mobile">K8s快速實戰(1)</span>
+                      <a href="/2025/11/06/My-first-day-started-learning-Kubernetes/" title="K8s快速實戰（一）">
+                        <span class="hidden-mobile">K8s快速實戰（一）</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

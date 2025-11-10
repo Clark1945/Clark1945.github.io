@@ -21,7 +21,7 @@
   
     <meta name="description" content="今天是我開始學習Kubernetes的第一天！Kubernetes(又稱K8s)在現代的開發環境中，已經幾乎變成了必備技能了。也因此快速掌握Kubernetes的功能與特性也變得更加重要，那麼事不宜遲，我們就開始來學習K8s吧！  …我本來是想這麼說的，但是在提到K8s之前，我希望可以先解釋為甚麼K8s會變得更加重要，要談談K8s的崛起，我想免不了提到現代系統架構。K8s在微服務興起之後，變得相當">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K8s快速實戰(1)">
+<meta property="og:title" content="K8s快速實戰（一）">
 <meta property="og:url" content="https://clark1945.github.io/2025/11/06/My-first-day-started-learning-Kubernetes/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
 <meta property="og:description" content="今天是我開始學習Kubernetes的第一天！Kubernetes(又稱K8s)在現代的開發環境中，已經幾乎變成了必備技能了。也因此快速掌握Kubernetes的功能與特性也變得更加重要，那麼事不宜遲，我們就開始來學習K8s吧！  …我本來是想這麼說的，但是在提到K8s之前，我希望可以先解釋為甚麼K8s會變得更加重要，要談談K8s的崛起，我想免不了提到現代系統架構。K8s在微服務興起之後，變得相當">
@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://clark1945.github.io/img/image-8.png">
 <meta property="og:image" content="https://clark1945.github.io/img/image-9.png">
 <meta property="article:published_time" content="2025-11-06T00:42:23.000Z">
-<meta property="article:modified_time" content="2025-11-10T08:34:26.053Z">
+<meta property="article:modified_time" content="2025-11-10T08:56:29.443Z">
 <meta property="article:author" content="Clark Liu">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
@@ -46,7 +46,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>K8s快速實戰(1) - Clark&#39;s Blog</title>
+  <title>K8s快速實戰（一） - Clark&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -239,7 +239,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="K8s快速實戰(1)"></span>
+            <span id="subtitle" data-typed-text="K8s快速實戰（一）"></span>
           
         </div>
 
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k words
+          1.4k words
         
       </span>
     
@@ -319,7 +319,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">K8s快速實戰(1)</h1>
+            <h1 id="seo-header">K8s快速實戰（一）</h1>
             
             
               <div class="markdown-body">
@@ -329,7 +329,7 @@
 <p>…我本來是想這麼說的，但是在提到K8s之前，我希望可以先解釋為甚麼K8s會變得更加重要，要談談K8s的崛起，我想免不了提到現代系統架構。K8s在<strong>微服務</strong>興起之後，變得相當知名，原因是因為微服務的要求有一個特點──”服務需要可以獨立部署”。</p>
 <p><strong>微服務</strong>簡單來說，就是將各個系統的功能依照業務邊界切割來達到職責分明，並且需要符合不少特性，就可以被稱為微服務。</p>
 <p>在大型系統中如果採用微服務設計的話，可想而知，將會因功能切分，產生可能數以百計的服務，而這些服務若是一個個手動管理的話，維運工程師應該會抓狂，於是Kubernetes便是用來簡化複雜的容器部署功能，提供一連串簡易的設定讓軟體的部署可以快速、實現自動化。</p>
-<h3 id="單體式架構與微服務"><a href="#單體式架構與微服務" class="headerlink" title="單體式架構與微服務"></a>單體式架構與微服務</h3><p><code>單體式架構(Monolithic)</code>定義是──利用單一個元件建構，以一個單一元件部署，因為所有功能都塞在一起，常常有牽一髮動全身的問題。</p>
+<h2 id="單體式架構與微服務"><a href="#單體式架構與微服務" class="headerlink" title="單體式架構與微服務"></a>單體式架構與微服務</h2><p><code>單體式架構(Monolithic)</code>定義是──利用單一個元件建構，以一個單一元件部署，因為所有功能都塞在一起，常常有牽一髮動全身的問題。</p>
 <p><code>微服務(Microservice)</code>是一個<strong>服務導向架構(Service-Orient architecture)<strong>的變形，將服務解構為一個個</strong>鬆耦合</strong>的應用程式元件。在微服務架構中，服務應該是<strong>輕量化</strong>且<strong>可獨立部署</strong>的。<br>此外還有以下特色:</p>
 <ul>
 <li>單個元件擁有單一職責，權責分明</li>
@@ -338,11 +338,11 @@
 <li>一個微服務可以擁有自己的資料庫</li>
 </ul>
 <p>Kubernetes提供了完整的介面去管理我們的服務，我們的程式碼通常會經由Docker打包一個可以在各個環境都可以運作的容器(Container)。</p>
-<h3 id="甚麼是Docker"><a href="#甚麼是Docker" class="headerlink" title="甚麼是Docker?"></a>甚麼是Docker?</h3><p><code>Docker</code>是一個開源的<code>Container</code>執行環境，支援Mac, Windows與Linux，可以用Command Line Tool去控制。應用程式會透過<code>Dockerfile</code>去建構Container Image，透過Container使你的程式碼可以跨環境地執行。</p>
-<h3 id="甚麼是Container"><a href="#甚麼是Container" class="headerlink" title="甚麼是Container?"></a>甚麼是Container?</h3><p>Container是一個軟體單元包含了你的程式碼、執行環境(Runtime)、System Tools、System Library。使用Docker部署有許多好處，除了幾乎不會遇到環境問題外，一個Container包含許多Image Layer，這代表如果你只改了一部分的功能，Docker會只重新編譯你更動的那部分，使用Image Layer可以大大提升執行&#x2F;部署的效率。</p>
+<h2 id="甚麼是Docker"><a href="#甚麼是Docker" class="headerlink" title="甚麼是Docker?"></a>甚麼是Docker?</h2><p><code>Docker</code>是一個開源的<code>Container</code>執行環境，支援Mac, Windows與Linux，可以用Command Line Tool去控制。應用程式會透過<code>Dockerfile</code>去建構Container Image，透過Container使你的程式碼可以跨環境地執行。</p>
+<h2 id="甚麼是Container"><a href="#甚麼是Container" class="headerlink" title="甚麼是Container?"></a>甚麼是Container?</h2><p>Container是一個軟體單元包含了你的程式碼、執行環境(Runtime)、System Tools、System Library。使用Docker部署有許多好處，除了幾乎不會遇到環境問題外，一個Container包含許多Image Layer，這代表如果你只改了一部分的功能，Docker會只重新編譯你更動的那部分，使用Image Layer可以大大提升執行&#x2F;部署的效率。</p>
 <p>如果沒學過或是不知道Docker是甚麼的人可以參考這篇文章(<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10319089" title="Title">What is Docker?</a>)</p>
-<h3 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker Compose"></a>Docker Compose</h3><p>在Docker中，我們也經常使用Docker Compose這個功能來管理我們的Container，你可以把Docker想成一個腳本，只要一運行就執行多個Container，設定連線、環境參數等等，幫你一次把整個環境做到好，簡單來說，就是這麼萬能的功能。</p>
-<h3 id="Docker-Compose-特色"><a href="#Docker-Compose-特色" class="headerlink" title="Docker Compose 特色"></a>Docker Compose 特色</h3><ul>
+<h2 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker Compose"></a>Docker Compose</h2><p>在Docker中，我們也經常使用Docker Compose這個功能來管理我們的Container，你可以把Docker想成一個腳本，只要一運行就執行多個Container，設定連線、環境參數等等，幫你一次把整個環境做到好，簡單來說，就是這麼萬能的功能。</p>
+<h2 id="Docker-Compose-特色"><a href="#Docker-Compose-特色" class="headerlink" title="Docker Compose 特色"></a>Docker Compose 特色</h2><ul>
 <li>使用 <strong>YAML</strong> 格式的檔案來定義</li>
 <li>定義與執行多個Container的應用程式</li>
 <li>通常使用Docker CLI 來控制與執行</li>
@@ -366,14 +366,14 @@
 <p>App可以設定屬於的Network，達到公有子網路、私有子網路的效果。<br><img src="/img/image-6.png" srcset="/img/loading.gif" lazyload alt="Docker Separate Networking"></p>
 <h3 id="補充：Docker-Compose的執行順序"><a href="#補充：Docker-Compose的執行順序" class="headerlink" title="補充：Docker Compose的執行順序"></a>補充：Docker Compose的執行順序</h3><p>使用 <code>Depends</code> 可以確保一個服務會在另一個服務啟動後才跟著啟動，避免了未初始化完成造成的錯誤。<br><img src="/img/image-7.png" srcset="/img/loading.gif" lazyload alt="Load Process"></p>
 <h3 id="補充：Docker-Compose的儲存"><a href="#補充：Docker-Compose的儲存" class="headerlink" title="補充：Docker Compose的儲存"></a>補充：Docker Compose的儲存</h3><p>你可以建立一個<code>Volume</code>並把它掛載到一個Container上面，讓Container達到持久化儲存。<br><img src="/img/image-8.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
-<h3 id="Docker-Compose-Restart-Policy-重啟策略"><a href="#Docker-Compose-Restart-Policy-重啟策略" class="headerlink" title="Docker Compose Restart Policy 重啟策略"></a>Docker Compose Restart Policy 重啟策略</h3><p>🧠 補充建議</p>
+<h2 id="Docker-Compose-Restart-Policy-重啟策略"><a href="#Docker-Compose-Restart-Policy-重啟策略" class="headerlink" title="Docker Compose Restart Policy 重啟策略"></a>Docker Compose Restart Policy 重啟策略</h2><p>🧠 補充建議</p>
 <ul>
 <li>開發環境：通常用 no 或 on-failure，避免無限重啟造成混亂。</li>
 <li>生產環境：建議使用 always 或 unless-stopped，確保服務穩定運行。</li>
 <li>若搭配 健康檢查（healthcheck） 使用，可以更精準控制重啟時機。</li>
 </ul>
 <p><img src="/img/image-9.png" srcset="/img/loading.gif" lazyload alt="Restart your container"></p>
-<h3 id="常見Docker-指令"><a href="#常見Docker-指令" class="headerlink" title="常見Docker 指令"></a>常見Docker 指令</h3><table>
+<h2 id="常見Docker-指令"><a href="#常見Docker-指令" class="headerlink" title="常見Docker 指令"></a>常見Docker 指令</h2><table>
 <thead>
 <tr>
 <th></th>
@@ -622,6 +622,35 @@
 <td>Copy files to the container</td>
 </tr>
 </tbody></table>
+<h3 id="Docker-Compose-→-K8s-對照表"><a href="#Docker-Compose-→-K8s-對照表" class="headerlink" title="Docker Compose → K8s 對照表"></a>Docker Compose → K8s 對照表</h3><table>
+<thead>
+<tr>
+<th>功能面向</th>
+<th>Docker Compose</th>
+<th>Kubernetes 對應物件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服務管理</td>
+<td>service</td>
+<td>Service</td>
+</tr>
+<tr>
+<td>容器定義</td>
+<td>container</td>
+<td>Pod</td>
+</tr>
+<tr>
+<td>組態管理</td>
+<td>env file</td>
+<td>ConfigMap &#x2F; Secret</td>
+</tr>
+<tr>
+<td>資料持久化</td>
+<td>volume</td>
+<td>PersistentVolume &#x2F; PVC</td>
+</tr>
+</tbody></table>
 <h3 id="Finally"><a href="#Finally" class="headerlink" title="Finally"></a>Finally</h3><p>本文意在快速帶過Docker的概念，想要完整學習Docker的人建議還是看過相關教學之後再繼續學習，本文只專注提到那些對Kubernetes來說重要的Docker特性，下一篇我們正式進入Kubernetes。我們下次見。</p>
 <h3 id="學習資源"><a href="#學習資源" class="headerlink" title="學習資源"></a>學習資源</h3><ol>
 <li>(<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kTp5xUtcalw">https://www.youtube.com/watch?v=kTp5xUtcalw</a>)</li>
@@ -671,7 +700,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>K8s快速實戰(1)</div>
+      <div>K8s快速實戰（一）</div>
       <div>https://clark1945.github.io/2025/11/06/My-first-day-started-learning-Kubernetes/</div>
     </div>
     <div class="license-meta">
@@ -716,9 +745,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/11/07/My-second-day-started-learning-Kubernetes/" title="My second day started learning Kubernetes">
+                      <a href="/2025/11/07/My-second-day-started-learning-Kubernetes/" title="K8s快速實戰（二）">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">My second day started learning Kubernetes</span>
+                        <span class="hidden-mobile">K8s快速實戰（二）</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
