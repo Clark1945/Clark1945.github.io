@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://clark1945.github.io/img/pod-creation.png">
 <meta property="og:image" content="https://clark1945.github.io/img/pod-deletion.png">
 <meta property="article:published_time" content="2025-11-07T01:05:23.000Z">
-<meta property="article:modified_time" content="2025-11-10T13:02:12.977Z">
+<meta property="article:modified_time" content="2025-11-10T13:20:45.547Z">
 <meta property="article:author" content="Clark Liu">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
@@ -355,7 +355,7 @@
 <p>2️⃣ <code>kube-proxy</code>管理 Node 上的網路。負責 Service 的虛擬 IP（ClusterIP）與 Pod 之間的流量轉送。讓不同 Node 上的 Pod 能互相通訊。</p>
 <p>3️⃣ <code>Container Runtime</code>雖然圖上沒畫，但實際上每個 Node 都需要一個容器運行環境（例如 containerd、CRI-O）。<code>kubelet</code> 會呼叫 <code>runtime</code> 來建立、停止容器。</p>
 <h4 id="Pod？Container？Node？"><a href="#Pod？Container？Node？" class="headerlink" title="Pod？Container？Node？"></a>Pod？Container？Node？</h4><p>如果用一句話來解釋這些元件的關係，我會說「<code>Container</code>在<code>Pod</code>中被運行，<code>Pod</code>在<code>Node</code>中被運行，所有<code>Node</code>來自一個<code>Cluster</code>」</p>
-<h2 id="K8s-Component"><a href="#K8s-Component" class="headerlink" title="K8s Component"></a>K8s Component</h2><p>在運行<code>K8s</code>時，我們可以先了解有關<code>k8s</code>的相關設定，比方說，<code>K8s Context</code>是一組設定，包含<strong>要連線的Kubernetes Cluster</strong>、<strong>使用者身份與憑證</strong>、<strong>預設命名空間</strong>，這些來自<code>K8s Context</code>的資訊對日後的開發至關重要。    </p>
+<h2 id="K8s-Component"><a href="#K8s-Component" class="headerlink" title="K8s Component"></a>K8s Component</h2><p>在運行<code>K8s</code>時，我們可以先了解有關<code>k8s</code>的相關設定，<code>K8s Context</code>是一組設定，包含<strong>要連線的Kubernetes Cluster</strong>、<strong>使用者身份與憑證</strong>、<strong>預設命名空間</strong>，這些來自<code>K8s Context</code>的資訊對日後的開發至關重要。    </p>
 <p>接著，我們來介紹k8s的各種元件。</p>
 <h3 id="Cluster是什麼？"><a href="#Cluster是什麼？" class="headerlink" title="Cluster是什麼？"></a>Cluster是什麼？</h3><p><code>Cluster</code> 是由一組 <code>Master</code> 與 <code>Node</code> 所組成的整體系統，是 <code>Kubernetes</code> 運作的最外層單位。所有 <code>Pod</code>、<code>Service</code>、<code>Deployment</code> 都是 <code>Cluster</code> 內的資源。</p>
 <h3 id="Namespaces是什麼？"><a href="#Namespaces是什麼？" class="headerlink" title="Namespaces是什麼？"></a>Namespaces是什麼？</h3><p><strong>Namespaces</strong> 是 <strong>Kubernetes</strong> 用來邏輯分隔資源的機制。它的主要用途是：</p>
@@ -649,9 +649,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/11/08/My-third-day-started-learning-Kubernetes/" title="My third day started learning Kubernetes">
+                      <a href="/2025/11/08/My-third-day-started-learning-Kubernetes/" title="K8s快速實戰（三）">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">My third day started learning Kubernetes</span>
+                        <span class="hidden-mobile">K8s快速實戰（三）</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
