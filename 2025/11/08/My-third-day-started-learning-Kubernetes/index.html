@@ -19,12 +19,12 @@
   <meta name="author" content="Clark Liu">
   <meta name="keywords" content="Programming">
   
-    <meta name="description" content="Selector Use labels to identify, describe and gorup related sets of obejcts or resources. It’s key-value pair  Service 會根據 selector 找尋到對應的 Pod，利用kubectl get ep [serviceName]查看service是否有連接到指令的pod。 1234">
+    <meta name="description" content="今天是學習Kubernetes的第三天，昨天我們學習了許多Kubernetes中重要的元件，像是Deployment、Pod、Namespaces等等。今天我們要繼續學習更多有關Kubernetes的元件，透過了解這些元件的功能知道Kubernetes是怎麼在各種情境中運用的。 SelectorSelector的功能相當簡單，它的功能就是將兩個不同的元件可以彼此掛勾，它使用labels來辨識、描述">
 <meta property="og:type" content="article">
 <meta property="og:title" content="K8s快速實戰（三）">
 <meta property="og:url" content="https://clark1945.github.io/2025/11/08/My-third-day-started-learning-Kubernetes/index.html">
 <meta property="og:site_name" content="Clark&#39;s Blog">
-<meta property="og:description" content="Selector Use labels to identify, describe and gorup related sets of obejcts or resources. It’s key-value pair  Service 會根據 selector 找尋到對應的 Pod，利用kubectl get ep [serviceName]查看service是否有連接到指令的pod。 1234">
+<meta property="og:description" content="今天是學習Kubernetes的第三天，昨天我們學習了許多Kubernetes中重要的元件，像是Deployment、Pod、Namespaces等等。今天我們要繼續學習更多有關Kubernetes的元件，透過了解這些元件的功能知道Kubernetes是怎麼在各種情境中運用的。 SelectorSelector的功能相當簡單，它的功能就是將兩個不同的元件可以彼此掛勾，它使用labels來辨識、描述">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://clark1945.github.io/img/sidecar-pattern.png">
 <meta property="og:image" content="https://clark1945.github.io/img/adapter-pattern.png">
@@ -32,6 +32,7 @@
 <meta property="og:image" content="https://clark1945.github.io/img/network-concept.png">
 <meta property="og:image" content="https://clark1945.github.io/img/pod-communication.png">
 <meta property="og:image" content="https://clark1945.github.io/img/inter-pod-communication.png">
+<meta property="og:image" content="https://clark1945.github.io/img/Pod-Communication-from-outside.png">
 <meta property="og:image" content="https://clark1945.github.io/img/replicaSet.png">
 <meta property="og:image" content="https://clark1945.github.io/img/replicaSet-betweens.png">
 <meta property="og:image" content="https://clark1945.github.io/img/deployment-yaml.png">
@@ -39,7 +40,7 @@
 <meta property="og:image" content="https://clark1945.github.io/img/how-to-create-statefulset.png">
 <meta property="og:image" content="https://clark1945.github.io/img/statefulset-mechanism.png">
 <meta property="article:published_time" content="2025-11-08T06:42:42.000Z">
-<meta property="article:modified_time" content="2025-11-10T13:20:43.846Z">
+<meta property="article:modified_time" content="2025-11-10T15:26:18.264Z">
 <meta property="article:author" content="Clark Liu">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
@@ -265,7 +266,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          485 words
+          1k words
         
       </span>
     
@@ -276,7 +277,7 @@
         
         
         
-          5 mins
+          9 mins
         
       </span>
     
@@ -327,36 +328,48 @@
             
               <div class="markdown-body">
                 
-                <h3 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h3><ul>
-<li>Use <code>labels</code> to identify, describe and gorup related sets of obejcts or resources. It’s key-value pair</li>
-</ul>
-<p>Service 會根據 selector 找尋到對應的 Pod，利用<code>kubectl get ep [serviceName]</code>查看service是否有連接到指令的pod。</p>
+                <p>今天是學習Kubernetes的第三天，昨天我們學習了許多Kubernetes中重要的元件，像是<code>Deployment</code>、<code>Pod</code>、<code>Namespaces</code>等等。今天我們要繼續學習更多有關Kubernetes的元件，透過了解這些元件的功能知道Kubernetes是怎麼在各種情境中運用的。</p>
+<h3 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h3><p><code>Selector</code>的功能相當簡單，它的功能就是將兩個不同的元件可以彼此掛勾，它使用<code>labels</code>來辨識、描述以及把資源組合在一起，它使用<code>key-value</code>組合。</p>
+<p>以下方的例子來說，<code>Service</code> 會根據 <code>selector</code> 找尋到對應的 <code>Pod</code>，啟動後我們可以利用 <code>kubectl get ep [serviceName]</code> 查看<code>Service</code>是否有連接到指令的<code>Pod</code>。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Service</span><br><span class="hljs-attr">metadata:</span><br> <span class="hljs-attr">name:</span> <span class="hljs-string">myservice</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">ports:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">port:</span> <span class="hljs-number">80</span><br>    <span class="hljs-attr">targetPort:</span> <span class="hljs-number">80</span><br>  <span class="hljs-attr">selector:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">myapp</span><br>    <span class="hljs-attr">type:</span> <span class="hljs-string">front-end</span><br><br><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">myapp-pod</span><br>  <span class="hljs-attr">labels:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">myapp</span><br>    <span class="hljs-attr">type:</span> <span class="hljs-string">front-end</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">containers:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">nginx-container</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">nginx</span><br>    <span class="hljs-attr">resources:</span><br>      <span class="hljs-attr">requests:</span><br>        <span class="hljs-attr">cpu:</span> <span class="hljs-string">100m</span><br>        <span class="hljs-attr">memory:</span> <span class="hljs-string">128Mi</span><br>      <span class="hljs-attr">limits:</span><br>        <span class="hljs-attr">cpu:</span> <span class="hljs-string">250m</span><br>        <span class="hljs-attr">memory:</span> <span class="hljs-string">256Mi</span>    <br>    <span class="hljs-attr">ports:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">80</span><br></code></pre></td></tr></table></figure>
-
-<p>我原先以為port80可以直接連線，但是實際上出錯了。因為type沒有設定，預設的ClusterIP是沒有辦法對外連線的。解決方法有明確定義type，以及使用port forwarding把本地的8080forward到80之中。<br>如: <code>kubectl port-forward service/myservice 8080:80</code></p>
-<p>! &gt;&gt; ClusterIP 類型，它只在 Kubernetes Cluster 內部可用。</p>
-<h3 id="Multi-containers-Pods"><a href="#Multi-containers-Pods" class="headerlink" title="Multi-containers Pods"></a>Multi-containers Pods</h3><p>Helper function is separated from application code, which make it super clean.<br><img src="/img/sidecar-pattern.png" srcset="/img/loading.gif" lazyload alt="main pod&amp;Helper pod"></p>
-<p>Adapter simplify monitoring output for service<br><img src="/img/adapter-pattern.png" srcset="/img/loading.gif" lazyload alt="main pod&amp;adapter"></p>
-<p>Ambassador show the implementation of how function achieve, make App can more focus on the business thing that matter!<br><img src="/img/ambassador-pattern.png" srcset="/img/loading.gif" lazyload alt="main pod&amp;ambassador"></p>
+<h3 id="測試時遇到的突發狀況"><a href="#測試時遇到的突發狀況" class="headerlink" title="測試時遇到的突發狀況"></a>測試時遇到的突發狀況</h3><p>我原先以為port80可以直接連線，但是實際上出錯了。因為type沒有設定，預設的<strong>ClusterIP</strong>是沒有辦法對外連線的，ClusterIP 類型，它只在 Kubernetes Cluster 內部可用。解決方法有</p>
+<ol>
+<li>明確定義type，以及</li>
+<li>使用port forwarding把本地的8080forward到80之中。<br>如: <code>kubectl port-forward service/myservice 8080:80</code></li>
+</ol>
+<h3 id="多容器的Pods"><a href="#多容器的Pods" class="headerlink" title="多容器的Pods"></a>多容器的Pods</h3><p>你可能會有疑問說，為甚麼要在一個Pods裡面跑多個Container呢？我們已經可以在Node外層管理自動建立與移除Pods，向是這樣在一個Pods裡面建立多個Container難道不會很不好管理嗎？<br>以下我們舉出幾個例子，告訴你這麼做有什麼好處。</p>
+<ol>
+<li>Sidecar - Typical pattern<br>假設你有一個App會把API的log寫入一個log檔案中，而每天你要把log檔案拋到一個整合的FTP中。<br>這時拆開的好處有：</li>
+</ol>
+<ul>
+<li>主程式碼會很乾淨，拋送FTP的邏輯不會寫在App裡面，實現了關注點分離。</li>
+<li>拆開之後，元件的重用性就提升了，如果之後我們需要拋報表的話，拋送這段可以完全照用，不必重寫。<br><img src="/img/sidecar-pattern.png" srcset="/img/loading.gif" lazyload alt="main pod&amp;Helper pod"></li>
+</ul>
+<ol start="2">
+<li><p>Adapter - Typical pattern<br>假設你有一個<strong>App</strong>會回傳一個複雜的監控資訊，你就可以建立一個<strong>Adapter</strong>將<strong>App</strong>複雜的監控資訊，封裝成<strong>Monitor Service</strong>方便使用的通用格式。透過實作這個模式，你可以在不必調整App的程式碼的狀況下得到你的簡潔結果。<br><img src="/img/adapter-pattern.png" srcset="/img/loading.gif" lazyload alt="main pod&amp;adapter"></p>
+</li>
+<li><p>Ambassador - Typical pattern<br>假設你今天有一個<strong>App</strong>需要把資料存入到資料庫中，但是問題來了，DB近期可能因應上雲政策要把<strong>MySQL</strong>移動到<strong>Amazon Aurora</strong>，在沒有辦法確認資料庫的最終選擇前，透過建立一個<strong>Ambassador</strong>，你可以讓App只關注在重要的邏輯上，實際資料庫使用的Driver等等的交給<strong>Ambassador</strong>處理就好。<br><img src="/img/ambassador-pattern.png" srcset="/img/loading.gif" lazyload alt="main pod&amp;ambassador"></p>
+</li>
+</ol>
 <h3 id="Network-Concept-about-Kubernetes"><a href="#Network-Concept-about-Kubernetes" class="headerlink" title="Network Concept about Kubernetes"></a>Network Concept about Kubernetes</h3><p><img src="/img/network-concept.png" srcset="/img/loading.gif" lazyload alt="Network Concept"></p>
-<h4 id="Pod-Communication"><a href="#Pod-Communication" class="headerlink" title="Pod Communication"></a>Pod Communication</h4><p><img src="/img/pod-communication.png" srcset="/img/loading.gif" lazyload alt="Pod Communication"></p>
-<h4 id="Inter-Pod-Communication"><a href="#Inter-Pod-Communication" class="headerlink" title="Inter Pod Communication"></a>Inter Pod Communication</h4><p><img src="/img/inter-pod-communication.png" srcset="/img/loading.gif" lazyload alt="Inter Pod Communication"></p>
-<h4 id="Pod-Communication-from-outside"><a href="#Pod-Communication-from-outside" class="headerlink" title="Pod Communication from outside"></a>Pod Communication from outside</h4><p>![Pod Communication from outside](&#x2F;img&#x2F;Pod Communication from outside.png)</p>
-<h3 id="Workloads"><a href="#Workloads" class="headerlink" title="Workloads"></a>Workloads</h3><ul>
-<li>A workload is an application running on Kubernetes<ul>
-<li>Pod (Represents a set of running containers)</li>
-<li>ReplicaSet</li>
-<li>Deployment</li>
-<li>DeamonSet (Provide node-local facilities, such as a storage driver or network plugin)</li>
+<h3 id="Pod-Communication"><a href="#Pod-Communication" class="headerlink" title="Pod Communication"></a>Pod Communication</h3><p><img src="/img/pod-communication.png" srcset="/img/loading.gif" lazyload alt="Pod Communication"></p>
+<h3 id="Inter-Pod-Communication"><a href="#Inter-Pod-Communication" class="headerlink" title="Inter Pod Communication"></a>Inter Pod Communication</h3><p><img src="/img/inter-pod-communication.png" srcset="/img/loading.gif" lazyload alt="Inter Pod Communication"></p>
+<h3 id="Pod-Communication-from-outside"><a href="#Pod-Communication-from-outside" class="headerlink" title="Pod Communication from outside"></a>Pod Communication from outside</h3><p><img src="/img/Pod-Communication-from-outside.png" srcset="/img/loading.gif" lazyload alt="Pod Communication from outside"></p>
+<h2 id="Workloads"><a href="#Workloads" class="headerlink" title="Workloads"></a>Workloads</h2><ul>
+<li>簡單來說，<code>Workload</code>就是一個跑在<code>Kubernetes</code>上面的應用程式，包含以下元件<ul>
+<li><code>Pod</code> (Represents a set of running containers)</li>
+<li><code>ReplicaSet</code></li>
+<li><code>Deployment</code></li>
+<li><code>DeamonSet</code> (Provide node-local facilities, such as a storage driver or network plugin)</li>
 <li>Tasks that run to completion<ul>
-<li>Job</li>
-<li>CronJob</li>
+<li><code>Job</code></li>
+<li><code>CronJob</code></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h4 id="ReplicaSet"><a href="#ReplicaSet" class="headerlink" title="ReplicaSet"></a>ReplicaSet</h4><ul>
+<h3 id="ReplicaSet"><a href="#ReplicaSet" class="headerlink" title="ReplicaSet"></a>ReplicaSet</h3><ul>
 <li>管理Pod Replica與生命週期，以提供自我修復能力。</li>
 <li>目的是為了確保Pod數量是符合預期的。</li>
 <li>當可以建立ReplicaSet時，建議先建立Deployments</li>
@@ -365,19 +378,19 @@
 <ul>
 <li>雖然Deployment有包含ReplicaSet的功能，但這兩者不是對立的關係，原因是因為建立Deployment時，也會隱含建立ReplicaSet。</li>
 </ul>
-<h4 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h4><ul>
+<h3 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h3><ul>
 <li>A Deployment can <code>Self-heal</code>、<code>Scale</code>、<code>Update</code>、<code>Rollback</code>.</li>
 <li>You create a deployment for each microservice</li>
 </ul>
-<h4 id="透過ReplicaSet與Deployment管理Pods"><a href="#透過ReplicaSet與Deployment管理Pods" class="headerlink" title="透過ReplicaSet與Deployment管理Pods"></a>透過ReplicaSet與Deployment管理Pods</h4><p><img src="/img/replicaSet-betweens.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="透過ReplicaSet與Deployment管理Pods"><a href="#透過ReplicaSet與Deployment管理Pods" class="headerlink" title="透過ReplicaSet與Deployment管理Pods"></a>透過ReplicaSet與Deployment管理Pods</h3><p><img src="/img/replicaSet-betweens.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
 <h4 id="Deployment-重要欄位解說"><a href="#Deployment-重要欄位解說" class="headerlink" title="Deployment 重要欄位解說"></a>Deployment 重要欄位解說</h4><p>![alt text](&#x2F;img&#x2F;additional deployment.png)</p>
-<h4 id="Deployments-yaml"><a href="#Deployments-yaml" class="headerlink" title="Deployments yaml"></a>Deployments yaml</h4><p><img src="/img/deployment-yaml.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
-<h4 id="DaemonSet"><a href="#DaemonSet" class="headerlink" title="DaemonSet"></a>DaemonSet</h4><ul>
+<h3 id="Deployments-yaml"><a href="#Deployments-yaml" class="headerlink" title="Deployments yaml"></a>Deployments yaml</h3><p><img src="/img/deployment-yaml.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="DaemonSet"><a href="#DaemonSet" class="headerlink" title="DaemonSet"></a>DaemonSet</h3><ul>
 <li>確保所有Nodes都會運行一個特定的Pod Replica</li>
 <li>受Scheduler controller調配，由daemon controller執行</li>
 </ul>
-<h4 id="Toleration-禁止在master-node上執行"><a href="#Toleration-禁止在master-node上執行" class="headerlink" title="Toleration 禁止在master node上執行"></a>Toleration 禁止在master node上執行</h4><p><img src="/img/tolerations.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
-<h4 id="StatefulSet"><a href="#StatefulSet" class="headerlink" title="StatefulSet"></a>StatefulSet</h4><ul>
+<h3 id="Toleration-禁止在master-node上執行"><a href="#Toleration-禁止在master-node上執行" class="headerlink" title="Toleration 禁止在master node上執行"></a>Toleration 禁止在master node上執行</h3><p><img src="/img/tolerations.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="StatefulSet"><a href="#StatefulSet" class="headerlink" title="StatefulSet"></a>StatefulSet</h3><ul>
 <li>用於那些必須要持久化或保存的狀態</li>
 <li>與Deployment不同，StatefultSet維持讓每一個Pods都有一個固定的辨認身分。</li>
 <li>每一個Pods都有持久化的，固定的辨認身分。</li>
@@ -386,8 +399,8 @@
 <li>Containers本身以Stateless設計的。最好是使用Cloud provider database services來取代StatefulSet功能</li>
 <li>刪除StatefulSet不會刪除PVCs，你必須手動刪除。</li>
 </ul>
-<h4 id="怎麼建立一個StatefulSet-in-yaml"><a href="#怎麼建立一個StatefulSet-in-yaml" class="headerlink" title="怎麼建立一個StatefulSet in yaml"></a>怎麼建立一個StatefulSet in yaml</h4><p><img src="/img/how-to-create-statefulset.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
-<h4 id="只在Master進行寫入的實現方式。"><a href="#只在Master進行寫入的實現方式。" class="headerlink" title="只在Master進行寫入的實現方式。"></a>只在Master進行寫入的實現方式。</h4><p><img src="/img/statefulset-mechanism.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="怎麼建立一個StatefulSet-in-yaml"><a href="#怎麼建立一個StatefulSet-in-yaml" class="headerlink" title="怎麼建立一個StatefulSet in yaml"></a>怎麼建立一個StatefulSet in yaml</h3><p><img src="/img/how-to-create-statefulset.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h3 id="只在Master進行寫入的實現方式。"><a href="#只在Master進行寫入的實現方式。" class="headerlink" title="只在Master進行寫入的實現方式。"></a>只在Master進行寫入的實現方式。</h3><p><img src="/img/statefulset-mechanism.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
 <h3 id="常見Kubernetes-指令"><a href="#常見Kubernetes-指令" class="headerlink" title="常見Kubernetes 指令"></a>常見Kubernetes 指令</h3><table>
 <thead>
 <tr>
