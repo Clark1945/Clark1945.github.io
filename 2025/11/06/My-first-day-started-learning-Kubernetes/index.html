@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://clark1945.github.io/img/image-8.png">
 <meta property="og:image" content="https://clark1945.github.io/img/image-9.png">
 <meta property="article:published_time" content="2025-11-06T00:42:23.000Z">
-<meta property="article:modified_time" content="2025-11-10T08:56:29.443Z">
+<meta property="article:modified_time" content="2025-11-10T08:58:21.448Z">
 <meta property="article:author" content="Clark Liu">
 <meta property="article:tag" content="Kubernetes">
 <meta name="twitter:card" content="summary_large_image">
@@ -339,10 +339,10 @@
 </ul>
 <p>Kubernetes提供了完整的介面去管理我們的服務，我們的程式碼通常會經由Docker打包一個可以在各個環境都可以運作的容器(Container)。</p>
 <h2 id="甚麼是Docker"><a href="#甚麼是Docker" class="headerlink" title="甚麼是Docker?"></a>甚麼是Docker?</h2><p><code>Docker</code>是一個開源的<code>Container</code>執行環境，支援Mac, Windows與Linux，可以用Command Line Tool去控制。應用程式會透過<code>Dockerfile</code>去建構Container Image，透過Container使你的程式碼可以跨環境地執行。</p>
-<h2 id="甚麼是Container"><a href="#甚麼是Container" class="headerlink" title="甚麼是Container?"></a>甚麼是Container?</h2><p>Container是一個軟體單元包含了你的程式碼、執行環境(Runtime)、System Tools、System Library。使用Docker部署有許多好處，除了幾乎不會遇到環境問題外，一個Container包含許多Image Layer，這代表如果你只改了一部分的功能，Docker會只重新編譯你更動的那部分，使用Image Layer可以大大提升執行&#x2F;部署的效率。</p>
+<h3 id="甚麼是Container"><a href="#甚麼是Container" class="headerlink" title="甚麼是Container?"></a>甚麼是Container?</h3><p>Container是一個軟體單元包含了你的程式碼、執行環境(Runtime)、System Tools、System Library。使用Docker部署有許多好處，除了幾乎不會遇到環境問題外，一個Container包含許多Image Layer，這代表如果你只改了一部分的功能，Docker會只重新編譯你更動的那部分，使用Image Layer可以大大提升執行&#x2F;部署的效率。</p>
 <p>如果沒學過或是不知道Docker是甚麼的人可以參考這篇文章(<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10319089" title="Title">What is Docker?</a>)</p>
-<h2 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker Compose"></a>Docker Compose</h2><p>在Docker中，我們也經常使用Docker Compose這個功能來管理我們的Container，你可以把Docker想成一個腳本，只要一運行就執行多個Container，設定連線、環境參數等等，幫你一次把整個環境做到好，簡單來說，就是這麼萬能的功能。</p>
-<h2 id="Docker-Compose-特色"><a href="#Docker-Compose-特色" class="headerlink" title="Docker Compose 特色"></a>Docker Compose 特色</h2><ul>
+<h3 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker Compose"></a>Docker Compose</h3><p>在Docker中，我們也經常使用Docker Compose這個功能來管理我們的Container，你可以把Docker想成一個腳本，只要一運行就執行多個Container，設定連線、環境參數等等，幫你一次把整個環境做到好，簡單來說，就是這麼萬能的功能。</p>
+<h3 id="Docker-Compose-特色"><a href="#Docker-Compose-特色" class="headerlink" title="Docker Compose 特色"></a>Docker Compose 特色</h3><ul>
 <li>使用 <strong>YAML</strong> 格式的檔案來定義</li>
 <li>定義與執行多個Container的應用程式</li>
 <li>通常使用Docker CLI 來控制與執行</li>
@@ -366,7 +366,7 @@
 <p>App可以設定屬於的Network，達到公有子網路、私有子網路的效果。<br><img src="/img/image-6.png" srcset="/img/loading.gif" lazyload alt="Docker Separate Networking"></p>
 <h3 id="補充：Docker-Compose的執行順序"><a href="#補充：Docker-Compose的執行順序" class="headerlink" title="補充：Docker Compose的執行順序"></a>補充：Docker Compose的執行順序</h3><p>使用 <code>Depends</code> 可以確保一個服務會在另一個服務啟動後才跟著啟動，避免了未初始化完成造成的錯誤。<br><img src="/img/image-7.png" srcset="/img/loading.gif" lazyload alt="Load Process"></p>
 <h3 id="補充：Docker-Compose的儲存"><a href="#補充：Docker-Compose的儲存" class="headerlink" title="補充：Docker Compose的儲存"></a>補充：Docker Compose的儲存</h3><p>你可以建立一個<code>Volume</code>並把它掛載到一個Container上面，讓Container達到持久化儲存。<br><img src="/img/image-8.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
-<h2 id="Docker-Compose-Restart-Policy-重啟策略"><a href="#Docker-Compose-Restart-Policy-重啟策略" class="headerlink" title="Docker Compose Restart Policy 重啟策略"></a>Docker Compose Restart Policy 重啟策略</h2><p>🧠 補充建議</p>
+<h3 id="Docker-Compose-Restart-Policy-重啟策略"><a href="#Docker-Compose-Restart-Policy-重啟策略" class="headerlink" title="Docker Compose Restart Policy 重啟策略"></a>Docker Compose Restart Policy 重啟策略</h3><p>🧠 補充建議</p>
 <ul>
 <li>開發環境：通常用 no 或 on-failure，避免無限重啟造成混亂。</li>
 <li>生產環境：建議使用 always 或 unless-stopped，確保服務穩定運行。</li>
